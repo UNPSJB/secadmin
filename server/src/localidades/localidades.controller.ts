@@ -1,7 +1,5 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
+import { Controller, Get, Param, Query } from '@nestjs/common';
 import { LocalidadesService } from './localidades.service';
-import { CreateLocalidadeDto } from './dto/create-localidade.dto';
-import { UpdateLocalidadeDto } from './dto/update-localidade.dto';
 
 @Controller('localidades')
 export class LocalidadesController {

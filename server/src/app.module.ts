@@ -5,6 +5,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import typeorm from './configuracion/typeorm';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { LocalidadesModule } from './localidades/localidades.module';
+import { AulaModule } from './aula/aula.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { LocalidadesModule } from './localidades/localidades.module';
       useFactory: async (configService: ConfigService) => (configService.get('typeorm'))
     }),
     LocalidadesModule,
+    AulaModule,
   ],
   controllers: [AppController],
   providers: [AppService],
