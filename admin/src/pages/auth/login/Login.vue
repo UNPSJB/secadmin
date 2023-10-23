@@ -35,6 +35,9 @@
   import { computed, ref } from 'vue'
   import { useRouter } from 'vue-router'
   import { useI18n } from 'vue-i18n'
+  import { isEmail } from '../../../services/utils';
+  import { Store } from 'pinia';
+  import { useAuthStore } from '../../../stores/auth-store'
   const { t } = useI18n()
 
   const email = ref('')
@@ -44,14 +47,48 @@
   const passwordErrors = ref<string[]>([])
   const router = useRouter()
 
+  const store = useAuthStore();
+
   const formReady = computed(() => !emailErrors.value.length && !passwordErrors.value.length)
+
+  function validateEmail(email:string){
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const errorList = [];
+
+    if (!email) {
+      errorList.push('El email es requerido');
+    }
+
+
+    if (email && !isEmail(email) ) {
+      errorList.push('El email ingresado no tiene el formato correcto');
+    }
+
+    return errorList
+  }
+
+  function validatePassword(password:string){
+    const errorList = [];
+
+    if (!password) {
+      errorList.push('El password es requerido');
+    }
+    
+    return errorList
+  }
+
+  function login(email:string, password:string) {
+    store.login(email,password);
+  }
+
 
   function onsubmit() {
     if (!formReady.value) return
 
-    emailErrors.value = email.value ? [] : ['Email is required']
-    passwordErrors.value = password.value ? [] : ['Password is required']
+    emailErrors.value = validateEmail(email.value);
+    passwordErrors.value = validatePassword(password.value);
 
-    router.push({ name: 'dashboard' })
+
+    login(email.value, password.value);
   }
 </script>

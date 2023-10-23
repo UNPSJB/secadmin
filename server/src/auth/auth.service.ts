@@ -17,9 +17,15 @@ export class AuthService {
 
     async signIn(email: string, pass: string): Promise<any> {
         const user = await this.usersService.findOne({ email });
+
+        if (!user) {
+            return new UnauthorizedException("No se encontro ese usuario o la contraseña no es correcta");
+        }
+
+        
         const isMatch = await bcrypt.compare(pass, user.password);
 
-        if (!user || !isMatch) {
+        if (!isMatch) {
             return new UnauthorizedException("No se encontro ese usuario o la contraseña no es correcta");
         }
 
