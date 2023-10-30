@@ -8,9 +8,7 @@
         </span>
       </template>
       <va-dropdown-content class="profile-dropdown__content">
-        <va-list-item class="p-2" @click="onCerrarSesion">
-          Cerrar Sesión
-        </va-list-item>
+        <va-button class="custom-button"> Cerrar sesión </va-button>
       </va-dropdown-content>
     </va-dropdown>
   </div>
@@ -22,6 +20,7 @@
   import { useColors } from 'vuestic-ui'
   import { useAuthStore } from '../../../../stores/auth-store'
   import { useRouter } from 'vue-router'
+  //import store from '../../../../stores'
   
 
   const { t } = useI18n()
@@ -72,5 +71,11 @@
         color: var(--va-primary);
       }
     }
+  }
+
+  .custom-button {
+    background: none; /* Elimina cualquier fondo */
+    order: none; /* Elimina el borde */
+    padding: 0; /* Elimina el relleno del botón */
   }
 </style>
