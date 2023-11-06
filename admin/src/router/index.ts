@@ -10,10 +10,6 @@ import UIRoute from '../pages/admin/ui/route'
  
 const routes: Array<RouteRecordRaw> = [
   {
-    path: '/:catchAll(.*)',
-    redirect: { name: 'dashboard' },
-  },
-  {
     name: 'admin',
     path: '/admin',
     component: AppLayout,
@@ -237,6 +233,10 @@ const routes: Array<RouteRecordRaw> = [
       requireAuth: false
     }
   },
+  {
+    path: '/:catchAll(.*)',
+    redirect: { name: 'dashboard' },
+  },
 ]
 
 const router = createRouter({
@@ -257,8 +257,9 @@ const router = createRouter({
 
 router.beforeEach((to,from,next)=>{
 const authStore = useAuthStore();
+debugger
   if(to.meta.requireAuth && !authStore.token){
-    next("login")
+    next({ name: 'login'})
   } else {
     next()
   }
