@@ -39,11 +39,22 @@ export class AulaService {
   }
 
   findOne(id: number) {
-    return this.repo.findOne({where:{id}});
+    return this.repo.findOne({where:{id}, relations:["localidad"]});
   }
 
-  update(id: number, updateAulaDto: UpdateAulaDto) {
-    return `This action updates a #${id} aula`;
+  async update(id: number, updateAulaDto: UpdateAulaDto) {
+    const localidad = await this.localidadService.findOne(updateAulaDto.localidad);
+
+    if(!localidad) {
+      throw new NotFoundException("No se ha encontrado la localidad solicitada")
+    }
+
+    return this.repo.update({id}, {
+      capacidad: updateAulaDto.capacidad,
+      codigo_aula: updateAulaDto.codigo_aula,
+      direccion: updateAulaDto.direccion,
+      localidad
+    });
   }
 
   remove(id: number) {

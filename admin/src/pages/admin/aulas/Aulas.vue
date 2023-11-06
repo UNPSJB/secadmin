@@ -32,7 +32,8 @@
                                 <va-button-group class="col-span-12 xl:col-span-6" preset="plain">
                                     <va-button 
                                         round
-                                        icon="md_edit" 
+                                        icon="md_edit"
+                                        @click="onEditarAula(aula)" 
                                     />
                                     <va-button 
                                         round
@@ -48,30 +49,36 @@
         </va-card>
     </va-content>
 </template>
-  
+
 <script setup lang="ts">
-import { computed, ComputedRef } from 'vue'
-import { useRouter } from 'vue-router'
-import { useAulasStore } from '../../../stores/aulas-store';
+    import { computed, ComputedRef } from 'vue'
+    import { useRouter } from 'vue-router'
+    import { useAulasStore } from '../../../stores/aulas-store';
 
-const aulasStore = useAulasStore();
+    const aulasStore = useAulasStore();
 
-const router = useRouter();
+    const router = useRouter();
 
-aulasStore.obtenerListadoDeAulas();
+    aulasStore.obtenerListadoDeAulas();
 
-const listadoDeAulas:ComputedRef<Aula[]> = computed(() => aulasStore.aulas);
+    const listadoDeAulas:ComputedRef<Aula[]> = computed(() => aulasStore.aulas);
 
-function onNuevaAula() {
-    router.push({name: 'nueva-aula'});
-}
-
-async function onEliminarAula(aula:Aula){
-    if (aula.id){
-        await aulasStore.borrarAula(aula.id);
-        aulasStore.obtenerListadoDeAulas();
+    function onNuevaAula() {
+        router.push({name: 'nueva-aula'});
     }
-}   
+
+    async function onEliminarAula(aula:Aula){
+        if (aula.id){
+            await aulasStore.borrarAula(aula.id);
+            aulasStore.obtenerListadoDeAulas();
+        }
+    }   
+
+    function onEditarAula(aula:Aula) {
+        if (aula.id){
+            router.push({name: 'editar-aula', params: {id:aula.id}});
+        }
+    }
 
 </script>
   

@@ -4,7 +4,7 @@
             <va-card-content class="overflow-auto">
                 <div class="flex flex-row">
                     <div class="basis-10/12">
-                        <h4> Nueva aula </h4>
+                        <h4> {{ esEdicion? 'Editar Aula' : 'Nueva aula' }} </h4>
                     </div>
                 </div>
                 <form>
@@ -19,6 +19,7 @@
                             <Suspense>
                                 <LocalidadesSelect 
                                     @update-localidad="updateLocalidad"
+                                    :localidad="localidad"
                                 />
                                 <template #fallback>
                                     Loading...
@@ -51,20 +52,27 @@
 </template>
   
 <script setup lang="ts">
-import { ref, computed } from 'vue';
-import { useRouter } from 'vue-router'
-import LocalidadesSelect from '../../../../components/selectors/LocalidadesSelect.vue';
-import { useAulasStore } from '../../../../stores/aulas-store';
-import { ToastPosition, useToast } from 'vuestic-ui'
+import { ref, computed, watch, Ref, ComputedRef } from 'vue';
+import { useRouter, useRoute } from 'vue-router'
+import LocalidadesSelect from '../../../components/selectors/LocalidadesSelect.vue';
+import { useAulasStore } from '../../../stores/aulas-store';
+import { useToast } from 'vuestic-ui'
 
 const router = useRouter();
-const aulasStore = useAulasStore()
-const { init } = useToast()
+const route = useRoute();
+const aulasStore = useAulasStore();
+const { init } = useToast();
 
 const codigoAula = ref("");
 const capacidad = ref(0);
 const direccion = ref("");
-const localidad = ref(null);
+const localidad:Ref<Localidad | null> = ref(null);
+
+const esEdicion = route.name === 'editar-aula';
+
+if(esEdicion) {
+    aulasStore.obtenerAula(route.params.id as string);
+}
 
 function updateLocalidad (newLocalidad:any) {
     localidad.value = newLocalidad;
@@ -90,7 +98,17 @@ function onLimpiar() {
 
 async function onGuardar() {
     try {
-        await aulasStore.guardarAula(codigoAula.value,capacidad.value, localidad.value, direccion.value);
+        if(esEdicion) {
+            await aulasStore.actualizarAula(
+                route.params.id as string,
+                codigoAula.value,
+                capacidad.value, 
+                localidad.value, 
+                direccion.value
+            )
+        } else {
+            await aulasStore.guardarAula(codigoAula.value,capacidad.value, localidad.value, direccion.value);
+        }
         init({
             message: 'Aula guardada correctamente',
             position: 'bottom-right',
@@ -107,8 +125,18 @@ async function onGuardar() {
     }
 }
 
-function onGuardadoCorrectamente() {
-    router.push({ name: 'aulas' });
-}
+
+const aulaParaEditar:ComputedRef<Aula | null> = computed(() => aulasStore.aula)
+
+
+watch(aulaParaEditar as any, (aulaAEditar:Aula) => {
+    if(aulaAEditar) {
+        codigoAula.value = aulaAEditar.codigo_aula;
+        capacidad.value = aulaAEditar.capacidad;
+        direccion.value = aulaAEditar.direccion;
+        localidad.value = aulaAEditar.localidad;
+    }
+})
+
 </script>
   

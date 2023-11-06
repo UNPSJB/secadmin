@@ -5,6 +5,7 @@ export const useAulasStore = defineStore('aulas', {
   state: () => {
     return {  
       aulas: [],
+      aula: null
     }
   },
   actions: {
@@ -28,16 +29,16 @@ export const useAulasStore = defineStore('aulas', {
     },
 
     async actualizarAula(
-      aulaId: number,
-      codigoAula:string,
+      aulaId: string,
+      codigo_aula:string,
       capacidad:number,
       localidad:any,
       direccion:string
     ) {
       const response = await request(`aulas/${aulaId}`, 'PATCH', {
-        id: aulaId,
+        id: Number(aulaId),
         localidad: localidad.id, 
-        codigoAula, 
+        codigo_aula, 
         capacidad, 
         direccion
       });
@@ -64,6 +65,14 @@ export const useAulasStore = defineStore('aulas', {
       this.aulas = await response.json();
     },
 
+    async obtenerAula(id:string) {
+      const response = await request(`aulas/${id}`, 'GET');
+
+      if (!response.ok) {
+        throw new Error('Error encontrando el aula');
+      }
+      this.aula = await response.json();
+    },
 
   },
 })

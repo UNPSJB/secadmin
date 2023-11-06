@@ -31,9 +31,14 @@ const routes: Array<RouteRecordRaw> = [
             },
             {
               name: 'nueva-aula',
-              path: 'nueva',
-              component: () => import('../pages/admin/aulas/nueva-aula/NuevaAula.vue'),
-            }      
+              path: 'form',
+              component: () => import('../pages/admin/aulas/AulaForm.vue'),
+            },
+            {
+              name: 'editar-aula',
+              path: 'form/:id',
+              component: () => import('../pages/admin/aulas/AulaForm.vue'),
+            }            
         ]
         
       },

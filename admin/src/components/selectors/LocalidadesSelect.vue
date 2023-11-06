@@ -1,6 +1,6 @@
 <template>
     <va-select 
-        v-model="localidad" 
+        v-model="localidadSeleccionada" 
         label="Localidad" 
         searchable 
         text-by="nombre" 
@@ -14,7 +14,7 @@
 </template>
   
 <script setup lang="ts">
-    import { computed, ref, defineEmits, watch } from 'vue';
+    import { computed, ref, defineEmits, watch, watchEffect } from 'vue';
 
     import { debounce } from 'lodash';
     import { useLocalidadesStore } from '../../stores/localidades-store';
@@ -35,12 +35,9 @@
         }
     }
 
-    const props = defineProps({
-        localidad: Object,
-    });
+    const props = defineProps(['localidad']);
 
-    let localidad: any = ref(props.localidad);
-
+    const localidadSeleccionada = ref(props.localidad);
 
     await localidadesStore.obtenerLocalidades();
 
@@ -48,10 +45,15 @@
 
     const emit = defineEmits(['update-localidad']);
 
-    watch(localidad, (newLocalidad,) => {
+    watch(() => props.localidad, (nuevaLocalidad) => {
+        localidadSeleccionada.value = nuevaLocalidad;
+    });
+    watchEffect(() => {
+        localidadSeleccionada.value = props.localidad;
+    });
+
+    watch(localidadSeleccionada, (newLocalidad,) => {
         emit('update-localidad', newLocalidad);
     })
-
-
 
 </script>
