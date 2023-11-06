@@ -22,7 +22,8 @@ export const useAulasStore = defineStore('aulas', {
       });
 
       if (!response.ok) {
-        throw new Error('Error guardando los datos');
+        const data = await response.json()
+        throw new Error(data.message);
       }
     },
 

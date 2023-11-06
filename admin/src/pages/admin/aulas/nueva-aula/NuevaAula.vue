@@ -39,7 +39,10 @@
                         <va-button @click="onLimpiar" preset="outline" border-color="primary"> Limpiar </va-button>
                     </div>
                     <div class="flex md:col-span-4 sm:col-span-4 col-span-4">
-                        <va-button @click="onGuardar"> Guardar </va-button>
+                        <va-button 
+                            @click="onGuardar"
+                            :disabled="!sePuedeGuardar"    
+                        > Guardar </va-button>
                     </div>
                 </div>
             </va-card-content>
@@ -48,13 +51,15 @@
 </template>
   
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import { useRouter } from 'vue-router'
 import LocalidadesSelect from '../../../../components/selectors/LocalidadesSelect.vue';
 import { useAulasStore } from '../../../../stores/aulas-store';
+import { ToastPosition, useToast } from 'vuestic-ui'
 
 const router = useRouter();
 const aulasStore = useAulasStore()
+const { init } = useToast()
 
 const codigoAula = ref("");
 const capacidad = ref(0);
@@ -69,6 +74,13 @@ function onCancelar() {
     router.push({ name: 'aulas' });
 }
 
+const sePuedeGuardar = computed(() => 
+    codigoAula.value !== "" && 
+    capacidad.value > 1 &&
+    direccion.value !== "" &&
+    localidad.value !== null 
+);
+
 function onLimpiar() {
     codigoAula.value = "";
     capacidad.value = 0;
@@ -79,9 +91,19 @@ function onLimpiar() {
 async function onGuardar() {
     try {
         await aulasStore.guardarAula(codigoAula.value,capacidad.value, localidad.value, direccion.value);
+        init({
+            message: 'Aula guardada correctamente',
+            position: 'bottom-right',
+            duration: 2500,
+        })
         router.push({ name: 'aulas' });
-    } catch (e) {
-
+    } catch (e: any) {
+        init({
+            message: e.message,
+            position: 'bottom-right',
+            duration: 2500,
+            color: "danger"
+        })  
     }
 }
 

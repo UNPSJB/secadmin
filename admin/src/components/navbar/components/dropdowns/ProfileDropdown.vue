@@ -8,7 +8,12 @@
         </span>
       </template>
       <va-dropdown-content class="profile-dropdown__content">
-        <va-button class="custom-button"> Cerrar sesión </va-button>
+        <va-button     
+          preset="plain"
+          class="cerrar-sesion-button"
+        > 
+          Cerrar sesión 
+        </va-button>
       </va-dropdown-content>
     </va-dropdown>
   </div>
@@ -73,9 +78,7 @@
     }
   }
 
-  .custom-button {
-    background: none; /* Elimina cualquier fondo */
-    order: none; /* Elimina el borde */
-    padding: 0; /* Elimina el relleno del botón */
+  .cerrar-sesion-button {
+    margin: 10px 20px
   }
 </style>

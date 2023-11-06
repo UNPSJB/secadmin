@@ -28,6 +28,19 @@
                             <td>{{ aula.capacidad }}</td>
                             <td>{{ aula.localidad.nombre }}</td>
                             <td>{{ aula.direccion }}</td>
+                            <td> 
+                                <va-button-group class="col-span-12 xl:col-span-6" preset="plain">
+                                    <va-button 
+                                        round
+                                        icon="md_edit" 
+                                    />
+                                    <va-button 
+                                        round
+                                        icon="md_delete"
+                                        @click="onEliminarAula(aula)"
+                                    />
+                                </va-button-group>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
@@ -53,7 +66,12 @@ function onNuevaAula() {
     router.push({name: 'nueva-aula'});
 }
 
-
+async function onEliminarAula(aula:Aula){
+    if (aula.id){
+        await aulasStore.borrarAula(aula.id);
+        aulasStore.obtenerListadoDeAulas();
+    }
+}   
 
 </script>
   
