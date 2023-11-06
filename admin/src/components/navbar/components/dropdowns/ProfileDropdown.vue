@@ -8,11 +8,7 @@
         </span>
       </template>
       <va-dropdown-content class="profile-dropdown__content">
-        <va-list-item v-for="option in options" :key="option.name" class="p-2">
-          <router-link :to="{ name: option.redirectTo }" class="profile-dropdown__item">
-            {{ t(`user.${option.name}`) }}
-          </router-link>
-        </va-list-item>
+        <va-button class="custom-button"> Cerrar sesión </va-button>
       </va-dropdown-content>
     </va-dropdown>
   </div>
@@ -22,9 +18,20 @@
   import { ref } from 'vue'
   import { useI18n } from 'vue-i18n'
   import { useColors } from 'vuestic-ui'
+  import { useAuthStore } from '../../../../stores/auth-store'
+  import { useRouter } from 'vue-router'
+  //import store from '../../../../stores'
+  
 
   const { t } = useI18n()
   const { colors } = useColors()
+  const store = useAuthStore();
+  const router = useRouter()
+
+  function onCerrarSesion(){
+    store.logout()
+    router.push ("auth/login")
+  }
 
   withDefaults(
     defineProps<{
@@ -64,5 +71,11 @@
         color: var(--va-primary);
       }
     }
+  }
+
+  .custom-button {
+    background: none; /* Elimina cualquier fondo */
+    order: none; /* Elimina el borde */
+    padding: 0; /* Elimina el relleno del botón */
   }
 </style>

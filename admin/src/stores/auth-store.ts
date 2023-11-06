@@ -10,7 +10,7 @@ export const useAuthStore = defineStore('auth', {
     }
   },
   actions: {
-    async login(email:string, password:string) {
+    async login(email:string, password:string, onLoginSuccess: any) {
         try {
             const response = await fetch(`${import.meta.env.VITE_API_URL}/auth/login`, {
               method: 'POST',
@@ -33,11 +33,17 @@ export const useAuthStore = defineStore('auth', {
             const user = getUserFromToken(access_token);
 
             this.user = user;
+            
+            onLoginSuccess();
 
           } catch (error: any) {
             console.error(error.message);
           }
     
     },
+    logout(){
+      this.token=null
+      this.user=null
+    }
   },
 })

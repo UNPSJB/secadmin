@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
+import { useAuthStore } from '../stores/auth-store'
 
 import AuthLayout from '../layouts/AuthLayout.vue'
 import AppLayout from '../layouts/AppLayout.vue'
@@ -6,7 +7,7 @@ import Page404Layout from '../layouts/Page404Layout.vue'
 
 import RouteViewComponent from '../layouts/RouterBypass.vue'
 import UIRoute from '../pages/admin/ui/route'
-
+ 
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/:catchAll(.*)',
@@ -175,6 +176,9 @@ const routes: Array<RouteRecordRaw> = [
       },
       UIRoute,
     ],
+    meta:{
+      requireAuth: true
+    }
   },
   {
     path: '/auth',
@@ -200,6 +204,9 @@ const routes: Array<RouteRecordRaw> = [
         redirect: { name: 'login' },
       },
     ],
+    meta:{
+      requireAuth: false
+    }
   },
   {
     path: '/404',
@@ -226,6 +233,9 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import('../pages/404-pages/VaPageNotFoundLargeText.vue'),
       },
     ],
+    meta:{
+      requireAuth: false
+    }
   },
 ]
 
@@ -243,6 +253,15 @@ const router = createRouter({
     }
   },
   routes,
+})
+
+router.beforeEach((to,from,next)=>{
+const authStore = useAuthStore();
+  if(to.meta.requireAuth && !authStore.token){
+    next("login")
+  } else {
+    next()
+  }
 })
 
 export default router
