@@ -19,6 +19,24 @@ export default {
       },
     },
     {
+      name: 'aulas',
+      displayName: 'menu.aulas',
+      meta: {
+        icon: 'material-icons-school',
+      },
+      disabled: true,
+      children: [
+        {
+          name: 'aulas',
+          displayName: 'Listado de aulas',
+        },
+        {
+          name: 'nueva-aula',
+          displayName: 'Nueva aula',
+        },
+      ],
+    },
+    {
       name: 'statistics',
       displayName: 'menu.statistics',
       meta: {

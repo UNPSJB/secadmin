@@ -130,6 +130,7 @@
   },
   "menu": {
     "auth": "Autenticación",
+    "aulas": "Aulas",
     "buttons": "Botones",
     "charts": "Gráficos",
     "collapse": "Colapso",

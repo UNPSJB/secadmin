@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateAulaDto } from './dto/create-aula.dto';
 import { UpdateAulaDto } from './dto/update-aula.dto';
 import { Aula } from './entities/aula.entity';
@@ -20,6 +20,10 @@ export class AulaService {
       throw new NotFoundException("No se ha encontrado la localidad solicitada")
     }
 
+    if(dto.capacidad < 1) {
+      throw new BadRequestException("La capacidad no puede ser menor a 1")
+    }
+
     const aula = this.repo.create({
       capacidad: dto.capacidad,
       codigo_aula: dto.codigo_aula,
@@ -31,7 +35,7 @@ export class AulaService {
   }
 
   findAll() {
-    return this.repo.find();  
+    return this.repo.find({relations:["localidad"]});  
   }
 
   findOne(id: number) {

@@ -23,6 +23,24 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import('../pages/admin/dashboard/Dashboard.vue'),
       },
       {
+        name: 'aulas-menu',
+        path: 'aulas',
+        component: RouteViewComponent,
+        children: [
+            {
+              name: 'aulas',
+              path: '',
+              component: () => import('../pages/admin/aulas/Aulas.vue'),
+            },
+            {
+              name: 'nueva-aula',
+              path: 'nueva',
+              component: () => import('../pages/admin/aulas/nueva-aula/NuevaAula.vue'),
+            }      
+        ]
+        
+      },
+      {
         name: 'statistics',
         path: 'statistics',
         component: RouteViewComponent,

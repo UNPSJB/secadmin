@@ -2,11 +2,13 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { AulaService } from './aula.service';
 import { CreateAulaDto } from './dto/create-aula.dto';
 import { UpdateAulaDto } from './dto/update-aula.dto';
+import { Public } from 'src/auth/auth.guard';
 
 @Controller('aulas')
 export class AulaController {
   constructor(private readonly aulaService: AulaService) {}
-
+  
+  @Public()
   @Post()
   create(@Body() createAulaDto: CreateAulaDto) {
     return this.aulaService.create(createAulaDto);
