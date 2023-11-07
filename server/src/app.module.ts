@@ -11,6 +11,7 @@ import { UsuariosModule } from './usuarios/usuarios.module';
 import typeormConfig from './configuracion/typeorm';
 import jwtConfig from './configuracion/jwt';
 import { JwtModule } from '@nestjs/jwt';
+import { EmpresaModule } from './empresa/empresa.module';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { JwtModule } from '@nestjs/jwt';
     AuthModule,
     PersonaModule,
     UsuariosModule,
+    EmpresaModule,
   ],
   controllers: [AppController],
   providers: [AppService],
