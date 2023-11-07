@@ -18,6 +18,7 @@
       :label="'contraseña'"
       :error="!!passwordErrors.length"
       :error-messages="passwordErrors"
+      @keyup.enter="onsubmit"
     />
 
     <div class="auth-layout__options flex items-center justify-between">
@@ -26,9 +27,9 @@
       </router-link>
     </div>
 
-    <div class="flex justify-center mt-4">
-      <va-button class="my-0" @click="onsubmit">{{ ('Ingresar') }}</va-button>
-    </div>
+      <div class="flex justify-center mt-4">
+        <va-button class="my-0" @click="onsubmit">{{ ('Ingresar') }}</va-button>
+      </div>
   </form>
 </template>
 
@@ -94,7 +95,7 @@
   }
 
   function onLoginSuccess(){
-    router.push ("/admin/dashboard")
+    router.push ("admin/dashboard")
   }
 </script>
 

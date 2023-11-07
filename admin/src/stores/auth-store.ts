@@ -2,6 +2,7 @@
 import { defineStore } from 'pinia'
 import { getUserFromToken } from '../services/auth/auth.service';
 
+
 export const useAuthStore = defineStore('auth', {
   state: () => {
     return { 

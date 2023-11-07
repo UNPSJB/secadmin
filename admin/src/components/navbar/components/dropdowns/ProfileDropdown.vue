@@ -8,7 +8,10 @@
         </span>
       </template>
       <va-dropdown-content class="profile-dropdown__content">
-        <va-button class="custom-button"> Cerrar sesión </va-button>
+        <va-button 
+        preset="secondary"
+        class="custom-button" 
+        @click="onCerrarSesion"> Cerrar sesión </va-button>
       </va-dropdown-content>
     </va-dropdown>
   </div>
@@ -29,8 +32,8 @@
   const router = useRouter()
 
   function onCerrarSesion(){
-    store.logout()
-    router.push ("auth/login")
+    store.logout();
+    router.push('/auth/login' );
   }
 
   withDefaults(

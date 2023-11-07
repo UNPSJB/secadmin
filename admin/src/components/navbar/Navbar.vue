@@ -13,21 +13,6 @@
         </router-link>
       </div>
     </template>
-    <div class="app-navbar-center">
-      <span class="hidden md:block mr-2">{{ t('navbar.messageUs') }}</span>
-      <a class="hidden md:block mr-2" href="mailto:hello@epicmax.co" target="_blank" :style="{ color: colors.primary }">
-        hello@epicmax.co
-      </a>
-      <va-button
-        href="https://github.com/epicmaxco/vuestic-admin"
-        color="#000000"
-        class="hidden lg:block"
-        icon="github"
-        target="_blank"
-      >
-        {{ t('navbar.repository') }}
-      </va-button>
-    </div>
     <template #right>
       <app-navbar-actions class="app-navbar__actions" :user-name="userName" />
     </template>
@@ -57,6 +42,7 @@
   .va-navbar {
     box-shadow: var(--va-box-shadow);
     z-index: 2;
+    height: 70%;
 
     @media screen and (max-width: 950px) {
       .left {
@@ -88,21 +74,9 @@
     transform: scaleX(-100%);
   }
 
-  .app-navbar-center {
-    display: flex;
-    align-items: center;
-    height: 1rem;
-
-    @media screen and (max-width: 1200px) {
-      &__github-button {
-        display: none;
-      }
-    }
-
     @media screen and (max-width: 950px) {
-      &__text {
+      __text {
         display: none;
       }
     }
-  }
 </style>
