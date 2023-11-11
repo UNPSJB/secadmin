@@ -5,7 +5,8 @@ export const useAulasStore = defineStore('aulas', {
   state: () => {
     return {  
       aulas: [],
-      aula: null
+      aula: null,
+      cantidadDeAulas: 0
     }
   },
   actions: {
@@ -56,7 +57,7 @@ export const useAulasStore = defineStore('aulas', {
       }
     },
 
-    async obtenerListadoDeAulas(like?: string, ordernamiento?:{atributo: string, orden:OrderDeOrdenamiento}) {
+    async obtenerListadoDeAulas(like?: string, ordernamiento?:{atributo: string, orden:OrderDeOrdenamiento}, pagina:number=1) {
       let filters = [];
 
       if(like) {
@@ -69,12 +70,19 @@ export const useAulasStore = defineStore('aulas', {
         filters.push(`ordenDireccion=${ordernamiento.orden}`)
       }
 
+      if (pagina) {
+        filters.push(`pagina=${pagina}`)
+
+      }
+
       const response = await request(`aulas?${filters.join('&')}`, 'GET');
 
       if (!response.ok) {
         throw new Error('Error guardando los datos');
       }
-      this.aulas = await response.json();
+      const respuesta = await response.json();
+      this.aulas = respuesta.aulas;
+      this.cantidadDeAulas = respuesta.cantidadDeAulas;
     },
 
     async obtenerAula(id:string) {

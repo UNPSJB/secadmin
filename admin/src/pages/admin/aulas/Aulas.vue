@@ -72,6 +72,16 @@
                         </tr>
                     </tbody>
                 </table>
+                <div class="wrapper">
+                    <va-button-group class="botton-group">
+                        <va-button  
+                            v-for="boton in botonesDePaginacion" 
+                            :key="boton.pagina"
+                            :disabled="boton.selected"
+                            @click="cambiarPagina(boton.pagina)" 
+                        > {{ boton.pagina }}</va-button>
+                    </va-button-group>
+                </div>
             </va-card-content>
         </va-card>
         <va-modal
@@ -90,7 +100,7 @@
     import { computed, ComputedRef, ref,Ref, watch } from 'vue';
     import { useRouter } from 'vue-router';
     import { useAulasStore } from '../../../stores/aulas-store';
-    
+    import { generarBotonesPaginacion } from '../../../services/paginacion/paginacion.service';
     const aulasStore = useAulasStore();
     const router = useRouter();
     
@@ -104,14 +114,16 @@
         { value:'direccion', text:'Dirección'}
     ];
     
-    
     let showSmallModal = ref(false)
     let aulaParaEliminar:Ref<Aula| null> = ref(null)
     let filtro:Ref<string> = ref("")
     let ordenarPor:Ref<SelectOption> = ref(opcionesOrdenarPor[0]);
     let ordenDeOrdenamiento: Ref<SelectOption>= ref(opcionesDeOrdenamientoListado[0]);
+    let pagina: Ref<number>= ref(1);
+    let limitePorPagina = 10;
 
     const listadoDeAulas:ComputedRef<Aula[]> = computed(() => aulasStore.aulas);
+    const botonesDePaginacion:ComputedRef<any[]> = computed(() => generarBotonesPaginacion(aulasStore.cantidadDeAulas, pagina.value, limitePorPagina));
 
     function onNuevaAula() {
         router.push({name: 'nueva-aula'});
@@ -140,27 +152,50 @@
     }
 
     function onCambiaFiltro() { 
-        aulasStore.obtenerListadoDeAulas(filtro.value, {
-            atributo: ordenarPor.value.value,
-            orden: ordenDeOrdenamiento.value.value as OrderDeOrdenamiento
-        });
+        pagina.value=1;
+
+        aulasStore.obtenerListadoDeAulas(
+            filtro.value, 
+            {
+                atributo: ordenarPor.value.value,
+                orden: ordenDeOrdenamiento.value.value as OrderDeOrdenamiento
+            }, 
+            1
+        );
     }
 
     watch(() => ordenarPor.value, (nuevoOrden) => {
-        aulasStore.obtenerListadoDeAulas(filtro.value, {
-            atributo: nuevoOrden.value,
-            orden: ordenDeOrdenamiento.value.value as OrderDeOrdenamiento
-        });
+        aulasStore.obtenerListadoDeAulas(
+            filtro.value, {
+                atributo: nuevoOrden.value,
+                orden: ordenDeOrdenamiento.value.value as OrderDeOrdenamiento
+            }, 
+            pagina.value
+        );
     });
     
 
     watch(() => ordenDeOrdenamiento.value, (nuevoOrden) => {
-        aulasStore.obtenerListadoDeAulas(filtro.value, {
-            atributo: ordenarPor.value.value,
-            orden: nuevoOrden.value as OrderDeOrdenamiento
-        });
+        aulasStore.obtenerListadoDeAulas(
+            filtro.value, {
+                atributo: ordenarPor.value.value,
+                orden: nuevoOrden.value as OrderDeOrdenamiento
+            },
+            pagina.value
+        );
     });
     
+    function cambiarPagina(paginaSeleccionada:number) { 
+        pagina.value = paginaSeleccionada;
+        aulasStore.obtenerListadoDeAulas(
+            filtro.value, 
+            {
+                atributo: ordenarPor.value.value,
+                orden: ordenDeOrdenamiento.value.value as OrderDeOrdenamiento,
+            }, 
+            paginaSeleccionada
+        );
+    }
 
 </script>
   

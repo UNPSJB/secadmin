@@ -18,12 +18,15 @@ export class AulaController {
   findAll(
     @Query('like') like_filter:string,
     @Query('ordenPor') orden_por_filter:string,
-    @Query('ordenDireccion') orden_direccion_filter:string  
+    @Query('ordenDireccion') orden_direccion_filter:string,
+    @Query('pagina') pagina_filter:string,
+    
   ) {
     return this.aulaService.findAll({
       like_filter, 
       orden_por_filter,
-      orden_direccion_filter
+      orden_direccion_filter,
+      pagina_filter
     });
   }
 

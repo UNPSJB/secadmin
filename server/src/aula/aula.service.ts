@@ -34,11 +34,14 @@ export class AulaService {
     return this.repo.save(aula)
   }
 
-  findAll(filters) {
+  async findAll(filters) {
+    let cantidad_por_pagina = 10;
+
+
     let processed_filter:any = {
       where: {},
       relations:["localidad"],
-      take:10,
+      take:cantidad_por_pagina,
       order: {id: 'ASC' as 'ASC'}
     };
 
@@ -58,7 +61,21 @@ export class AulaService {
       }
     }
 
-    return this.repo.find(processed_filter);  
+    if(filters.pagina_filter) {
+      const pagina = Number(filters.pagina_filter)
+      processed_filter = {
+        ...processed_filter,
+        take: cantidad_por_pagina,
+        skip: (pagina - 1) * cantidad_por_pagina 
+      }
+    }
+
+    const [aulas, cantidadDeAulas] = await this.repo.findAndCount(processed_filter);  
+
+    return {
+      aulas, 
+      cantidadDeAulas
+    }
   }
 
   findOne(id: number) {
