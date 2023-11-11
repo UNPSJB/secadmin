@@ -6,13 +6,15 @@ import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from './auth.guard';
 import { JwtModule, JwtService } from '@nestjs/jwt';
 import { ConfigModule } from '@nestjs/config';
+import { EmailModule } from 'src/email/email.module';
 
 @Module({
 
   imports: [
     ConfigModule,
     forwardRef(() => UsuariosModule),
-    JwtModule
+    JwtModule, 
+    EmailModule
   ],
   providers: [
     {

@@ -12,5 +12,12 @@ export class AuthController {
     signIn(@Body() signInDto: Record<string, any>) {
       return this.authService.signIn(signInDto.email, signInDto.password);
     }
+    
+    @Public()
+    @HttpCode(HttpStatus.OK)
+    @Post('recover-password')
+    recoverPassword(@Body() recoverPasswordDto: Record<string, any>) {
+      return this.authService.recoverPassword(recoverPasswordDto.email);
+    }
 
 }

@@ -13,6 +13,10 @@ export class UsuariosService {
         @Inject(forwardRef(() => AuthService)) private authService: AuthService,
     ) {}
     
+    save(usuario:Usuario){
+        return this.repo.save(usuario);
+    }
+
     findOne(filter) {
         return this.repo.findOne({where:filter, relations:["persona"]})
     }

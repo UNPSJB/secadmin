@@ -44,6 +44,35 @@ export const useAuthStore = defineStore('auth', {
     logout(){
       this.token=null
       this.user=null
+    },
+
+    async recoverPass(email:string, onEmailSubmit:any)
+    {
+      try {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/auth/recover-password`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            email
+          }),
+        });
+        if(!response.ok){
+          throw new Error('Email no encontrado');
+        }
+            const { access_token } = await response.json();
+            this.token = access_token;
+
+            const user = getUserFromToken(access_token);
+
+            this.user = user;
+
+            onEmailSubmit();
+
+    }catch (error: any) {
+      console.error(error.message);
     }
   },
+}
 })

@@ -1,7 +1,7 @@
 <template>
   <nav class="logo">
   <div class="sec-logo">
-    <svg width="350" height="120" viewBox="15 -20 415 129" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <svg width="120" height="65" viewBox="15 -25 250 129" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
       <rect width="250" height="80" fill="#0470AA"/>
       <rect x="30" y="1" width="180" height="80" fill="url(#pattern0)"/>
     <defs>

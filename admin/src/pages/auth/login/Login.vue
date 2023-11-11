@@ -1,6 +1,4 @@
 <template>
-
-
   <form @submit.prevent="onsubmit">
     <va-input
       v-model="email"
@@ -18,11 +16,12 @@
       :label="'contraseña'"
       :error="!!passwordErrors.length"
       :error-messages="passwordErrors"
+      @keyup.enter="onsubmit"
     />
 
     <div class="auth-layout__options flex items-center justify-between">
       <router-link class="ml-1 va-link" :to="{ name: 'recover-password' }">
-        Recuperar contraseña
+        Olvidé mi contraseña
       </router-link>
     </div>
 
@@ -53,7 +52,7 @@
   const formReady = computed(() => !emailErrors.value.length && !passwordErrors.value.length)
 
   function validateEmail(email:string){
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
     const errorList = [];
 
     if (!email) {

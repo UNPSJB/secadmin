@@ -3,14 +3,14 @@
     <va-dropdown v-model="isShown" class="profile-dropdown" stick-to-edges :offset="[13, 0]">
       <template #anchor>
         <span class="profile-dropdown__anchor">
-          <slot />
           <va-icon class="px-2" :name="isShown ? 'angle_up' : 'angle_down'" :color="colors.primary" />
         </span>
       </template>
       <va-dropdown-content class="profile-dropdown__content">
-        <va-button     
+        <va-button   
           preset="plain"
           class="cerrar-sesion-button"
+          @click="onCerrarSesion"
         > 
           Cerrar sesión 
         </va-button>
@@ -21,14 +21,10 @@
 
 <script setup lang="ts">
   import { ref } from 'vue'
-  import { useI18n } from 'vue-i18n'
   import { useColors } from 'vuestic-ui'
   import { useAuthStore } from '../../../../stores/auth-store'
   import { useRouter } from 'vue-router'
-  //import store from '../../../../stores'
-  
 
-  const { t } = useI18n()
   const { colors } = useColors()
   const store = useAuthStore();
   const router = useRouter()

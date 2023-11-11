@@ -12,12 +12,15 @@ import typeormConfig from './configuracion/typeorm';
 import jwtConfig from './configuracion/jwt';
 import { JwtModule } from '@nestjs/jwt';
 import { EmpresaModule } from './empresa/empresa.module';
+import { EmailModule } from './email/email.module';
+import emailConfig from './configuracion/email';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      load: [typeormConfig,jwtConfig]
+      load: [typeormConfig,jwtConfig, emailConfig]
+      
     }),
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],
@@ -28,12 +31,14 @@ import { EmpresaModule } from './empresa/empresa.module';
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => (configService.get('jwt'))
     }),
+  
     LocalidadesModule,
     AulaModule,
     AuthModule,
     PersonaModule,
     UsuariosModule,
     EmpresaModule,
+    EmailModule,
   ],
   controllers: [AppController],
   providers: [AppService],
