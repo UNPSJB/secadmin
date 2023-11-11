@@ -1,9 +1,12 @@
 // stores/counter.js
 import { defineStore } from 'pinia'
-import { getUserFromToken } from '../services/auth/auth.service';
+import { getUserFromToken, isTokenExpired } from '../services/auth/auth.service';
 
 export const useAuthStore = defineStore('auth', {
-  state: () => {
+  state: ():{
+    token: string | null,
+    user: any
+  } => {
     return { 
       token: null,
       user: null 
@@ -31,6 +34,9 @@ export const useAuthStore = defineStore('auth', {
             this.token = access_token;
 
             const user = getUserFromToken(access_token);
+
+            // Guarda el token en localStorage
+            localStorage.setItem('jwt_token', access_token);
 
             this.user = user;
             
@@ -74,5 +80,14 @@ export const useAuthStore = defineStore('auth', {
       console.error(error.message);
     }
   },
+
+  initialize() {
+    const token = localStorage.getItem('jwt_token');
+    if ( token && !isTokenExpired(token)) {
+      this.token = token;
+      const user = getUserFromToken(token);
+      this.user = user;
+    }
+  }
 }
 })
