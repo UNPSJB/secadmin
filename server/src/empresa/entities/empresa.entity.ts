@@ -9,7 +9,7 @@ export class Empresa {
     @Column({
         unique:true
     })
-    cuit:number
+    cuit:string
 
     @Column()
     razon_social:string

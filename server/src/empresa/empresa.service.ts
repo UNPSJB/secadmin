@@ -3,7 +3,7 @@ import { CreateEmpresaDto } from './dto/create-empresa.dto';
 import { UpdateEmpresaDto } from './dto/update-empresa.dto';
 import { Empresa } from './entities/empresa.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { ILike, Repository } from 'typeorm';
 import { LocalidadesService } from 'src/localidades/localidades.service';
 
 
@@ -30,8 +30,50 @@ export class EmpresaService {
   
     return this.repo.save(empresa)
   }
-  findAll() {
-    return this.repo.find({relations:["localidad"]});  
+
+  async findAll(filters) {
+    let cantidad_por_pagina = 10;
+
+
+    let processed_filter:any = {
+      where: {},
+      relations:["localidad"],
+      take:cantidad_por_pagina,
+      order: {id: 'ASC' as 'ASC'}
+    };
+
+    if(filters.like_filter) {
+      processed_filter.where = [
+        { cuit: ILike(`%${filters.like_filter}%`) },
+        { localidad: { nombre: ILike(`%${filters.like_filter}%`) } },
+        { direccion: ILike(`%${filters.like_filter}%`) },
+        { razon_social: ILike(`%${filters.like_filter}%`) },
+      ]
+    }
+
+    if(filters.orden_por_filter) {
+      if (filters.orden_por_filter === 'localidad') {
+        processed_filter.order = { "localidad": {"nombre": filters.orden_direccion_filter || "ASC"} }
+      } else {
+        processed_filter.order = { [filters.orden_por_filter]: filters.orden_direccion_filter || "ASC" }
+      }
+    }
+
+    if(filters.pagina_filter) {
+      const pagina = Number(filters.pagina_filter)
+      processed_filter = {
+        ...processed_filter,
+        take: cantidad_por_pagina,
+        skip: (pagina - 1) * cantidad_por_pagina 
+      }
+    }
+
+    const [empresas, cantidadDeEmpresas] = await this.repo.findAndCount(processed_filter);  
+
+    return {
+      empresas, 
+      cantidadDeEmpresas
+    };
   }
 
   findOne(id: number) {

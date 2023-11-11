@@ -1,5 +1,5 @@
 export class CreateEmpresaDto {
-    cuit: number;
+    cuit: string;
     razon_social:string;
     direccion: string;
     localidad:number;

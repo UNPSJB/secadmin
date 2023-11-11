@@ -8,7 +8,6 @@ import { Public } from 'src/auth/auth.guard';
 export class AulaController {
   constructor(private readonly aulaService: AulaService) {}
   
-  @Public()
   @Post()
   create(@Body() createAulaDto: CreateAulaDto) {
     return this.aulaService.create(createAulaDto);

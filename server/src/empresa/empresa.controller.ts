@@ -1,9 +1,9 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { EmpresaService } from './empresa.service';
 import { CreateEmpresaDto } from './dto/create-empresa.dto';
 import { UpdateEmpresaDto } from './dto/update-empresa.dto';
 
-@Controller('empresa')
+@Controller('empresas')
 export class EmpresaController {
   constructor(private readonly empresaService: EmpresaService) {}
 
@@ -13,8 +13,18 @@ export class EmpresaController {
   }
 
   @Get()
-  findAll() {
-    return this.empresaService.findAll();
+  findAll(
+    @Query('like') like_filter:string,
+    @Query('ordenPor') orden_por_filter:string,
+    @Query('ordenDireccion') orden_direccion_filter:string,
+    @Query('pagina') pagina_filter:string,
+  ) {
+    return this.empresaService.findAll({
+      like_filter, 
+      orden_por_filter,
+      orden_direccion_filter,
+      pagina_filter
+    });
   }
 
   @Get(':id')
