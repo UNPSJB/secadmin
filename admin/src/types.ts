@@ -11,3 +11,10 @@ type Localidad = {
     nombre: string;
     codigo_postal: number;
 }
+
+type OrderDeOrdenamiento = 'ASC' | 'DESC';
+
+type SelectOption = {
+    value:string, 
+    text:string
+};

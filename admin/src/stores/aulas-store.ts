@@ -56,11 +56,17 @@ export const useAulasStore = defineStore('aulas', {
       }
     },
 
-    async obtenerListadoDeAulas(like?: string) {
+    async obtenerListadoDeAulas(like?: string, ordernamiento?:{atributo: string, orden:OrderDeOrdenamiento}) {
       let filters = [];
 
       if(like) {
         filters.push(`like=${like}`)
+      }
+
+
+      if(ordernamiento) {
+        filters.push(`ordenPor=${ordernamiento.atributo}`)
+        filters.push(`ordenDireccion=${ordernamiento.orden}`)
       }
 
       const response = await request(`aulas?${filters.join('&')}`, 'GET');

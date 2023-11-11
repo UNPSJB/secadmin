@@ -35,10 +35,11 @@ export class AulaService {
   }
 
   findAll(filters) {
-    let processed_filter = {
+    let processed_filter:any = {
       where: {},
       relations:["localidad"],
       take:10,
+      order: {id: 'ASC' as 'ASC'}
     };
 
     if(filters.like_filter) {
@@ -47,6 +48,14 @@ export class AulaService {
         { localidad: { nombre: ILike(`%${filters.like_filter}%`) } },
         { direccion: ILike(`%${filters.like_filter}%`) },
       ]
+    }
+
+    if(filters.orden_por_filter) {
+      if (filters.orden_por_filter === 'localidad') {
+        processed_filter.order = { "localidad": {"nombre": filters.orden_direccion_filter || "ASC"} }
+      } else {
+        processed_filter.order = { [filters.orden_por_filter]: filters.orden_direccion_filter || "ASC" }
+      }
     }
 
     return this.repo.find(processed_filter);  

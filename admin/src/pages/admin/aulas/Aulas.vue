@@ -6,6 +6,22 @@
                     <div class="basis-8/12">
                         <h4> Listado de aulas </h4>
                     </div>  
+
+                    <div class="basis-2/12">
+                        <va-select
+                            v-model="ordenarPor"
+                            label="Ordenar por"
+                            :options="opcionesOrdenarPor"
+
+                        />
+                    </div>
+                    <div class="basis-2/12">
+                    <va-select
+                        v-model="ordenDeOrdenamiento"
+                        label="Dirección de ordenamiento"
+                        :options="opcionesDeOrdenamientoListado"
+                    />
+                    </div>
                     <div class="basis-2/12">
                         <va-input
                             v-model="filtro"
@@ -71,18 +87,29 @@
 </template>
 
 <script setup lang="ts">
-    import { computed, ComputedRef, ref,Ref } from 'vue'
-    import { useRouter } from 'vue-router'
+    import { computed, ComputedRef, ref,Ref, watch } from 'vue';
+    import { useRouter } from 'vue-router';
     import { useAulasStore } from '../../../stores/aulas-store';
-
+    
     const aulasStore = useAulasStore();
     const router = useRouter();
     
     aulasStore.obtenerListadoDeAulas();
+
+    const opcionesDeOrdenamientoListado:SelectOption[] = [{ value:'ASC', text:'Ascendente'}, {value:'DESC', text:'Descendente'}]
+    const opcionesOrdenarPor:SelectOption[] = [
+        { value:'codigo_aula', text:'Código de aula'}, 
+        { value:'capacidad', text:'Capacidad'}, 
+        { value:'localidad', text:'Localidad'}, 
+        { value:'direccion', text:'Dirección'}
+    ];
+    
     
     let showSmallModal = ref(false)
     let aulaParaEliminar:Ref<Aula| null> = ref(null)
     let filtro:Ref<string> = ref("")
+    let ordenarPor:Ref<SelectOption> = ref(opcionesOrdenarPor[0]);
+    let ordenDeOrdenamiento: Ref<SelectOption>= ref(opcionesDeOrdenamientoListado[0]);
 
     const listadoDeAulas:ComputedRef<Aula[]> = computed(() => aulasStore.aulas);
 
@@ -113,9 +140,27 @@
     }
 
     function onCambiaFiltro() { 
-        aulasStore.obtenerListadoDeAulas(filtro.value);
-
+        aulasStore.obtenerListadoDeAulas(filtro.value, {
+            atributo: ordenarPor.value.value,
+            orden: ordenDeOrdenamiento.value.value as OrderDeOrdenamiento
+        });
     }
+
+    watch(() => ordenarPor.value, (nuevoOrden) => {
+        aulasStore.obtenerListadoDeAulas(filtro.value, {
+            atributo: nuevoOrden.value,
+            orden: ordenDeOrdenamiento.value.value as OrderDeOrdenamiento
+        });
+    });
+    
+
+    watch(() => ordenDeOrdenamiento.value, (nuevoOrden) => {
+        aulasStore.obtenerListadoDeAulas(filtro.value, {
+            atributo: ordenarPor.value.value,
+            orden: nuevoOrden.value as OrderDeOrdenamiento
+        });
+    });
+    
 
 </script>
   

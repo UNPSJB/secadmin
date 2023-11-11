@@ -15,8 +15,16 @@ export class AulaController {
   }
 
   @Get()
-  findAll(@Query('like') like_filter:string ) {
-    return this.aulaService.findAll({like_filter});
+  findAll(
+    @Query('like') like_filter:string,
+    @Query('ordenPor') orden_por_filter:string,
+    @Query('ordenDireccion') orden_direccion_filter:string  
+  ) {
+    return this.aulaService.findAll({
+      like_filter, 
+      orden_por_filter,
+      orden_direccion_filter
+    });
   }
 
   @Get(':id')
