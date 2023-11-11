@@ -3,9 +3,20 @@
         <va-card class="markup-tables mb-8">
             <va-card-content class="overflow-auto">
                 <div class="flex flex-row">    
-                    <div class="basis-10/12">
+                    <div class="basis-8/12">
                         <h4> Listado de aulas </h4>
                     </div>  
+                    <div class="basis-2/12">
+                        <va-input
+                            v-model="filtro"
+                            placeholder="Filtrar..."
+                            @change="onCambiaFiltro"
+                        >
+                        <template #prependInner>
+                            <va-icon name="search" />
+                        </template>
+                        </va-input>
+                    </div>
                     <div class="basis-2/12">
                         <va-button @click="onNuevaAula"> Nueva aula </va-button>
                     </div>
@@ -47,19 +58,31 @@
                 </table>
             </va-card-content>
         </va-card>
+        <va-modal
+            v-model="showSmallModal"
+            size="small"
+            title="Confirmar eliminación"
+            :message="obtenerMensajeDeEliminacion()"
+            ok-text="Eliminar"
+            cancel-text="Cancelar"
+            @ok="eliminarAula"
+        />
     </va-content>
 </template>
 
 <script setup lang="ts">
-    import { computed, ComputedRef } from 'vue'
+    import { computed, ComputedRef, ref,Ref } from 'vue'
     import { useRouter } from 'vue-router'
     import { useAulasStore } from '../../../stores/aulas-store';
 
     const aulasStore = useAulasStore();
-
     const router = useRouter();
-
+    
     aulasStore.obtenerListadoDeAulas();
+    
+    let showSmallModal = ref(false)
+    let aulaParaEliminar:Ref<Aula| null> = ref(null)
+    let filtro:Ref<string> = ref("")
 
     const listadoDeAulas:ComputedRef<Aula[]> = computed(() => aulasStore.aulas);
 
@@ -68,8 +91,13 @@
     }
 
     async function onEliminarAula(aula:Aula){
-        if (aula.id){
-            await aulasStore.borrarAula(aula.id);
+        showSmallModal.value = true;
+        aulaParaEliminar.value = aula;
+    }   
+
+    async function eliminarAula(){
+        if (aulaParaEliminar.value && aulaParaEliminar.value.id){
+            await aulasStore.borrarAula(aulaParaEliminar.value.id);
             aulasStore.obtenerListadoDeAulas();
         }
     }   
@@ -78,6 +106,15 @@
         if (aula.id){
             router.push({name: 'editar-aula', params: {id:aula.id}});
         }
+    }
+
+    function obtenerMensajeDeEliminacion():string { 
+        return `Esta a punto de eliminar el aula ${aulaParaEliminar.value !== null && aulaParaEliminar.value.codigo_aula}. ¿Esta seguro?`
+    }
+
+    function onCambiaFiltro() { 
+        aulasStore.obtenerListadoDeAulas(filtro.value);
+
     }
 
 </script>

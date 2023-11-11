@@ -3,7 +3,7 @@ import { CreateAulaDto } from './dto/create-aula.dto';
 import { UpdateAulaDto } from './dto/update-aula.dto';
 import { Aula } from './entities/aula.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { ILike, Repository } from 'typeorm';
 import { LocalidadesService } from 'src/localidades/localidades.service';
 
 @Injectable()
@@ -34,8 +34,22 @@ export class AulaService {
     return this.repo.save(aula)
   }
 
-  findAll() {
-    return this.repo.find({relations:["localidad"]});  
+  findAll(filters) {
+    let processed_filter = {
+      where: {},
+      relations:["localidad"],
+      take:10,
+    };
+
+    if(filters.like_filter) {
+      processed_filter.where = [
+        { codigo_aula: ILike(`%${filters.like_filter}%`) },
+        { localidad: { nombre: ILike(`%${filters.like_filter}%`) } },
+        { direccion: ILike(`%${filters.like_filter}%`) },
+      ]
+    }
+
+    return this.repo.find(processed_filter);  
   }
 
   findOne(id: number) {
@@ -53,7 +67,6 @@ export class AulaService {
       capacidad: updateAulaDto.capacidad,
       codigo_aula: updateAulaDto.codigo_aula,
       direccion: updateAulaDto.direccion,
-      localidad
     });
   }
 

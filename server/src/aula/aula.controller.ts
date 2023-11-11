@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { AulaService } from './aula.service';
 import { CreateAulaDto } from './dto/create-aula.dto';
 import { UpdateAulaDto } from './dto/update-aula.dto';
@@ -15,8 +15,8 @@ export class AulaController {
   }
 
   @Get()
-  findAll() {
-    return this.aulaService.findAll();
+  findAll(@Query('like') like_filter:string ) {
+    return this.aulaService.findAll({like_filter});
   }
 
   @Get(':id')

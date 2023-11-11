@@ -56,8 +56,14 @@ export const useAulasStore = defineStore('aulas', {
       }
     },
 
-    async obtenerListadoDeAulas() {
-      const response = await request(`aulas`, 'GET');
+    async obtenerListadoDeAulas(like?: string) {
+      let filters = [];
+
+      if(like) {
+        filters.push(`like=${like}`)
+      }
+
+      const response = await request(`aulas?${filters.join('&')}`, 'GET');
 
       if (!response.ok) {
         throw new Error('Error guardando los datos');
