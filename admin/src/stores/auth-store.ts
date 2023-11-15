@@ -15,7 +15,8 @@ export const useAuthStore = defineStore('auth', {
   actions: {
     async login(email:string, password:string, onLoginSuccess: any) {
         try {
-            const response = await fetch(`${import.meta.env.VITE_API_URL}/auth/login`, {
+          console.log('Antes de la solicitud fetch');
+          const response = await fetch(`${import.meta.env.VITE_API_URL}/auth/login`, {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
@@ -25,6 +26,8 @@ export const useAuthStore = defineStore('auth', {
                 password
               }),
             });
+            console.log('Despues de la solicitud fetch');
+
     
             if (!response.ok) {
               throw new Error('Login failed');

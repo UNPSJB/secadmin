@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "nodemailer-smtp-transport": "^2.4.2",
+    "xoauth2": "^1.2.0"
+  }
+}
