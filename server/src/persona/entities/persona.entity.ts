@@ -1,7 +1,8 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToOne, CreateDateColumn, UpdateDateColumn, DeleteDateColumn } from "typeorm"
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToOne, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, OneToMany } from "typeorm"
 import { Nacionalidad } from "./nacionalidades.entity";
 import { EstadoCivil } from "./estados-civiles.enum";
 import { Localidades } from "src/localidades/entities/localidades.entity";
+import { Rol } from "src/usuarios/entities/rol.entity";
 
 @Entity('personas')
 export class Persona {
@@ -54,6 +55,9 @@ export class Persona {
 
     @OneToOne(() => Persona, (persona) => persona.usuario)
     usuario: Persona;    
+
+    @OneToMany(() => Rol, (rol) => rol.persona)
+    roles: Rol[]
 
     @CreateDateColumn()
     fecha_creacion: Date

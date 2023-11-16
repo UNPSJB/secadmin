@@ -37,6 +37,24 @@ export default {
       ],
     },
     {
+      name: 'empresas',
+      displayName: 'Empresas',
+      meta: {
+        icon: 'material-icons-business',
+      },
+      disabled: true,
+      children: [
+        {
+          name: 'empresas',
+          displayName: 'Listado de empresas',
+        },
+        {
+          name: 'nueva-empresa',
+          displayName: 'Nueva empresa',
+        },
+      ],
+    },
+    {
       name: 'statistics',
       displayName: 'menu.statistics',
       meta: {

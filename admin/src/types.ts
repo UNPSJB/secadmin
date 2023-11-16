@@ -1,4 +1,4 @@
-type Aula = {
+export type Aula = {
     id?: number;
     codigo_aula: string;
     direccion: string;
@@ -6,15 +6,23 @@ type Aula = {
     localidad: Localidad
 }
 
-type Localidad = {
+export type Localidad = {
     id: number;
     nombre: string;
     codigo_postal: number;
 }
 
-type OrderDeOrdenamiento = 'ASC' | 'DESC';
+export type OrderDeOrdenamiento = 'ASC' | 'DESC';
 
-type SelectOption = {
+export type SelectOption = {
     value:string, 
     text:string
 };
+
+export type Empresa = {
+    id?: number;
+    cuit:string;
+    razon_social:string;
+    direccion:string;
+    localidad:Localidad;
+}

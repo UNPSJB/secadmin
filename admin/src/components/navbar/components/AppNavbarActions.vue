@@ -3,7 +3,8 @@
     <color-dropdown class="app-navbar-actions__item" />
     <language-dropdown class="app-navbar-actions__item" />
     <profile-dropdown class="app-navbar-actions__item app-navbar-actions__item--profile">
-      <span>{{ userName }}</span>
+      <span>{{ `${user.nombre} ${user.apellido}` }} </span>
+      
     </profile-dropdown>
   </div>
 </template>
@@ -15,11 +16,11 @@
 
   withDefaults(
     defineProps<{
-      userName?: string
+      user?: any
       isTopBar?: boolean
     }>(),
     {
-      userName: '',
+      user: {nombre: '', apellido:''},
       isTopBar: false,
     },
   )

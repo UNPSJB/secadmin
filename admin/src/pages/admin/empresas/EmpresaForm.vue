@@ -4,16 +4,16 @@
             <va-card-content class="overflow-auto">
                 <div class="flex flex-row">
                     <div class="basis-10/12">
-                        <h4> {{ esEdicion? 'Editar Aula' : 'Nueva aula' }} </h4>
+                        <h4> {{ esEdicion? 'Editar Empresa' : 'Nueva empresa' }} </h4>
                     </div>
                 </div>
                 <form>
                     <div class="grid grid-cols-12 gap-6">
                         <div class="flex md:col-span-6 sm:col-span-6 col-span-12">
-                            <va-input v-model="codigoAula" label="Código aula" />
+                            <va-input v-model="razonSocial" label="Razon social" />
                         </div>
                         <div class="flex md:col-span-6 sm:col-span-6 col-span-12">
-                            <va-input v-model="capacidad" label="Capacidad" mask="numeral" />
+                            <va-input v-model="cuit" label="CUIT" />
                         </div>
                         <div class="flex md:col-span-6 sm:col-span-6 col-span-12">
                             <Suspense>
@@ -55,24 +55,24 @@
 import { ref, computed, watch, Ref, ComputedRef } from 'vue';
 import { useRouter, useRoute } from 'vue-router'
 import LocalidadesSelect from '../../../components/selectors/LocalidadesSelect.vue';
-import { useAulasStore } from '../../../stores/aulas-store';
+import { useEmpresasStore } from '../../../stores/empresas-store';
 import { useToast } from 'vuestic-ui'
-import { Aula, Localidad } from '../../../types';
+import { Empresa, Localidad } from '../../../types';
 
 const router = useRouter();
 const route = useRoute();
-const aulasStore = useAulasStore();
+const empresasStore = useEmpresasStore();
 const { init } = useToast();
 
-const codigoAula = ref("");
-const capacidad = ref(0);
+const razonSocial = ref("");
+const cuit = ref("");
 const direccion = ref("");
 const localidad:Ref<Localidad | null> = ref(null);
 
-const esEdicion = route.name === 'editar-aula';
+const esEdicion = route.name === 'editar-empresa';
 
 if(esEdicion) {
-    aulasStore.obtenerAula(route.params.id as string);
+    empresasStore.obtenerEmpresa(route.params.id as string);
 }
 
 function updateLocalidad (newLocalidad:any) {
@@ -80,19 +80,19 @@ function updateLocalidad (newLocalidad:any) {
 }
 
 function onCancelar() {
-    router.push({ name: 'aulas' });
+    router.push({ name: 'empresas' });
 }
 
 const sePuedeGuardar = computed(() => 
-    codigoAula.value !== "" && 
-    capacidad.value > 1 &&
+    razonSocial.value !== "" && 
+    cuit.value !== "" &&
     direccion.value !== "" &&
     localidad.value !== null 
 );
 
 function onLimpiar() {
-    codigoAula.value = "";
-    capacidad.value = 0;
+    razonSocial.value = "";
+    cuit.value = "";
     direccion.value = ""
     localidad.value = null;
 }
@@ -100,22 +100,22 @@ function onLimpiar() {
 async function onGuardar() {
     try {
         if(esEdicion) {
-            await aulasStore.actualizarAula(
+            await empresasStore.actualizarEmpresa(
                 route.params.id as string,
-                codigoAula.value,
-                capacidad.value, 
+                razonSocial.value,
+                cuit.value, 
                 localidad.value, 
                 direccion.value
             )
         } else {
-            await aulasStore.guardarAula(codigoAula.value,capacidad.value, localidad.value, direccion.value);
+            await empresasStore.guardarEmpresa(razonSocial.value,cuit.value, localidad.value, direccion.value);
         }
         init({
-            message: 'Aula guardada correctamente',
+            message: 'Empresa guardada correctamente',
             position: 'bottom-right',
             duration: 2500,
         })
-        router.push({ name: 'aulas' });
+        router.push({ name: 'empresas' });
     } catch (e: any) {
         init({
             message: e.message,
@@ -127,15 +127,15 @@ async function onGuardar() {
 }
 
 
-const aulaParaEditar:ComputedRef<Aula | null> = computed(() => aulasStore.aula)
+const empresaParaEditar:ComputedRef<Empresa | null> = computed(() => empresasStore.empresa)
 
 
-watch(aulaParaEditar as any, (aulaAEditar:Aula) => {
-    if(aulaAEditar) {
-        codigoAula.value = aulaAEditar.codigo_aula;
-        capacidad.value = aulaAEditar.capacidad;
-        direccion.value = aulaAEditar.direccion;
-        localidad.value = aulaAEditar.localidad;
+watch(empresaParaEditar as any, (empresaAEditar:Empresa) => {
+    if(empresaAEditar) {
+        razonSocial.value = empresaAEditar.razon_social;
+        cuit.value = empresaAEditar.cuit;
+        direccion.value = empresaAEditar.direccion;
+        localidad.value = empresaAEditar.localidad;
     }
 })
 

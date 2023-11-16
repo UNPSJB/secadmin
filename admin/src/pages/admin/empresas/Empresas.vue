@@ -4,7 +4,7 @@
             <va-card-content class="overflow-auto">
                 <div class="flex flex-row">    
                     <div class="basis-8/12">
-                        <h4> Listado de aulas </h4>
+                        <h4> Listado de Empresas </h4>
                     </div>  
 
                     <div class="basis-2/12">
@@ -34,15 +34,15 @@
                         </va-input>
                     </div>
                     <div class="basis-2/12">
-                        <va-button @click="onNuevaAula"> Nueva aula </va-button>
+                        <va-button @click="onNuevaEmpresa"> Nueva empresa </va-button>
                     </div>
                 </div>    
 
                 <table class="va-table w-full">
                     <thead>
                         <tr>
-                            <th> Código aula </th>
-                            <th> Capacidad </th>
+                            <th> Razon social </th>
+                            <th> CUIT </th>
                             <th> Localidad </th>
                             <th> Direccion </th>
                             <th> Acciones </th>
@@ -50,22 +50,22 @@
                     </thead>
 
                     <tbody>
-                        <tr v-for="aula in listadoDeAulas" :key="aula.id">
-                            <td>{{ aula.codigo_aula }}</td>
-                            <td>{{ aula.capacidad }}</td>
-                            <td>{{ aula.localidad.nombre }}</td>
-                            <td>{{ aula.direccion }}</td>
+                        <tr v-for="empresa in listadoDeEmpresas" :key="empresa.id">
+                            <td>{{ empresa.razon_social }}</td>
+                            <td>{{ empresa.cuit }}</td>
+                            <td>{{ empresa.localidad.nombre }}</td>
+                            <td>{{ empresa.direccion }}</td>
                             <td> 
                                 <va-button-group class="col-span-12 xl:col-span-6" preset="plain">
                                     <va-button 
                                         round
                                         icon="md_edit"
-                                        @click="onEditarAula(aula)" 
+                                        @click="onEditarEmpresa(empresa)" 
                                     />
                                     <va-button 
                                         round
                                         icon="md_delete"
-                                        @click="onEliminarAula(aula)"
+                                        @click="onEliminarEmpresa(empresa)"
                                     />
                                 </va-button-group>
                             </td>
@@ -73,7 +73,7 @@
                     </tbody>
                 </table>
                 <div class="wrapper">
-                    <va-button-group class="botton-group">
+                    <va-button-group class="button-group">
                         <va-button  
                             v-for="boton in botonesDePaginacion" 
                             :key="boton.pagina"
@@ -91,7 +91,7 @@
             :message="obtenerMensajeDeEliminacion()"
             ok-text="Eliminar"
             cancel-text="Cancelar"
-            @ok="eliminarAula"
+            @ok="eliminarEmpresa"
         />
     </va-content>
 </template>
@@ -99,64 +99,63 @@
 <script setup lang="ts">
     import { computed, ComputedRef, ref,Ref, watch } from 'vue';
     import { useRouter } from 'vue-router';
-    import { useAulasStore } from '../../../stores/aulas-store';
+    import { useEmpresasStore } from '../../../stores/empresas-store';
     import { generarBotonesPaginacion } from '../../../services/paginacion/paginacion.service';
-import { Aula, OrderDeOrdenamiento } from '../../../types';
-import { SelectOption } from 'vuestic-ui/web-components';
-    const aulasStore = useAulasStore();
+    import { SelectOption, Empresa, OrderDeOrdenamiento } from '../../../types';
+    const empresasStore = useEmpresasStore();
     const router = useRouter();
     
-    aulasStore.obtenerListadoDeAulas();
+    empresasStore.obtenerListadoDeEmpresas();
 
     const opcionesDeOrdenamientoListado:SelectOption[] = [{ value:'ASC', text:'Ascendente'}, {value:'DESC', text:'Descendente'}]
     const opcionesOrdenarPor:SelectOption[] = [
-        { value:'codigo_aula', text:'Código de aula'}, 
-        { value:'capacidad', text:'Capacidad'}, 
+        { value:'razon_social', text:'Razon social'}, 
+        { value:'cuit', text:'CUIT'}, 
         { value:'localidad', text:'Localidad'}, 
         { value:'direccion', text:'Dirección'}
     ];
     
     let showSmallModal = ref(false)
-    let aulaParaEliminar:Ref<Aula| null> = ref(null)
+    let empresaParaEliminar:Ref<Empresa| null> = ref(null)
     let filtro:Ref<string> = ref("")
     let ordenarPor:Ref<SelectOption> = ref(opcionesOrdenarPor[0]);
     let ordenDeOrdenamiento: Ref<SelectOption>= ref(opcionesDeOrdenamientoListado[0]);
     let pagina: Ref<number>= ref(1);
     let limitePorPagina = 10;
 
-    const listadoDeAulas:ComputedRef<Aula[]> = computed(() => aulasStore.aulas);
-    const botonesDePaginacion:ComputedRef<any[]> = computed(() => generarBotonesPaginacion(aulasStore.cantidadDeAulas, pagina.value, limitePorPagina));
+    const listadoDeEmpresas:ComputedRef<Empresa[]> = computed(() => empresasStore.empresas);
+    const botonesDePaginacion:ComputedRef<any[]> = computed(() => generarBotonesPaginacion(empresasStore.cantidadDeEmpresas, pagina.value, limitePorPagina));
 
-    function onNuevaAula() {
-        router.push({name: 'nueva-aula'});
+    function onNuevaEmpresa() {
+        router.push({name: 'nueva-empresa'});
     }
 
-    async function onEliminarAula(aula:Aula){
+    async function onEliminarEmpresa(empresa:Empresa){
         showSmallModal.value = true;
-        aulaParaEliminar.value = aula;
+        empresaParaEliminar.value = empresa;
     }   
 
-    async function eliminarAula(){
-        if (aulaParaEliminar.value && aulaParaEliminar.value.id){
-            await aulasStore.borrarAula(aulaParaEliminar.value.id);
-            aulasStore.obtenerListadoDeAulas();
+    async function eliminarEmpresa(){
+        if (empresaParaEliminar.value && empresaParaEliminar.value.id){
+            await empresasStore.borrarEmpresa(empresaParaEliminar.value.id);
+            empresasStore.obtenerListadoDeEmpresas();
         }
     }   
 
-    function onEditarAula(aula:Aula) {
-        if (aula.id){
-            router.push({name: 'editar-aula', params: {id:aula.id}});
+    function onEditarEmpresa(empresa:Empresa) {
+        if (empresa.id){
+            router.push({name: 'editar-empresa', params: {id:empresa.id}});
         }
     }
 
     function obtenerMensajeDeEliminacion():string { 
-        return `Esta a punto de eliminar el aula ${aulaParaEliminar.value !== null && aulaParaEliminar.value.codigo_aula}. ¿Esta seguro?`
+        return `Esta a punto de eliminar el empresa ${empresaParaEliminar.value !== null && empresaParaEliminar.value.razon_social}. ¿Esta seguro?`
     }
 
     function onCambiaFiltro() { 
         pagina.value=1;
 
-        aulasStore.obtenerListadoDeAulas(
+        empresasStore.obtenerListadoDeEmpresas(
             filtro.value, 
             {
                 atributo: ordenarPor.value.value,
@@ -167,7 +166,7 @@ import { SelectOption } from 'vuestic-ui/web-components';
     }
 
     watch(() => ordenarPor.value, (nuevoOrden) => {
-        aulasStore.obtenerListadoDeAulas(
+        empresasStore.obtenerListadoDeEmpresas(
             filtro.value, {
                 atributo: nuevoOrden.value,
                 orden: ordenDeOrdenamiento.value.value as OrderDeOrdenamiento
@@ -178,7 +177,7 @@ import { SelectOption } from 'vuestic-ui/web-components';
     
 
     watch(() => ordenDeOrdenamiento.value, (nuevoOrden) => {
-        aulasStore.obtenerListadoDeAulas(
+        empresasStore.obtenerListadoDeEmpresas(
             filtro.value, {
                 atributo: ordenarPor.value.value,
                 orden: nuevoOrden.value as OrderDeOrdenamiento
@@ -189,7 +188,7 @@ import { SelectOption } from 'vuestic-ui/web-components';
     
     function cambiarPagina(paginaSeleccionada:number) { 
         pagina.value = paginaSeleccionada;
-        aulasStore.obtenerListadoDeAulas(
+        empresasStore.obtenerListadoDeEmpresas(
             filtro.value, 
             {
                 atributo: ordenarPor.value.value,
@@ -201,3 +200,15 @@ import { SelectOption } from 'vuestic-ui/web-components';
 
 </script>
   
+<style>
+.wrapper {
+    position: relative;
+    display: block;
+}
+
+.button-group {
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+}
+</style>

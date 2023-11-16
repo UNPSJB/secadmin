@@ -43,6 +43,29 @@ const routes: Array<RouteRecordRaw> = [
         
       },
       {
+        name: 'empresas-menu',
+        path: 'empresas',
+        component: RouteViewComponent,
+        children: [
+            {
+              name: 'empresas',
+              path: '',
+              component: () => import('../pages/admin/empresas/Empresas.vue'),
+            },
+            {
+              name: 'nueva-empresa',
+              path: 'form',
+              component: () => import('../pages/admin/empresas/EmpresaForm.vue'),
+            },
+            {
+              name: 'editar-aula',
+              path: 'form/:id',
+              component: () => import('../pages/admin/empresas/EmpresaForm.vue'),
+            }            
+        ]
+        
+      },
+      {
         name: 'statistics',
         path: 'statistics',
         component: RouteViewComponent,
