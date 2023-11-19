@@ -7,13 +7,7 @@
         </span>
       </template>
       <va-dropdown-content class="profile-dropdown__content">
-        <va-button   
-          preset="plain"
-          class="cerrar-sesion-button"
-          @click="onCerrarSesion"
-        > 
-          Cerrar sesión 
-        </va-button>
+        <va-button preset="plain" class="cerrar-sesion-button" @click="onCerrarSesion"> Cerrar sesión </va-button>
       </va-dropdown-content>
     </va-dropdown>
   </div>
@@ -26,12 +20,12 @@
   import { useRouter } from 'vue-router'
 
   const { colors } = useColors()
-  const store = useAuthStore();
+  const store = useAuthStore()
   const router = useRouter()
 
-  function onCerrarSesion(){
+  function onCerrarSesion() {
     store.logout()
-    router.push ("auth/login")
+    router.push('auth/login')
   }
 
   withDefaults(
@@ -75,6 +69,6 @@
   }
 
   .cerrar-sesion-button {
-    margin: 10px 20px
+    margin: 10px 20px;
   }
 </style>

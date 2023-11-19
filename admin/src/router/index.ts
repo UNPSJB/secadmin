@@ -7,7 +7,7 @@ import Page404Layout from '../layouts/Page404Layout.vue'
 
 import RouteViewComponent from '../layouts/RouterBypass.vue'
 import UIRoute from '../pages/admin/ui/route'
- 
+
 const routes: Array<RouteRecordRaw> = [
   {
     name: 'admin',
@@ -24,23 +24,22 @@ const routes: Array<RouteRecordRaw> = [
         path: 'aulas',
         component: RouteViewComponent,
         children: [
-            {
-              name: 'aulas',
-              path: '',
-              component: () => import('../pages/admin/aulas/Aulas.vue'),
-            },
-            {
-              name: 'nueva-aula',
-              path: 'form',
-              component: () => import('../pages/admin/aulas/AulaForm.vue'),
-            },
-            {
-              name: 'editar-aula',
-              path: 'form/:id',
-              component: () => import('../pages/admin/aulas/AulaForm.vue'),
-            }            
-        ]
-        
+          {
+            name: 'aulas',
+            path: '',
+            component: () => import('../pages/admin/aulas/Aulas.vue'),
+          },
+          {
+            name: 'nueva-aula',
+            path: 'form',
+            component: () => import('../pages/admin/aulas/AulaForm.vue'),
+          },
+          {
+            name: 'editar-aula',
+            path: 'form/:id',
+            component: () => import('../pages/admin/aulas/AulaForm.vue'),
+          },
+        ],
       },
       {
         name: 'statistics',
@@ -177,9 +176,9 @@ const routes: Array<RouteRecordRaw> = [
       },
       UIRoute,
     ],
-    meta:{
-      requireAuth: true
-    }
+    meta: {
+      requireAuth: true,
+    },
   },
   {
     path: '/auth',
@@ -205,9 +204,9 @@ const routes: Array<RouteRecordRaw> = [
         redirect: { name: 'login' },
       },
     ],
-    meta:{
-      requireAuth: false
-    }
+    meta: {
+      requireAuth: false,
+    },
   },
   {
     path: '/404',
@@ -234,9 +233,9 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import('../pages/404-pages/VaPageNotFoundLargeText.vue'),
       },
     ],
-    meta:{
-      requireAuth: false
-    }
+    meta: {
+      requireAuth: false,
+    },
   },
   {
     path: '/:catchAll(.*)',
@@ -260,10 +259,10 @@ const router = createRouter({
   routes,
 })
 
-router.beforeEach((to,from,next)=>{
-const authStore = useAuthStore();
-  if(to.meta.requireAuth && !authStore.token){
-    next({ name: 'login'})
+router.beforeEach((to, from, next) => {
+  const authStore = useAuthStore()
+  if (to.meta.requireAuth && !authStore.token) {
+    next({ name: 'login' })
   } else {
     next()
   }

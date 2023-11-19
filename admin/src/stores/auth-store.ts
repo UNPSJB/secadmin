@@ -1,62 +1,58 @@
 // stores/counter.js
 import { defineStore } from 'pinia'
-import { getUserFromToken, isTokenExpired } from '../services/auth/auth.service';
+import { getUserFromToken, isTokenExpired } from '../services/auth/auth.service'
 
 export const useAuthStore = defineStore('auth', {
-  state: ():{
-    token: string | null,
+  state: (): {
+    token: string | null
     user: any
   } => {
-    return { 
+    return {
       token: null,
-      user: null 
+      user: null,
     }
   },
   actions: {
-    async login(email:string, password:string, onLoginSuccess: any) {
-        try {
-          console.log('Antes de la solicitud fetch');
-          const response = await fetch(`${import.meta.env.VITE_API_URL}/auth/login`, {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({
-                email,
-                password
-              }),
-            });
-            console.log('Despues de la solicitud fetch');
+    async login(email: string, password: string, onLoginSuccess: any) {
+      try {
+        console.log('Antes de la solicitud fetch')
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/auth/login`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            email,
+            password,
+          }),
+        })
+        console.log('Despues de la solicitud fetch')
 
-    
-            if (!response.ok) {
-              throw new Error('Login failed');
-            }
-    
-            const { access_token } = await response.json();
-            this.token = access_token;
+        if (!response.ok) {
+          throw new Error('Login failed')
+        }
 
-            const user = getUserFromToken(access_token);
+        const { access_token } = await response.json()
+        this.token = access_token
 
-            // Guarda el token en localStorage
-            localStorage.setItem('jwt_token', access_token);
+        const user = getUserFromToken(access_token)
 
-            this.user = user;
-            
-            onLoginSuccess();
+        // Guarda el token en localStorage
+        localStorage.setItem('jwt_token', access_token)
 
-          } catch (error: any) {
-            console.error(error.message);
-          }
-    
+        this.user = user
+
+        onLoginSuccess()
+      } catch (error: any) {
+        console.error(error.message)
+      }
     },
-    logout(){
-      this.token=null
-      this.user=null
+    logout() {
+      this.token = null
+      this.user = null
     },
 
-    async recoverPass(email:string, onEmailSubmit:any)
-    {
+    async recoverPass(email: string, onEmailSubmit: any) {
       try {
         const response = await fetch(`${import.meta.env.VITE_API_URL}/auth/recover-password`, {
           method: 'POST',
@@ -64,33 +60,32 @@ export const useAuthStore = defineStore('auth', {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            email
+            email,
           }),
-        });
-        if(!response.ok){
-          throw new Error('Email no encontrado');
+        })
+        if (!response.ok) {
+          throw new Error('Email no encontrado')
         }
-            const { access_token } = await response.json();
-            this.token = access_token;
+        const { access_token } = await response.json()
+        this.token = access_token
 
-            const user = getUserFromToken(access_token);
+        const user = getUserFromToken(access_token)
 
-            this.user = user;
+        this.user = user
 
-            onEmailSubmit();
+        onEmailSubmit()
+      } catch (error: any) {
+        console.error(error.message)
+      }
+    },
 
-    }catch (error: any) {
-      console.error(error.message);
-    }
+    initialize() {
+      const token = localStorage.getItem('jwt_token')
+      if (token && !isTokenExpired(token)) {
+        this.token = token
+        const user = getUserFromToken(token)
+        this.user = user
+      }
+    },
   },
-
-  initialize() {
-    const token = localStorage.getItem('jwt_token');
-    if ( token && !isTokenExpired(token)) {
-      this.token = token;
-      const user = getUserFromToken(token);
-      this.user = user;
-    }
-  }
-}
 })

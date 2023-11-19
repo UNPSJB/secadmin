@@ -1,5 +1,5 @@
-export function isEmail(email:string) {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+export function isEmail(email: string) {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
-    return email.match(emailRegex);
+  return email.match(emailRegex)
 }

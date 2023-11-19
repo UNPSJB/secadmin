@@ -16,7 +16,6 @@
 </template>
 
 <script>
-
   import Logo from '../components/Logo/index.vue'
   import { useI18n } from 'vue-i18n'
 

@@ -9,8 +9,32 @@ export class EmailService {
   constructor(private configService: ConfigService) {
     // Configurar el transporter (puedes utilizar un servicio como Gmail o cualquier otro proveedor SMTP)
     const nodemailer = require('nodemailer');
+    const { google } = require("googleapis");
+    const OAuth2 = google.auth.OAuth2;
     const smtpTransport = require('nodemailer-smtp-transport');
     const xoauth2 = require('xoauth2');
+    
+
+    const mail_rover = async (callback) => {
+      const oauth2Client = new OAuth2(
+          this.transporter.auth.clientId,
+          this.transporter.auth.clientSecret,
+          "https://developers.google.com/oauthplayground",
+      );
+      oauth2Client.setCredentials({
+          refresh_token: this.transporter.auth.refreshToken,
+          tls: {
+              rejectUnauthorized: false
+          }
+      });
+      oauth2Client.getAccessToken((err, token) => {
+          if (err)
+              return console.log(err);;
+          this.transporter.auth.accessToken = token;
+          callback(nodemailer.createTransport(this.transporter));
+      });
+  };
+
     this.transporter = nodemailer.createTransport(
       smtpTransport({
         service: 'gmail', // Puedes cambiarlo según tu proveedor de correo
@@ -50,3 +74,4 @@ export class EmailService {
     console.log('URL del mensaje: %s', nodemailer.getTestMessageUrl(info));
   }
 }
+ 
