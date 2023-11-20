@@ -19,6 +19,24 @@ export default {
       },
     },
     {
+      name: 'afiliados',
+      displayName: 'Afiliados',
+      meta: {
+        icon: 'material-icons-school',
+      },
+      disabled: true,
+      children: [
+        {
+          name: 'afiliados',
+          displayName: 'Listado de afiliados',
+        },
+        {
+          name: 'nuevo-afiliado',
+          displayName: 'Nuevo afiliado',
+        },
+      ],
+    },
+    {
       name: 'aulas',
       displayName: 'menu.aulas',
       meta: {

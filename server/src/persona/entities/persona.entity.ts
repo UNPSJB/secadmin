@@ -2,7 +2,7 @@ import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToOne, CreateDate
 import { Nacionalidad } from "./nacionalidades.entity";
 import { EstadoCivil } from "./estados-civiles.enum";
 import { Localidades } from "src/localidades/entities/localidades.entity";
-import { Rol } from "src/usuarios/entities/rol.entity";
+import { Rol } from "../../rol/rol.entity";
 
 @Entity('personas')
 export class Persona {
@@ -56,7 +56,7 @@ export class Persona {
     @OneToOne(() => Persona, (persona) => persona.usuario)
     usuario: Persona;    
 
-    @OneToMany(() => Rol, (rol) => rol.persona)
+    @OneToMany(() => Rol, (rol:Rol) => rol.persona)
     roles: Rol[]
 
     @CreateDateColumn()

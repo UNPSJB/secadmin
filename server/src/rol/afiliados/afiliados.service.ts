@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { FindManyOptions, ILike, Repository } from 'typeorm';
 import { Afiliado } from './afiliado.entity';
 import { CreateAfiliadoDto } from './dto/create-afiliado.dto';
+import { UpdateAfiliadoDto } from './dto/update-afiliado.dto';
 
 @Injectable()
 export class AfiliadosService {
@@ -23,18 +24,19 @@ export class AfiliadosService {
       order: {id: 'ASC' as 'ASC'}
     };
 
+
     if(filters.like_filter) {
-      processed_filter.where = [
-        { persona: { dni: ILike(`%${filters.like_filter}%`) } },
-        { persona: { nombre: ILike(`%${filters.like_filter}%`) } },
-        { persona: { apellido: ILike(`%${filters.like_filter}%`) } },
-        { direccion: ILike(`%${filters.like_filter}%`) },
-      ]
+      // processed_filter.where = [
+      //   { persona: { dni: ILike(`%${filters.like_filter}%`) } },
+      //   { persona: { nombre: ILike(`%${filters.like_filter}%`) } },
+      //   { persona: { apellido: ILike(`%${filters.like_filter}%`) } },
+      //   { direccion: ILike(`%${filters.like_filter}%`) },
+      // ]
     }
 
     if(filters.orden_por_filter) {
       if (filters.orden_por_filter === 'localidad') {
-        processed_filter.order = { "localidad": {"nombre": filters.orden_direccion_filter || "ASC"} }
+        processed_filter.order = { "persona": { "localidad": {"nombre": filters.orden_direccion_filter || "ASC"} }}
       } else {
         processed_filter.order = { [filters.orden_por_filter]: filters.orden_direccion_filter || "ASC" }
       }
@@ -61,7 +63,7 @@ export class AfiliadosService {
     return this.repo.findOne({where:{id}, relations:["localidad"]});
   }
 
-  async update(id: number, updateAfiliadoDto: CreateAfiliadoDto) {
+  async update(id: number, updateAfiliadoDto: UpdateAfiliadoDto) {
     return 'Falta implementar'
   }
 

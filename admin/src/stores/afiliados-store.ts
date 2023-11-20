@@ -2,12 +2,12 @@ import { defineStore } from 'pinia'
 import { request } from '../services/requests/requests.service';
 import { OrderDeOrdenamiento } from '../types';
 
-export const useAulasStore = defineStore('aulas', {
+export const useAfiliadosStore = defineStore('afiliados', {
   state: () => {
     return {  
-      aulas: [],
-      aula: null,
-      cantidadDeAulas: 0
+      afiliados: [],
+      afiliado: null,
+      cantidadDeAfiliados: 0
     }
   },
   actions: {
@@ -17,7 +17,7 @@ export const useAulasStore = defineStore('aulas', {
       localidad:any,
       direccion:string
     ) {
-      const response = await request(`aulas`, 'POST', {
+      const response = await request(`afiliados`, 'POST', {
         localidad: localidad.id, 
         codigo_aula: codigoAula, 
         capacidad, 
@@ -37,7 +37,7 @@ export const useAulasStore = defineStore('aulas', {
       localidad:any,
       direccion:string
     ) {
-      const response = await request(`aulas/${aulaId}`, 'PATCH', {
+      const response = await request(`afiliados/${aulaId}`, 'PATCH', {
         id: Number(aulaId),
         localidad: localidad.id, 
         codigo_aula, 
@@ -50,15 +50,15 @@ export const useAulasStore = defineStore('aulas', {
       }
     },
 
-    async borrarAula(aulaId: number) {
-      const response = await request(`aulas/${aulaId}`, 'DELETE');
+    async borrarAula(afiliadoId: number) {
+      const response = await request(`afiliados/${afiliadoId}`, 'DELETE');
 
       if (!response.ok) {
         throw new Error('Fallo el borrado');
       }
     },
 
-    async obtenerListadoDeAulas(like?: string, ordernamiento?:{atributo: string, orden:OrderDeOrdenamiento}, pagina:number=1) {
+    async obtenerListadoDeAfiliados(like?: string, ordernamiento?:{atributo: string, orden:OrderDeOrdenamiento}, pagina:number=1) {
       let filters = [];
 
       if(like) {
@@ -76,23 +76,23 @@ export const useAulasStore = defineStore('aulas', {
 
       }
 
-      const response = await request(`aulas?${filters.join('&')}`, 'GET');
+      const response = await request(`afiliados?${filters.join('&')}`, 'GET');
 
       if (!response.ok) {
-        throw new Error('Error guardando los datos');
+        throw new Error('Error obteniendo los datos');
       }
       const respuesta = await response.json();
-      this.aulas = respuesta.aulas;
-      this.cantidadDeAulas = respuesta.cantidadDeAulas;
+      this.afiliados = respuesta.afiliados;
+      this.cantidadDeAfiliados = respuesta.cantidadDeAfiliados;
     },
 
-    async obtenerAula(id:string) {
-      const response = await request(`aulas/${id}`, 'GET');
+    async obtenerAfiliado(id:string) {
+      const response = await request(`afiliados/${id}`, 'GET');
 
       if (!response.ok) {
-        throw new Error('Error encontrando el aula');
+        throw new Error('Error encontrando el afiliado');
       }
-      this.aula = await response.json();
+      this.afiliado = await response.json();
     },
 
   },

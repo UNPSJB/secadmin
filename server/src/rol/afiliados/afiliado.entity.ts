@@ -43,4 +43,5 @@ export class Afiliado extends Rol {
 
     @ManyToOne(() => Empresa)
     empresa: Empresa;
+
 }

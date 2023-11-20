@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToOne } from "typeorm";
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Afiliado } from "./afiliado.entity";
 
 export enum CargaHorariaDias {
@@ -18,6 +18,9 @@ export enum TipoCargaHoraria {
 
 @Entity('carga_horaria')
 export class CargaHoraria {
+    @PrimaryGeneratedColumn()
+    id: number;
+    
     @ManyToOne(() => Afiliado, (afiliado) => afiliado.cargaHoraria)
     afiliado: Afiliado;
 

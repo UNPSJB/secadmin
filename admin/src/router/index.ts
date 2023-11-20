@@ -66,6 +66,29 @@ const routes: Array<RouteRecordRaw> = [
         
       },
       {
+        name: 'afiliados-menu',
+        path: 'afiliados',
+        component: RouteViewComponent,
+        children: [
+            {
+              name: 'afiliados',
+              path: '',
+              component: () => import('../pages/admin/afiliados/Afiliados.vue'),
+            },
+            {
+              name: 'nuevo-afiliado',
+              path: 'form',
+              component: () => import('../pages/admin/afiliados/AfiliadoForm.vue'),
+            },
+            {
+              name: 'editar-afiliado',
+              path: 'form/:id',
+              component: () => import('../pages/admin/afiliados/AfiliadoForm.vue'),
+            }            
+        ]
+        
+      },
+      {
         name: 'statistics',
         path: 'statistics',
         component: RouteViewComponent,
