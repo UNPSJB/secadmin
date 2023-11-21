@@ -41,7 +41,8 @@ export type Afiliado = {
 }
 
 export type Persona = {
-    dni: number;
+    tipo_documento: TipoDocumento; 
+    nroDocumento: string;
     cuil: string;
     nombre: string
     apellido: string;
@@ -51,6 +52,9 @@ export type Persona = {
     nacionalidad: Nacionalidad;
     estado_civil: EstadoCivil;
     localidad: Localidad;
+    email: string;
+    domicilio: string;
+    
 }
 
 export type CargaHoraria = {
@@ -75,22 +79,29 @@ export enum TipoCargaHoraria {
 }
 
 export enum EstadoCivil {
-    Soltero = "Soltero/a",
-    Casado = "Casado/a",
-    UnionFree = "Unión libre o unión de hecho",
-    Separado = "Separado/a",
-    Divorciado = "Divorciado/a",
-    Viudo = "Viudo/a",
+    Soltero = "Soltero",
+    Casado = "Casado",
+    UnionFree = "Unión",
+    Separado = "Separado",
+    Divorciado = "Divorciado",
+    Viudo = "Viudo",
 }
 
-export const EstadosCiviles = [
-    EstadoCivil.Casado,
-    EstadoCivil.Soltero,
-    EstadoCivil.UnionFree,
-    EstadoCivil.Viudo,
-    EstadoCivil.Divorciado,
-    EstadoCivil.Separado
-]
+export enum TipoDocumento {
+    DNI = 'DNI', 
+    LC = 'LC',
+    LE = 'LE',
+    PASAPORTE = 'Pasaporte'
+} 
+
+export const listadoEstadosCiviles: SelectOption[] = [
+    { value: EstadoCivil.Casado, text: 'Casado/a' },
+    { value: EstadoCivil.Soltero, text: 'Soltero/a' },
+    { value: EstadoCivil.UnionFree, text: "Unión libre o unión de hecho" },
+    { value: EstadoCivil.Viudo, text: 'Viudo/a' },
+    { value: EstadoCivil.Divorciado, text: 'Divorciado/a' },
+    { value: EstadoCivil.Separado, text: 'Separado/a' }
+  ];
 
 export enum EstadoAfiliacion {
     APROBADO = 'Aprobado',
@@ -102,3 +113,26 @@ export type Nacionalidad = {
     nombre_es: string;
     nombre_en: string;
 }
+
+export type DatosPersonalesFormType = {
+    tipoDocumento?: TipoDocumento;
+    nroDocumento: string;
+    nombre: string;
+    apellido: string;
+    email: string;
+    telefono: string;
+    fechaNacimiento?: Date;
+    nacionalidad?: Nacionalidad;
+    estadoCivil?:  EstadoCivil;
+    domicilio: string;
+    cuil: string;
+    localidad?: Localidad;
+}
+
+
+export const listaDocumentos: SelectOption[] = [
+    { value: TipoDocumento.DNI, text: 'Documento Nacional de Identidad' },
+    { value: TipoDocumento.LC, text: 'Libreta Cívica' },
+    { value: TipoDocumento.LE, text: 'Libreta de Enrolamiento' },
+    { value: TipoDocumento.PASAPORTE, text: 'Pasaporte' }
+  ];

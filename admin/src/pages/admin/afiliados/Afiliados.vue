@@ -52,7 +52,7 @@
                     <tbody>
                         <tr v-for="afiliado in listadoDeAFiliados" :key="afiliado.id">
                             <td>{{ `${afiliado.persona.nombre} ${afiliado.persona.apellido}`}} </td>
-                            <td>{{ afiliado.persona.dni }}</td>
+                            <td>{{ afiliado.persona.nroDocumento }}</td>
                             <td>{{ afiliado.persona.localidad.nombre }}</td>
                             <td>{{ afiliado.persona.direccion }}</td>
                             <td> 
@@ -101,8 +101,8 @@
     import { useRouter } from 'vue-router';
     import { useAfiliadosStore } from '../../../stores/afiliados-store';
     import { generarBotonesPaginacion } from '../../../services/paginacion/paginacion.service';
-import { Afiliado, OrderDeOrdenamiento } from '../../../types';
-import { SelectOption } from 'vuestic-ui/web-components';
+    import { Afiliado, OrderDeOrdenamiento } from '../../../types';
+    import { SelectOption } from 'vuestic-ui/web-components';
     const afiliadosStore = useAfiliadosStore();
     const router = useRouter();
     

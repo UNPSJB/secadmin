@@ -3,13 +3,14 @@
         v-model="localidadSeleccionada" 
         label="Localidad" 
         searchable 
-        text-by="nombre" 
+        :text-by="getTextBy" 
         track-by="id"
         :options="localidades" 
         :search="searchText"
         noOptionsText="No se encontró coincidencia"
         searchPlaceholderText="Buscar localidad" 
         @updateSearch="onCambioBusqueda"
+        :disabled="disabled"
     />
 </template>
   
@@ -18,6 +19,7 @@
 
     import { debounce } from 'lodash';
     import { useLocalidadesStore } from '../../stores/localidades-store';
+import { Localidad } from '../../types';
 
     const localidadesStore = useLocalidadesStore();
 
@@ -35,7 +37,11 @@
         }
     }
 
-    const props = defineProps(['localidad']);
+    function getTextBy(opcion:Localidad) {
+        return `${opcion.codigo_postal} - ${opcion.nombre}`
+    }
+
+    const props = defineProps(['localidad', 'disabled']);
 
     const localidadSeleccionada = ref(props.localidad);
 
