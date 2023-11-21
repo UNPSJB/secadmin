@@ -19,6 +19,24 @@ export default {
       },
     },
     {
+      name: 'afiliados',
+      displayName: 'Afiliados',
+      meta: {
+        icon: 'material-icons-school',
+      },
+      disabled: true,
+      children: [
+        {
+          name: 'afiliados',
+          displayName: 'Listado de afiliados',
+        },
+        {
+          name: 'nuevo-afiliado',
+          displayName: 'Nuevo afiliado',
+        },
+      ],
+    },
+    {
       name: 'aulas',
       displayName: 'menu.aulas',
       meta: {
@@ -33,6 +51,24 @@ export default {
         {
           name: 'nueva-aula',
           displayName: 'Nueva aula',
+        },
+      ],
+    },
+    {
+      name: 'empresas',
+      displayName: 'Empresas',
+      meta: {
+        icon: 'material-icons-business',
+      },
+      disabled: true,
+      children: [
+        {
+          name: 'empresas',
+          displayName: 'Listado de empresas',
+        },
+        {
+          name: 'nueva-empresa',
+          displayName: 'Nueva empresa',
         },
       ],
     },

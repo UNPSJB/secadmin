@@ -43,11 +43,12 @@
 </template>
 
 <script setup lang="ts">
-  import { ref, computed, watch, Ref, ComputedRef } from 'vue'
-  import { useRouter, useRoute } from 'vue-router'
-  import LocalidadesSelect from '../../../components/selectors/LocalidadesSelect.vue'
-  import { useAulasStore } from '../../../stores/aulas-store'
-  import { useToast } from 'vuestic-ui'
+import { ref, computed, watch, Ref, ComputedRef } from 'vue';
+import { useRouter, useRoute } from 'vue-router'
+import LocalidadesSelect from '../../../components/selectors/LocalidadesSelect.vue';
+import { useAulasStore } from '../../../stores/aulas-store';
+import { useToast } from 'vuestic-ui'
+import { Aula, Localidad } from '../../../types';
 
   const router = useRouter()
   const route = useRoute()

@@ -1,23 +1,25 @@
 <template>
-  <va-select
-    v-model="localidadSeleccionada"
-    label="Localidad"
-    searchable
-    text-by="nombre"
-    track-by="id"
-    :options="localidades"
-    :search="searchText"
-    no-options-text="No se encontró coincidencia"
-    search-placeholder-text="Buscar localidad"
-    @updateSearch="onCambioBusqueda"
-  />
+    <va-select 
+        v-model="localidadSeleccionada" 
+        label="Localidad" 
+        searchable 
+        :text-by="getTextBy" 
+        track-by="id"
+        :options="localidades" 
+        :search="searchText"
+        noOptionsText="No se encontró coincidencia"
+        searchPlaceholderText="Buscar localidad" 
+        @updateSearch="onCambioBusqueda"
+        :disabled="disabled"
+    />
 </template>
 
 <script setup lang="ts">
-  import { computed, ref, defineEmits, watch, watchEffect } from 'vue'
+import { computed, ref, defineEmits, watch, watchEffect } from 'vue'
 
-  import { debounce } from 'lodash'
-  import { useLocalidadesStore } from '../../stores/localidades-store'
+import { debounce } from 'lodash';
+import { useLocalidadesStore } from '../../stores/localidades-store';
+import { Localidad } from '../../types';
 
   const localidadesStore = useLocalidadesStore()
 
@@ -35,7 +37,11 @@
     }
   }
 
-  const props = defineProps(['localidad'])
+    function getTextBy(opcion:Localidad) {
+        return `${opcion.codigo_postal} - ${opcion.nombre}`
+    }
+
+    const props = defineProps(['localidad', 'disabled']);
 
   const localidadSeleccionada = ref(props.localidad)
 

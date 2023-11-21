@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
-import { request } from '../services/requests/requests.service'
+import { request } from '../services/requests/requests.service';
+import { OrderDeOrdenamiento } from '../types';
 
 export const useAulasStore = defineStore('aulas', {
   state: () => {
