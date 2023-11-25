@@ -13,6 +13,7 @@ import jwtConfig from './configuracion/jwt';
 import { JwtModule } from '@nestjs/jwt';
 import { EmpresaModule } from './empresa/empresa.module';
 import { EmailModule } from './email/email.module';
+import { CursoModule } from './curso/curso.module';
 import emailConfig from './configuracion/email';
 
 @Module({
@@ -39,6 +40,7 @@ import emailConfig from './configuracion/email';
     UsuariosModule,
     EmpresaModule,
     EmailModule,
+    CursoModule,
   ],
   controllers: [AppController],
   providers: [AppService],
