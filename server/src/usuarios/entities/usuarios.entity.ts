@@ -21,7 +21,6 @@ export class Usuario {
     @CreateDateColumn()
     fecha_creacion: Date
 
-
     @UpdateDateColumn()
     fecha_actualizacion: Date
 

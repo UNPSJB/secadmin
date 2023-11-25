@@ -7,6 +7,8 @@
         </span>
       </template>
       <va-dropdown-content class="profile-dropdown__content">
+        <va-button preset="plain" class="cambiar-contraseña-button" @click="onCambiarContraseña">Cambiar Contraseña</va-button>
+        <br>
         <va-button preset="plain" class="cerrar-sesion-button" @click="onCerrarSesion"> Cerrar sesión </va-button>
       </va-dropdown-content>
     </va-dropdown>
@@ -26,6 +28,10 @@
   function onCerrarSesion() {
     store.logout()
     router.push('auth/login')
+  }
+
+  function onCambiarContraseña(){
+    router.push({path:'/admin/change-password'})
   }
 
   withDefaults(

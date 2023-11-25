@@ -25,7 +25,15 @@
       </div>
 
       <div class="flex justify-center mt-4">
-        <va-button class="my-0" @click="onsubmit">{{ t('Recuperar contraseña') }}</va-button>
+        <va-button class="my-0" @click="onsubmit" >Recuperar Contraseña</va-button>
+        <va-modal
+      v-model="showSmallModal"
+      size="small"
+      title="Email enviado a su correo electronico"
+      message="En caso de no encontrarlo, revisar por favor su bandeja de spam"
+      ok-text="Aceptar"
+      @ok="onsubmit"
+    ></va-modal>
       </div>
     </form>
   </div>
@@ -39,6 +47,7 @@
   import { useAuthStore } from '../../../stores/auth-store'
   import { Store } from 'pinia'
 
+  let showSmallModal = ref(false)
   const store = useAuthStore()
   const { t } = useI18n()
   const email = ref('')
@@ -47,8 +56,10 @@
   const router = useRouter()
 
   function onsubmit() {
+    showSmallModal.value = true
     if (!formReady.value) return
     emailErrors.value = validateEmail(email.value)
+
 
     recoverPassword(email.value)
   }

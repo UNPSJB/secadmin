@@ -4,7 +4,7 @@ import { Usuario } from './entities/usuarios.entity';
 import { Repository } from 'typeorm';
 import { PersonaService } from 'src/persona/persona.service';
 import { AuthService } from 'src/auth/auth.service';
-
+import * as bcrypt from 'bcrypt';
 @Injectable()
 export class UsuariosService {
     constructor(
@@ -36,6 +36,26 @@ export class UsuariosService {
             persona
         });
 
+        return this.repo.save(usuario);
+    }
+
+    async cambiarContraseña(idUsuario: number, contraseñaActual: string, nuevaContraseña:string, confirmarContraseña:string){
+        const usuario = await this.repo.findOne({where:{id:idUsuario}})
+        const isMatch = await bcrypt.compare(contraseñaActual, usuario.password);
+
+        if(!usuario){
+            throw new NotFoundException("No se encontro el usuario");
+        }
+          
+        if (!isMatch) {
+            throw new NotFoundException("La contraseña brindada es incorrecta");
+        }
+
+        if(nuevaContraseña!==confirmarContraseña){
+            throw new NotFoundException("Las contraseñas no coinciden");
+        }
+
+        usuario.password = await this.authService.hashPassword(nuevaContraseña);
         return this.repo.save(usuario);
     }
 }

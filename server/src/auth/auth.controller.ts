@@ -1,6 +1,7 @@
-import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
+import { Body, Controller, HttpCode, HttpStatus, Patch, Post } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { Public } from './auth.guard';
+
 
 @Controller('auth')
 export class AuthController {
@@ -19,5 +20,4 @@ export class AuthController {
     recoverPassword(@Body() recoverPasswordDto: Record<string, any>) {
       return this.authService.recoverPassword(recoverPasswordDto.email);
     }
-
 }
