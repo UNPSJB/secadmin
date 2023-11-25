@@ -14,6 +14,12 @@
                     <template #step-content-0>
                         <DatosPersonalesForm :form-data="datosPersonales"/>
                     </template>
+                    <template #step-content-1>
+                        <DatosLaboralesForm :form-data="datosPersonales"/>
+                    </template>
+                    <template #step-content-2>
+                        <DatosFamiliaresForm :form-data="datosPersonales"/>
+                    </template>
                 </va-stepper>
                     <!-- <div class="flex md:col-span-4 sm:col-span-4 col-span-4">
                         <va-button @click="onCancelar" preset="outline" border-color="primary"> Cancelar </va-button>
@@ -39,6 +45,8 @@ import { useAfiliadosStore } from '../../../stores/afiliados-store';
 import { useToast } from 'vuestic-ui'
 import { Aula, Localidad, DatosPersonalesFormType, Afiliado } from '../../../types';
 import DatosPersonalesForm from './DatosPersonalesForm.vue';
+import DatosFamiliaresForm from './DatosFamiliaresForm.vue';
+import DatosLaboralesForm from './DatosLaboralesForm.vue';
 
 const router = useRouter();
 const route = useRoute();

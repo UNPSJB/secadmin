@@ -115,20 +115,27 @@ export type Nacionalidad = {
 }
 
 export type DatosPersonalesFormType = {
-    tipoDocumento?: TipoDocumento;
+    tipoDocumento: SelectOption;
     nroDocumento: string;
     nombre: string;
     apellido: string;
     email: string;
     telefono: string;
     fechaNacimiento?: Date;
-    nacionalidad?: Nacionalidad;
-    estadoCivil?:  EstadoCivil;
+    nacionalidad?: SelectOption;
+    estadoCivil?:  SelectOption;
     domicilio: string;
     cuil: string;
-    localidad?: Localidad;
+    localidad?: SelectOption;
 }
 
+export type DatosProfesionalesFormType = {
+    sueldo: number;
+    ocupacion: any;
+    fechaIngreso: Date;
+    empresa: Empresa;
+    cargaHoraria: CargaHoraria;
+}
 
 export const listaDocumentos: SelectOption[] = [
     { value: TipoDocumento.DNI, text: 'Documento Nacional de Identidad' },
@@ -136,3 +143,29 @@ export const listaDocumentos: SelectOption[] = [
     { value: TipoDocumento.LE, text: 'Libreta de Enrolamiento' },
     { value: TipoDocumento.PASAPORTE, text: 'Pasaporte' }
   ];
+
+export enum TipoOcupacion {
+    VENDEDOR = 'vendedor',
+    CAJERO = 'cajero',
+    ENCARGADO_STOCK = 'encargado_stock',
+    SERVICIO_CLIENTE = 'servicio_cliente',
+    GERENTE_TIENDA = 'gerente_tienda',
+    MERCADERISTA = 'mercaderista',
+    COMPRADOR = 'comprador',
+    PREVENCION_PERDIDAS = 'prevencion_perdidas',
+    VISUAL_MERCHANDISER = 'visual_merchandiser',
+    DEMOSTRADOR_PRODUCTO = 'demostrador_producto'
+};
+
+export const ocupacionesComercio: SelectOption[]  = [
+    { text: 'Vendedor', value: TipoOcupacion.VENDEDOR },
+    { text: 'Cajero', value: TipoOcupacion.CAJERO },
+    { text: 'Encargado de Stock', value: TipoOcupacion.ENCARGADO_STOCK },
+    { text: 'Servicio al Cliente', value: TipoOcupacion.SERVICIO_CLIENTE },
+    { text: 'Gerente de Tienda', value: TipoOcupacion.GERENTE_TIENDA },
+    { text: 'Mercaderista', value: TipoOcupacion.MERCADERISTA },
+    { text: 'Comprador', value: TipoOcupacion.COMPRADOR },
+    { text: 'Prevención de Pérdidas', value: TipoOcupacion.PREVENCION_PERDIDAS },
+    { text: 'Visual Merchandiser', value: TipoOcupacion.VISUAL_MERCHANDISER },
+    { text: 'Demostrador de Productos', value: TipoOcupacion.DEMOSTRADOR_PRODUCTO }
+];

@@ -22,10 +22,21 @@ export class PersonaController {
     return this.personaService.findAllNacionalidades({like_filter, limit});
   }
 
+  @Get('documento/:tipo/:numero')
+  async findOnePorDocumento(
+    @Param('tipo') tipo: string, 
+    @Param('numero') numero: string
+  ) {
+    const persona = await this.personaService.findOnePorDocumento(tipo, numero);
+    return { persona };
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.personaService.findOne(+id);
   }
+
+
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updatePersonaDto: UpdatePersonaDto) {

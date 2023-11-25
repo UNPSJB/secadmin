@@ -63,7 +63,8 @@ export class AuthService {
             email: user.email,
             nombre: user.persona.nombre,
             apellido: user.persona.apellido,
-            dni: user.persona.dni
+            nroDocumento: user.persona.nroDocumento,
+            tipoDocumento: user.persona.tipoDocumento
         };
 
         const jwtConfig = this.configService.get('jwt')

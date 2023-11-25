@@ -26,6 +26,17 @@ export class PersonaService {
     return this.repo.findOne({ where: { id } })
   }
 
+  findOnePorDocumento(tipo, numero) {
+    return this.repo.findOne(
+      { 
+        where: { 
+          tipoDocumento: tipo,
+          nroDocumento: numero 
+        } 
+      }
+    );
+  }
+
   update(id: number, updatePersonaDto: UpdatePersonaDto) {
     return `This action updates a #${id} persona`;
   }

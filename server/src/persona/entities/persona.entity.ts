@@ -12,7 +12,10 @@ export class Persona {
     @Column({
         unique: true
     })
-    dni: number;
+    nroDocumento: string;
+
+    @Column()
+    tipoDocumento: string;
 
 
     @Column({
