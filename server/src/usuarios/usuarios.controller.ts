@@ -7,7 +7,6 @@ import { UsuariosService } from './usuarios.service';
 export class UsuariosController {
     constructor(private readonly usuarioService: UsuariosService) {}
 
-
     @Public()
     @Post()
     crearUsuario(

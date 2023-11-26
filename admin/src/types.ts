@@ -52,13 +52,11 @@ export type Persona = {
     nacionalidad: Nacionalidad;
     estado_civil: EstadoCivil;
     localidad: Localidad;
-    email: string;
-    domicilio: string;
-    
+    email: string;    
 }
 
 export type CargaHoraria = {
-    dia: CargaHorariaDias;
+    dia?: CargaHorariaDias;
     tipo: TipoCargaHoraria;
     horas: number;
 }
@@ -115,7 +113,7 @@ export type Nacionalidad = {
 }
 
 export type DatosPersonalesFormType = {
-    tipoDocumento: SelectOption;
+    tipoDocumento?: SelectOption;
     nroDocumento: string;
     nombre: string;
     apellido: string;
@@ -133,7 +131,7 @@ export type DatosProfesionalesFormType = {
     sueldo: number;
     ocupacion: any;
     fechaIngreso: Date;
-    empresa: Empresa;
+    empresa: SelectOption;
     cargaHoraria: CargaHoraria;
 }
 

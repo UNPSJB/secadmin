@@ -10,7 +10,9 @@
                 <va-stepper
                     v-model="step"
                     :steps="steps"
-                >
+                    :controlsHidden="esconderControlesPredeterminados"
+                    :navigation-disabled="esconderControlesPredeterminados"
+                    >
                     <template #step-content-0>
                         <DatosPersonalesForm :form-data="datosPersonales"/>
                     </template>
@@ -18,8 +20,13 @@
                         <DatosLaboralesForm :form-data="datosPersonales"/>
                     </template>
                     <template #step-content-2>
-                        <DatosFamiliaresForm :form-data="datosPersonales"/>
+                        <DatosFamiliaresForm 
+                            :form-data="datosPersonales" 
+                            :esconderControlesPredeterminados="esconderControlesPredeterminados"
+                            @update:esconderControlesPredeterminados="actualizarEsconderControlesPredeterminados"    
+                        />
                     </template>
+
                 </va-stepper>
                     <!-- <div class="flex md:col-span-4 sm:col-span-4 col-span-4">
                         <va-button @click="onCancelar" preset="outline" border-color="primary"> Cancelar </va-button>
@@ -61,10 +68,13 @@ const datosPersonales = ref<DatosPersonalesFormType>({
     telefono: '',
     domicilio: '',
     cuil: '',
+
 });
 
 const localidad:Ref<Localidad | null> = ref(null);
 const step = ref(0)
+const esconderControlesPredeterminados = ref(false);
+
 
 const steps = [
   { label: 'Datos personales' },
@@ -119,6 +129,10 @@ watch(afiliadoParaEditar as any, (afiliadoAEditar:Afiliado) => {
         datosPersonales.value = afiliadoAEditar.persona;
     }
 })
+
+function actualizarEsconderControlesPredeterminados(nuevoValor:boolean) {
+    esconderControlesPredeterminados.value = nuevoValor;
+}
 
 </script>
   
