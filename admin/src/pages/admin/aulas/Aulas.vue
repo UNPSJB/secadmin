@@ -82,12 +82,16 @@
 </template>
 
 <script setup lang="ts">
-  import { computed, ComputedRef, ref, Ref, watch } from 'vue'
-  import { useRouter } from 'vue-router'
-  import { useAulasStore } from '../../../stores/aulas-store'
-  import { generarBotonesPaginacion } from '../../../services/paginacion/paginacion.service'
-  const aulasStore = useAulasStore()
-  const router = useRouter()
+    import { computed, ComputedRef, ref,Ref, watch } from 'vue';
+    import { useRouter } from 'vue-router';
+    import { useAulasStore } from '../../../stores/aulas-store';
+    import { generarBotonesPaginacion } from '../../../services/paginacion/paginacion.service';
+import { Aula, OrderDeOrdenamiento } from '../../../types';
+import { SelectOption } from 'vuestic-ui/web-components';
+    const aulasStore = useAulasStore();
+    const router = useRouter();
+    
+    aulasStore.obtenerListadoDeAulas();
 
   aulasStore.obtenerListadoDeAulas()
 

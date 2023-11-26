@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { PersonaService } from './persona.service';
 import { CreatePersonaDto } from './dto/create-persona.dto';
 import { UpdatePersonaDto } from './dto/update-persona.dto';
@@ -16,11 +16,27 @@ export class PersonaController {
   findAll() {
     return this.personaService.findAll();
   }
+  
+  @Get('nacionalidades')
+  findAllNacionalidades(@Query('like') like_filter, @Query('limit') limit) {
+    return this.personaService.findAllNacionalidades({like_filter, limit});
+  }
+
+  @Get('documento/:tipo/:numero')
+  async findOnePorDocumento(
+    @Param('tipo') tipo: string, 
+    @Param('numero') numero: string
+  ) {
+    const persona = await this.personaService.findOnePorDocumento(tipo, numero);
+    return { persona };
+  }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.personaService.findOne(+id);
   }
+
+
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updatePersonaDto: UpdatePersonaDto) {
@@ -31,4 +47,6 @@ export class PersonaController {
   remove(@Param('id') id: string) {
     return this.personaService.remove(+id);
   }
+
+
 }

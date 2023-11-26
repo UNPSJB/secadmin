@@ -1,7 +1,8 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToOne, CreateDateColumn, UpdateDateColumn, DeleteDateColumn } from "typeorm"
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToOne, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, OneToMany } from "typeorm"
 import { Nacionalidad } from "./nacionalidades.entity";
 import { EstadoCivil } from "./estados-civiles.enum";
 import { Localidades } from "src/localidades/entities/localidades.entity";
+import { Rol } from "../../rol/rol.entity";
 
 @Entity('personas')
 export class Persona {
@@ -11,7 +12,10 @@ export class Persona {
     @Column({
         unique: true
     })
-    dni: number;
+    nroDocumento: string;
+
+    @Column()
+    tipoDocumento: string;
 
 
     @Column({
@@ -54,6 +58,9 @@ export class Persona {
 
     @OneToOne(() => Persona, (persona) => persona.usuario)
     usuario: Persona;    
+
+    @OneToMany(() => Rol, (rol:Rol) => rol.persona)
+    roles: Rol[]
 
     @CreateDateColumn()
     fecha_creacion: Date

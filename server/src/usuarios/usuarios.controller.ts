@@ -8,7 +8,6 @@ import { ChangePasswordDto } from './dto/change.password.dto';
 export class UsuariosController {
     constructor(private readonly usuarioService: UsuariosService) {}
 
-
     @Public()
     @Post()
     crearUsuario(

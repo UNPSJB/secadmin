@@ -14,7 +14,7 @@
       </div>
     </template>
     <template #right>
-      <app-navbar-actions class="app-navbar__actions" :user-name="userName" />
+      <app-navbar-actions class="app-navbar__actions" :user="user" />
     </template>
   </va-navbar>
 </template>
@@ -23,6 +23,8 @@
   import { computed } from 'vue'
   import { storeToRefs } from 'pinia'
   import { useGlobalStore } from '../../stores/global-store'
+  import { useAuthStore } from '../../stores/auth-store'
+
   import { useI18n } from 'vue-i18n'
   import { useColors } from 'vuestic-ui'
   import VuesticLogo from '../VuesticLogo.vue'
@@ -30,9 +32,12 @@
   import AppNavbarActions from './components/AppNavbarActions.vue'
 
   const GlobalStore = useGlobalStore()
+  const authStore = useAuthStore();
   const { t } = useI18n()
 
-  const { isSidebarMinimized, userName } = storeToRefs(GlobalStore)
+  const { user } = authStore;
+
+  const { isSidebarMinimized } = storeToRefs(GlobalStore)
 
   const { getColors } = useColors()
   const colors = computed(() => getColors())
