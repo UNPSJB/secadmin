@@ -129,9 +129,9 @@ export type DatosPersonalesFormType = {
 
 export type DatosProfesionalesFormType = {
     sueldo: number;
-    ocupacion: any;
+    ocupacion?: any;
     fechaIngreso: Date;
-    empresa: SelectOption;
+    empresa?: SelectOption;
     cargaHoraria: CargaHoraria;
 }
 

@@ -79,7 +79,7 @@
                     :options="listadoEstadosCiviles"
                     label="Estado Civil"
                     text-by="text"
-                    track-by="value"
+                    value-by="value"
                     :disabled="!sePuedeEditar"
                 />
             </div>
@@ -165,6 +165,8 @@
     const props = toRefs<{formData: DatosPersonalesFormType}>(propsis);
     const localFormData = reactive({ ...props.formData.value });
 
+    const personaEncontrada = ref<any>(null)
+
     // Observar cambios en props.formData y actualizar localFormData
     watch(props.formData, (newFormData) => {
         Object.assign(localFormData, newFormData);
@@ -197,6 +199,7 @@
 
     function onPersonaEncontrada(persona:any){ 
         if (persona) {
+            personaEncontrada.value = persona;
             mostrarModalDePersonaEncontrada.value = true;
         } else {
             sePuedeEditar.value = true;
@@ -209,5 +212,14 @@
 
     function onCargarAutomaticamente(){
         sePuedeEditar.value = true;
+        const data = personaEncontrada.value;
+        props.formData.value.nombre = data.nombre; 
+        props.formData.value.apellido = data.apellido;
+        props.formData.value.telefono = data.telefono;
+        props.formData.value.domicilio = data.direccion;
+        props.formData.value.cuil = data.cuil;
+        props.formData.value.email = data.usuario.email;
+        props.formData.value.fechaNacimiento = new Date(data.fecha_nacimiento);
+        props.formData.value.estadoCivil = data.estado_civil;
     }
 </script>

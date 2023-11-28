@@ -18,6 +18,7 @@
             :formData="persona"
             :tipoCarga="tipoCarga"
             @cancelar-form="onCancelarForm"
+            @guardar-form="onGuardarForm"
         />
     </div>
 </template>
@@ -27,7 +28,6 @@
     import { DatosPersonalesFormType, SelectOption, Persona, EstadoCivil, Localidad, TipoDocumento } from '../../../types';
     import DatosFamiliaresTablas from './DatosFamiliaresTablas.vue';
     import DatosPersonalesFamiliaresForm from './DatosPersonalesFamiliaresForm.vue';
-
 
     const propsis = defineProps<{
         formData: DatosPersonalesFormType;
@@ -45,7 +45,7 @@
     const hijos = ref<{orden:number, persona: Persona}[]>([]);
     const orden = ref(0);
     const cargarPersona = ref(false);
-    const persona = ref<DatosPersonalesFormType>({
+    const personaDefault:DatosPersonalesFormType = {
         nroDocumento: '',
         nombre: '',
         apellido: '',
@@ -54,7 +54,9 @@
         domicilio: '',
         cuil: '',
 
-    });
+    }
+
+    const persona = ref<DatosPersonalesFormType>(personaDefault);
 
     const tipoCarga = ref<'CONYUGE'| 'HIJO' | null>()
 
@@ -69,7 +71,7 @@
         emit('update:esconderControlesPredeterminados', true);
     }
 
-    function onGuardarNuevoConyuge () {
+    function onGuardarNuevoConyuge (personaNueva: DatosPersonalesFormType) {
         const {
             apellido, 
             nombre, 
@@ -83,7 +85,7 @@
             localidad, 
             nacionalidad, 
             tipoDocumento
-        } = persona.value;
+        } = personaNueva;
         
         if (estadoCivil && fechaNacimiento && localidad && nacionalidad && tipoDocumento) {
             conyuge.value = {
@@ -101,16 +103,69 @@
                 tipo_documento: tipoDocumento.value as TipoDocumento
             }
         }
+        persona.value = personaDefault;
 
-
-        cargarPersona.value = false;
-        emit('update:esconderControlesPredeterminados', false);
     }
+
+    function onGuardarNuevoHijo (personaNueva: DatosPersonalesFormType) {
+        const {
+            apellido, 
+            nombre, 
+            cuil, 
+            domicilio, 
+            email, 
+            nroDocumento, 
+            telefono, 
+            estadoCivil, 
+            fechaNacimiento, 
+            localidad, 
+            nacionalidad, 
+            tipoDocumento
+        } = personaNueva;
+        
+        if (estadoCivil && fechaNacimiento && localidad && nacionalidad && tipoDocumento) {
+            const listadoDeHijos = hijos.value;
+            const orden = listadoDeHijos.length + 1;
+            hijos.value = [ 
+                ...listadoDeHijos,    
+                {
+                    orden,
+                    persona: {
+                        apellido,
+                        nombre,
+                        cuil,
+                        direccion: domicilio,
+                        email,
+                        nroDocumento,
+                        telefono,
+                        estado_civil: estadoCivil.value as EstadoCivil,
+                        fecha_nacimiento: fechaNacimiento, 
+                        localidad: { id: Number(localidad.value), codigo_postal:1, nombre:"efe"}, 
+                        nacionalidad: { nombre_en: "", nombre_es:""} , 
+                        tipo_documento: tipoDocumento.value as TipoDocumento
+                    }
+                }
+            ]
+        }
+
+        persona.value = personaDefault;
+    }
+
 
 
     function onCancelarForm () {
         cargarPersona.value = false;
         emit('update:esconderControlesPredeterminados', false);
+    }
+
+    function onGuardarForm(persona:DatosPersonalesFormType) {
+        cargarPersona.value = false;
+        emit('update:esconderControlesPredeterminados', false);
+        if (tipoCarga.value === 'CONYUGE') {
+            onGuardarNuevoConyuge(persona)
+        } else {
+           onGuardarNuevoHijo(persona); 
+        }
     }
 
 

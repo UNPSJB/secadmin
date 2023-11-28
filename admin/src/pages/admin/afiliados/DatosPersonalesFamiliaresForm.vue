@@ -181,7 +181,7 @@
     }>()
 
     const personasStore = usePersonasStore();
-    const emit = defineEmits(['cancelarForm']);
+    const emit = defineEmits(['cancelarForm', "guardarForm"]);
 
     // Acceder a las props con toRefs para mantener la reactividad
     const props = toRefs<{formData: DatosPersonalesFormType}>(propsis);
@@ -234,7 +234,7 @@
     }
 
     function onGuardar() {
-
+        emit('guardarForm', props.formData.value);
     }
 
     function onCancelar() {

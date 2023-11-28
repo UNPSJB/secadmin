@@ -18,12 +18,12 @@
                         <tbody>
                         <tr>
                             <td>{{ conyuge.nombre }}</td>
-                            <td>{{ conyuge.email }}</td>
+                            <td>{{ conyuge.nroDocumento }}</td>
                             <td> 
                                 <va-button-group class="col-span-12 xl:col-span-6" preset="plain">
                                     <va-button 
                                         round
-                                        icon="md_eye"
+                                        icon="md_visibility"
                                         @click="emitVerConyuge(conyuge)" 
                                     />
                                     <va-button 
@@ -72,7 +72,7 @@
                                 <va-button-group class="col-span-12 xl:col-span-6" preset="plain">
                                     <va-button 
                                         round
-                                        icon="md_eye"
+                                        icon="md_visibility"
                                         @click="emitVerHijo(hijo)" 
                                     />
                                     <va-button 
@@ -93,7 +93,7 @@
                 </div>
             </div>
             <div class="col-span-2">
-                <va-button @click="onNuevoHijo"> Cargar hijo </va-button>
+                <va-button @click="emitNuevoHijo"> Cargar hijo </va-button>
             </div>
         </div>
       </form>
