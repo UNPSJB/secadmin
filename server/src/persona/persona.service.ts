@@ -32,7 +32,8 @@ export class PersonaService {
         where: { 
           tipoDocumento: tipo,
           nroDocumento: numero 
-        } 
+        },
+        relations: ['usuario'] 
       }
     );
   }
