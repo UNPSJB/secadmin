@@ -19,11 +19,11 @@
                         <DatosPersonalesForm :form-data="datosPersonales"/>
                     </template>
                     <template #step-content-1>
-                        <DatosLaboralesForm :form-data="datosPersonales"/>
+                        <DatosLaboralesForm :form-data="datosLaborales"/>
                     </template>
                     <template #step-content-2>
                         <DatosFamiliaresForm 
-                            :form-data="datosPersonales" 
+                            :form-data="datosFamiliares" 
                             :esconderControlesPredeterminados="esconderControlesPredeterminados"
                             @update:esconderControlesPredeterminados="actualizarEsconderControlesPredeterminados"    
                         />
@@ -52,7 +52,7 @@ import { ref, computed, watch, Ref, ComputedRef } from 'vue';
 import { useRouter, useRoute } from 'vue-router'
 import { useAfiliadosStore } from '../../../stores/afiliados-store';
 import { useToast } from 'vuestic-ui'
-import { Localidad, DatosPersonalesFormType, Afiliado, DatosProfesionalesFormType, TipoCargaHoraria } from '../../../types';
+import { Localidad, DatosPersonalesFormType, TipoDocumento, Afiliado, DatosProfesionalesFormType, TipoCargaHoraria, DatosFamiliaresFormType } from '../../../types';
 import DatosPersonalesForm from './DatosPersonalesForm.vue';
 import DatosFamiliaresForm from './DatosFamiliaresForm.vue';
 import DatosLaboralesForm from './DatosLaboralesForm.vue';
@@ -75,10 +75,15 @@ const datosPersonales = ref<DatosPersonalesFormType>({
 const datosLaborales = ref<DatosProfesionalesFormType>({
     sueldo: 0,
     cargaHoraria: { tipo: TipoCargaHoraria.DIARIA, horas:0},
-    empresa: null,
     fechaIngreso: new Date(),
     ocupacion: null
 });
+
+
+const datosFamiliares = ref<DatosFamiliaresFormType>({
+    hijos:[]
+});
+
 
 const localidad:Ref<Localidad | null> = ref(null);
 const step = ref(0)
@@ -102,46 +107,38 @@ if(esEdicion) {
     afiliadosStore.obtenerAfiliado(route.params.id as string);
 }
 
-function updateLocalidad (newLocalidad:any) {
-    localidad.value = newLocalidad;
-}
-
-function onCancelar() {
-    router.push({ name: 'aulas' });
-}
-
 async function onGuardar() {
-    debugger
-    console.log('guardando afiliado');
-
-    init({
-        message: 'Afiliado guardado correctamente',
-        position: 'bottom-right',
-        duration: 2500,
-    })
-
-    // try {
-    //     if(esEdicion) {
-    //         await afiliadosStore.actualizarAfiliado({datosPersonales})
-    //     } else {
-    //         await aulasStore.guardarAula(codigoAula.value,capacidad.value, localidad.value, direccion.value);
-    //     }
-    //     init({
-    //         message: 'Aula guardada correctamente',
-    //         position: 'bottom-right',
-    //         duration: 2500,
-    //     })
-    //     router.push({ name: 'aulas' });
-    // } catch (e: any) {
-    //     init({
-    //         message: e.message,
-    //         position: 'bottom-right',
-    //         duration: 2500,
-    //         color: "danger"
-    //     })  
-    // }
+    try {
+        if(esEdicion) {
+            // await afiliadosStore.actualizarAfiliado(
+            //     route.params.id as string,
+            //     razonSocial.value,
+            //     cuit.value, 
+            //     localidad.value, 
+            //     direccion.value
+            // )
+        } else {
+            await afiliadosStore.guardarAfiliado({
+                datosFamiliares: datosFamiliares.value,
+                datosPersonales: datosPersonales.value,
+                datosLaborales: datosLaborales.value,
+            });
+        }
+        init({
+            message: 'Empresa guardada correctamente',
+            position: 'bottom-right',
+            duration: 2500,
+        })
+        router.push({ name: 'empresas' });
+    } catch (e: any) {
+        init({
+            message: e.message,
+            position: 'bottom-right',
+            duration: 2500,
+            color: "danger"
+        })  
+    }
 }
-
 
 const afiliadoParaEditar:ComputedRef<Afiliado | null> = computed(() => afiliadosStore.afiliado)
 

@@ -44,7 +44,7 @@
                 </div>
             </div>
             <div class="col-span-2">
-                <va-button v-if="conyuge === null" @click="emitNuevoConyuge"> Cargar cónyuge </va-button>
+                <va-button v-if="!conyuge" @click="emitNuevoConyuge"> Cargar cónyuge </va-button>
             </div>
             
         </div>

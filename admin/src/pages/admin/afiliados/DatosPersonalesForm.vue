@@ -8,7 +8,7 @@
                     :options="listaDocumentos"
                     label="Tipo de documento"
                     text-by="text"
-                    track-by="value"
+                    value-by="value"
                 />
             </div>
 
@@ -16,15 +16,18 @@
                 <va-input 
                     v-model="formData.nroDocumento" 
                     label="Nro de documento" 
-                    mask="numeral" 
-                    @keyup:enter="buscarDocumento"
+                    v-maska
+                    data-maska="###.###.###"
+                    data-maska-reversed
+                    @keyup.enter="buscarDocumento"
+                    :rules="[(v) => esDocumentoValido(v) || `Ingrese un documento válido`]"
                 >
                     <template #appendInner>
                         <va-button
                             icon="search"
                             preset="plain"
                             @click="buscarDocumento"
-                            :disabled="esDocumentoIncompleto(formData.nroDocumento)"
+                            :disabled="!esDocumentoValido(formData.nroDocumento)"
                         />
                     </template>
                 </va-input>
@@ -58,18 +61,24 @@
 
             <div class="flex md:col-span-6 sm:col-span-6 col-span-12">
                 <va-input 
-                    v-model="formData.telefono" 
+                    v-model="telefono" 
                     label="Telefono"
                     :disabled="!sePuedeEditar"
+                    v-maska
+                    data-maska="+54 (###) ###-####"
+                    :rules="[(v)=> !v || esNumeroDeTelefonoCompleto(v) || 'Ingrese un número de teléfono válido']"
                 />
             </div>
             
-
             <div class="flex md:col-span-6 sm:col-span-6 col-span-12">
                 <va-date-input
                     v-model="formData.fechaNacimiento"
                     label="Fecha nacimiento"
                     :disabled="!sePuedeEditar"
+                    :rules="[(v)=> !v || esMayorDeCiertaEdad(14, v) || 'La fecha de nacimiento ingresada no es válida']"
+                    v-model:view="fechaDeNacimientoView"
+                    :monthNames="['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic']"
+                    :weekdayNames="['Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab', 'Dom']"
                 />            
             </div>
             
@@ -122,7 +131,10 @@
                     v-model="formData.cuil" 
                     label="CUIL" 
                     :disabled="!sePuedeEditar"
-                    mask="numeral" 
+                    v-maska
+                    data-maska="##-########-#"
+                    :rules="[(v)=> !v || esCUILValido(v) || 'El CUIL ingresado no es válido']"
+
                 />
             </div>
         </div>
@@ -145,15 +157,20 @@
 </template>
   
 <script setup lang="ts">
-    import { ref, reactive, toRefs, defineProps, watch, computed } from 'vue';
+    import { ref, reactive, toRefs, defineProps, watch, computed, onMounted } from 'vue';
     import { DatosPersonalesFormType, listaDocumentos, SelectOption, listadoEstadosCiviles } from '../../../types';
     import NacionalidadesSelect from '../../../components/selectors/NacionalidadesSelect.vue';
     import LocalidadesSelect from '../../../components/selectors/LocalidadesSelect.vue';
     import { usePersonasStore } from '../../../stores/personas-store';
-    import { esEmail, esDocumentoIncompleto } from '../../../services/utils/validaciones'
+    import { esEmail, esDocumentoValido, esNumeroDeTelefonoCompleto, esMayorDeCiertaEdad, esCUILValido } from '../../../services/utils/validaciones'
+    import { vMaska } from "maska";
+    import { DatePickerView } from 'vuestic-ui/dist/types/components/va-date-picker/types';
 
     const sePuedeEditar = ref(false);
     const mostrarModalDePersonaEncontrada = ref(false);
+
+    const telefono = ref("");
+    const fechaDeNacimientoView = ref<DatePickerView>({type: "year", year: 2000, month:1})    
 
     const propsis = defineProps<{
         formData: DatosPersonalesFormType;
@@ -172,6 +189,10 @@
         Object.assign(localFormData, newFormData);
     });
 
+    watch(telefono, (newValue) => {
+        props.formData.value.telefono = newValue;
+    });
+
     function siguientePaso() {
 
     }
@@ -184,14 +205,13 @@
         props.formData.value.nacionalidad = newNacionalidad;
     }
 
-
     function puedeCompletarDatos() {
         return sePuedeEditar
     }
 
     function buscarDocumento() {
         const {tipoDocumento, nroDocumento } = props.formData.value;
-        if(!esDocumentoIncompleto(nroDocumento)) {
+        if(esDocumentoValido(nroDocumento)) {
             personasStore.obtenerPersonaPorDocumento(tipoDocumento.value, nroDocumento, onPersonaEncontrada)
         }
 

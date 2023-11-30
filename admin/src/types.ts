@@ -113,7 +113,7 @@ export type Nacionalidad = {
 }
 
 export type DatosPersonalesFormType = {
-    tipoDocumento?: SelectOption;
+    tipoDocumento?: TipoDocumento;
     nroDocumento: string;
     nombre: string;
     apellido: string;
@@ -133,6 +133,11 @@ export type DatosProfesionalesFormType = {
     fechaIngreso: Date;
     empresa?: SelectOption;
     cargaHoraria: CargaHoraria;
+}
+
+export type DatosFamiliaresFormType = {
+    hijos?: any[];
+    conyuge?: any;
 }
 
 export const listaDocumentos: SelectOption[] = [

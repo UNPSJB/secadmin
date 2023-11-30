@@ -15,6 +15,7 @@ import { EmpresaModule } from './empresa/empresa.module';
 import { EmailModule } from './email/email.module';
 import { CursoModule } from './curso/curso.module';
 import emailConfig from './configuracion/email';
+import { RolModule } from './rol/rol.module';
 
 @Module({
   imports: [
@@ -41,6 +42,7 @@ import emailConfig from './configuracion/email';
     EmpresaModule,
     EmailModule,
     CursoModule,
+    RolModule
   ],
   controllers: [AppController],
   providers: [AppService],
