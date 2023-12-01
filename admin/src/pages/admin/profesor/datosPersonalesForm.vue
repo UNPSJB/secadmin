@@ -86,7 +86,9 @@
     import { ref, reactive, toRefs, defineProps, watch, computed } from 'vue';
     import { DatosPersonalesFormType, listaDocumentos, SelectOption, listadoEstadosCiviles } from '../../../types';
     import { usePersonasStore } from '../../../stores/personas-store';
-    import { esEmail, esDocumentoIncompleto } from '../../../services/utils/validaciones'
+    import { esEmail, esDocumentoValido, esNumeroDeTelefonoCompleto, esMayorDeCiertaEdad, esCUILValido } from '../../../services/utils/validaciones'
+    import { vMaska } from "maska";
+    import { DatePickerView } from 'vuestic-ui/dist/types/components/va-date-picker/types';
 
     const sePuedeEditar = ref(false);
     const mostrarModalDePersonaEncontrada = ref(false);
@@ -100,6 +102,8 @@
     // Acceder a las props con toRefs para mantener la reactividad
     const props = toRefs<{formData: DatosPersonalesFormType}>(propsis);
     const localFormData = reactive({ ...props.formData.value });
+
+    const personaEncontrada = ref<any>(null)
 
     // Observar cambios en props.formData y actualizar localFormData
     watch(props.formData, (newFormData) => {
@@ -136,6 +140,15 @@
 
     function onCargarAutomaticamente(){
         sePuedeEditar.value = true;
+        const data = personaEncontrada.value;
+        props.formData.value.nombre = data.nombre; 
+        props.formData.value.apellido = data.apellido;
+        props.formData.value.telefono = data.telefono;
+        props.formData.value.domicilio = data.direccion;
+        props.formData.value.cuil = data.cuil;
+        props.formData.value.email = data.usuario.email;
+        props.formData.value.fechaNacimiento = new Date(data.fecha_nacimiento);
+        props.formData.value.estadoCivil = data.estado_civil;
     }
 </script>
   

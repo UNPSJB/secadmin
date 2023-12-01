@@ -11,26 +11,9 @@ export const useProfesorStore = defineStore('profesores', {
     }
   },
   actions: {
-    async guardarProfesor(
-      profesorId: string,
-      nombre: string,
-      apellido:string,
-      dni:string,
-      email:string,
-      descripcion:string,
-      especialidad: string,
-      honorarios: number
-    ) {
-      const response = await request(`profesores`, 'POST', {
-        id: Number(profesorId),
-        nombre, 
-        apellido, 
-        dni, 
-        email,
-        descripcion,
-        especialidad,
-        honorarios
-      });
+    async guardarProfesor(formData:any) {
+      const response = await request(`profesores`, 'POST', formData);
+     
 
       if (!response.ok) {
         const data = await response.json()
@@ -38,27 +21,10 @@ export const useProfesorStore = defineStore('profesores', {
       }
     },
 
-    async actualizarProfesor(
-      profesorId: string,
-      nombre: string,
-      apellido:string,
-      dni:string,
-      email:string,
-      descripcion:string,
-      especialidad: string,
-      honorarios: number
-    ) {
-      const response = await request(`profesores/${profesorId}`, 'PATCH', {
-        id: Number(profesorId),
-        nombre, 
-        apellido, 
-        dni, 
-        email,
-        descripcion,
-        especialidad,
-        honorarios
-
-      });
+    async actualizarProfesor(profesorId: string,
+    formData: any
+  ) {
+    const response = await request(`profesores/${profesorId}`, 'PATCH', formData);
 
       if (!response.ok) {
         throw new Error('Fallo la actualización');

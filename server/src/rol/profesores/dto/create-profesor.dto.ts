@@ -5,4 +5,5 @@ export class CreateProfesorDto {
     descripcion: string;
     honorarios: number;
     persona: Persona;
+    datosPersonales: any;
 }

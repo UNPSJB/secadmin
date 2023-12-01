@@ -36,7 +36,7 @@ export class PersonaService {
           tipoDocumento: tipo,
           nroDocumento: numero 
         },
-        relations: ['usuario'] 
+        relations: ['usuario','roles'] 
       }
     );
   }
@@ -70,8 +70,12 @@ export class PersonaService {
       persona.nacionalidad = nacionalidad;
     }
 
-    if(rol) {
-      persona.roles = [...persona.roles, rol]
+    if(rol ) {
+      if(persona.roles){
+        persona.roles = [...persona.roles, rol]
+      }else{
+        persona.roles= [rol]
+      }
     }
     return this.repo.save(persona);
   }

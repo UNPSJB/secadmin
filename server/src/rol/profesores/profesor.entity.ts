@@ -2,7 +2,7 @@ import { ChildEntity, Column} from "typeorm";
 import { Rol } from "../rol.entity";
 
 @ChildEntity()
-export class Profesores extends Rol {
+export class Profesor extends Rol {
   @Column()
   especialidad: string
   @Column()

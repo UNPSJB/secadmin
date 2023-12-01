@@ -10,17 +10,140 @@
           <form>
             <div class="grid grid-cols-12 gap-6">
               <div class="flex md:col-span-6 sm:col-span-6 col-span-12">
-                <va-input v-model="nombre" label="Nombre" />
-              </div>
-              <div class="flex md:col-span-6 sm:col-span-6 col-span-12">
-                <va-input v-model="apellido" label="Apellido"  />
-              </div>
-              <div class="flex md:col-span-6 sm:col-span-6 col-span-12">
-                <va-input v-model="dni" label="DNI" />
-              </div>
-              <div class="flex md:col-span-6 sm:col-span-6 col-span-12">
-                <va-input v-model="email" label="Email" />
-              </div>
+                <va-select
+                    v-model="datosPersonales.tipoDocumento"
+                    :options="listaDocumentos"
+                    label="Tipo de documento"
+                    text-by="text"
+                    value-by="value"
+                />
+            </div>
+
+            <div class="flex md:col-span-6 sm:col-span-6 col-span-12">
+                <va-input 
+                    v-model="datosPersonales.nroDocumento" 
+                    label="Nro de documento" 
+                    v-maska
+                    data-maska="###.###.###"
+                    data-maska-reversed
+                    @keyup.enter="buscarDocumento"
+                    :rules="[(v) => esDocumentoValido(v) || `Ingrese un documento válido`]"
+                >
+                    <template #appendInner>
+                        <va-button
+                            icon="search"
+                            preset="plain"
+                            @click="buscarDocumento"
+                            :disabled="!esDocumentoValido(datosPersonales.nroDocumento)"
+                        />
+                    </template>
+                </va-input>
+            </div>
+            
+            <div class="flex md:col-span-6 sm:col-span-6 col-span-12">
+                <va-input 
+                    v-model="datosPersonales.nombre" 
+                    label="Nombre"
+                    :disabled="!sePuedeEditar"
+                />
+            </div>
+            
+            <div class="flex md:col-span-6 sm:col-span-6 col-span-12">
+                <va-input 
+                    v-model="datosPersonales.apellido" 
+                    label="Apellido" 
+                    :disabled="!sePuedeEditar"
+                />
+            </div>
+            
+
+            <div class="flex md:col-span-6 sm:col-span-6 col-span-12">
+                <va-input 
+                    v-model="datosPersonales.email" 
+                    label="Email"
+                    :disabled="!sePuedeEditar"
+                    :rules="[(v) => esEmail(v) || `Ingresa un email válido`]"
+                />
+            </div>
+
+            <div class="flex md:col-span-6 sm:col-span-6 col-span-12">
+                <va-input 
+                    v-model="telefono" 
+                    label="Telefono"
+                    :disabled="!sePuedeEditar"
+                    v-maska
+                    data-maska="+54 (###) ###-####"
+                    :rules="[(v)=> !v || esNumeroDeTelefonoCompleto(v) || 'Ingrese un número de teléfono válido']"
+                />
+            </div>
+            
+            <div class="flex md:col-span-6 sm:col-span-6 col-span-12">
+                <va-date-input
+                    v-model="datosPersonales.fechaNacimiento"
+                    label="Fecha nacimiento"
+                    :disabled="!sePuedeEditar"
+                    :rules="[(v)=> !v || esMayorDeCiertaEdad(14, v) || 'La fecha de nacimiento ingresada no es válida']"
+                    v-model:view="fechaDeNacimientoView"
+                    :monthNames="['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic']"
+                    :weekdayNames="['Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab', 'Dom']"
+                />            
+            </div>
+            
+            <div class="flex md:col-span-6 sm:col-span-6 col-span-12">
+                <va-select
+                    v-model="datosPersonales.estadoCivil"
+                    :options="listadoEstadosCiviles"
+                    label="Estado Civil"
+                    text-by="text"
+                    value-by="value"
+                    :disabled="!sePuedeEditar"
+                />
+            </div>
+            <div class="flex md:col-span-6 sm:col-span-6 col-span-12">
+                <Suspense>
+                    <LocalidadesSelect 
+                        @update-localidad="updateLocalidad"
+                        :localidad="datosPersonales.localidad"                    
+                        :disabled="!sePuedeEditar"
+                    />
+                    <template #fallback>
+                        Loading...
+                    </template>
+                </Suspense>
+            </div>
+            <div class="flex md:col-span-6 sm:col-span-6 col-span-12">
+                <Suspense>
+                    <NacionalidadesSelect 
+                        @update-nacionalidad="updateNacionalidad"
+                        :nacionalidad="datosPersonales.nacionalidad"
+                        :disabled="!sePuedeEditar"
+                    />
+                    <template #fallback>
+                        Loading...
+                    </template>
+                </Suspense>
+            </div>
+            
+            <div class="flex md:col-span-6 sm:col-span-6 col-span-12">
+                <va-input 
+                    v-model="datosPersonales.domicilio" 
+                    label="Domicilio"
+                    :disabled="!sePuedeEditar"
+                />
+            </div>
+            
+
+            <div class="flex md:col-span-6 sm:col-span-6 col-span-12">
+                <va-input 
+                    v-model="datosPersonales.cuil" 
+                    label="CUIL" 
+                    :disabled="!sePuedeEditar"
+                    v-maska
+                    data-maska="##-########-#"
+                    :rules="[(v)=> !v || esCUILValido(v) || 'El CUIL ingresado no es válido']"
+
+                />
+            </div>
               <div class="flex md:col-span-6 sm:col-span-6 col-span-12">
                 <va-input v-model="especialidad" label="Especialidad" />
               </div>
@@ -49,12 +172,24 @@
   </template>
 
 <script setup lang="ts">
-import { ref, computed, watch, Ref, ComputedRef } from 'vue'
+import { ref, reactive, toRefs, defineProps, watch, computed, onMounted } from 'vue';
 import { useRouter, useRoute } from 'vue-router'
 import { useProfesorStore } from '../../../stores/profesores-store'
 import { useToast } from 'vuestic-ui'
-import { Profesor } from '../../../types'
+import { Profesor, DatosPersonalesFormType,listaDocumentos, SelectOption, listadoEstadosCiviles } from '../../../types'
+import NacionalidadesSelect from '../../../components/selectors/NacionalidadesSelect.vue';
+import LocalidadesSelect from '../../../components/selectors/LocalidadesSelect.vue';
+import { esEmail, esDocumentoValido, esNumeroDeTelefonoCompleto, esMayorDeCiertaEdad, esCUILValido } from '../../../services/utils/validaciones'
 
+const datosPersonales = ref<DatosPersonalesFormType>({
+    nroDocumento: '',
+    nombre: '',
+    apellido: '',
+    email: '',
+    telefono: '',
+    domicilio: '',
+    cuil: '',
+});
 
 const router = useRouter()
 const route = useRoute()
@@ -77,7 +212,7 @@ if (esEdicion) {
 
 
 function onCancelar() {
-  router.push({ name: 'aulas' })
+  router.push({ name: 'profesores' })
 }
 
 const sePuedeGuardar = computed(
@@ -97,26 +232,20 @@ honorarios.value = null
 async function onGuardar() {
   try {
     if (esEdicion) {
-      await profesorStore.actualizarProfesor(
-        route.params.id as string,
-        nombre.value,
-        apellido.value,
-        dni.value,
-        email.value,
-        descripcion.value,
-        especialidad.value,
-        honorarios.value,
-      )
+    //  await profesorStore.actualizarProfesor(
+    //    route.params.id as string,
+    //    nombre.value,
+    //    apellido.value,
+    //    dni.value,
+    //    email.value,
+    //    descripcion.value,
+    //    especialidad.value,
+    //    honorarios.value,
+    //  )
     } else {
-      await profesorStore.guardarProfesor(
-        route.params.id as string,
-        nombre.value,
-        apellido.value,
-        dni.value,
-        email.value,
-        descripcion.value,
-        especialidad.value,
-        honorarios.value)
+      await profesorStore.guardarProfesor({
+      datosPersonales: datosPersonales.value
+    })
     }
     init({
       message: 'Profesor guardado correctamente',
@@ -147,4 +276,5 @@ watch(profesorParaEditar as any, (profesorAEditar: Profesor) => {
     honorarios.value = profesorAEditar.honorarios
   }
 })
+
 </script>

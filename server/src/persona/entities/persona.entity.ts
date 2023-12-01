@@ -20,7 +20,7 @@ export class Persona {
 
 
     @Column({
-        unique: true
+        nullable: true
     })
     cuil: string;
 
@@ -42,16 +42,22 @@ export class Persona {
     })
     telefono: string;
 
-    @Column()
+    @Column({
+        nullable: true,
+    })
     direccion: string;
 
-    @Column()
+    @Column({
+        nullable: true,
+    })
     fecha_nacimiento: Date;
 
     @ManyToOne(() => Nacionalidad)
     nacionalidad: Nacionalidad;
 
-    @Column({enum: EstadoCivil})
+    @Column({
+        nullable: true,
+        enum: EstadoCivil})
     estado_civil: EstadoCivil;
 
     @ManyToOne(() => Localidades)

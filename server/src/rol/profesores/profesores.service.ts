@@ -1,31 +1,39 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FindManyOptions, ILike, Repository } from 'typeorm';
-import { Profesores } from './profesor.entity';
+import { Profesor } from './profesor.entity';
 import { CreateProfesorDto } from './dto/create-profesor.dto';
 import { UpdateProfesorDto } from './dto/update-profesor.dto';
+import { PersonaService } from 'src/persona/persona.service';
 
 @Injectable()
 export class ProfesoresService {
-  constructor(@InjectRepository(Profesores) private repo: Repository<Profesores>,) {}
+  constructor(
+    @InjectRepository(Profesor) private repo: Repository<Profesor>,
+    private personaService: PersonaService,
+  ) {}
   
 
   async create(dto: CreateProfesorDto) {
     //const persona 
-    const profesor = this.repo.create({
+    let profesor = this.repo.create({
       especialidad: dto.especialidad,
       honorarios: dto.honorarios,
       descripcion: dto.descripcion,
       persona: dto.persona
     })
 
-    return this.repo.save(profesor)
+    profesor = await this.repo.save(profesor)
+
+    const personaProfesor = await this.personaService.crearPersona(dto.datosPersonales, profesor)
+
+    return personaProfesor
   }
 
   async findAll(filters) {
     let cantidad_por_pagina = 10;
 
-    let processed_filter:FindManyOptions<Profesores> = {
+    let processed_filter:FindManyOptions<Profesor> = {
       where: {},
       relations:["persona"],
       take:cantidad_por_pagina,

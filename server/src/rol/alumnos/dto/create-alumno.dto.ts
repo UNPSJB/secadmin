@@ -8,4 +8,5 @@ export class CreateAlumnoDto {
     nombreResponsable:string
     apellidoResponsable:string
     responsable: Enumerator
+    datosPersonales: any
 }

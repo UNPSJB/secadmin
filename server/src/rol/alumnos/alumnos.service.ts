@@ -4,15 +4,28 @@ import { FindManyOptions, ILike, Repository } from 'typeorm';
 import { Alumnos } from './alumnos.entity';
 import { CreateAlumnoDto } from './dto/create-alumno.dto';
 import { UpdateAlumnoDto } from './dto/update-alumno.dto';
-
+import { PersonaService } from 'src/persona/persona.service';
 
 @Injectable()
 export class AlumnosService {
-  constructor(@InjectRepository(Alumnos) private repo: Repository<Alumnos>,) {}
+  constructor(
+    @InjectRepository(Alumnos) private repo: Repository<Alumnos>,
+    private personaService: AlumnosService,
+  ) {}
   
 
   async create(dto: CreateAlumnoDto) {
-    return 'Falta implementar'
+    //const persona 
+    let alumno = this.repo.create({
+    
+      persona: dto.persona
+    })
+
+    alumno = await this.repo.save(alumno)
+
+   // const personaAlumno = await this.personaService.crearPersona(dto.datosPersonales, alumno)
+
+    //return personaAlumno
   }
 
   async findAll(filters) {
