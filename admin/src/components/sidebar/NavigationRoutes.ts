@@ -55,6 +55,24 @@ export default {
       ],
     },
     {
+      name: 'profesores',
+      displayName: 'Profesores',
+      meta: {
+        icon: 'material-icons-school',
+      },
+      disabled: true,
+      children: [
+        {
+          name: 'profesores',
+          displayName: 'Listado de profesores',
+        },
+        {
+          name: 'nuevo-profesor',
+          displayName: 'Nuevo profesores',
+        },
+      ],
+    },
+    {
       name: 'empresas',
       displayName: 'Empresas',
       meta: {

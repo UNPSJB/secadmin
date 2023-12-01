@@ -93,6 +93,29 @@ const routes: Array<RouteRecordRaw> = [
         
       },
       {
+      name: 'profesores-menu',
+        path: 'profesores',
+        component: RouteViewComponent,
+        children: [
+            {
+              name: 'profesores',
+              path: '',
+              component: () => import('../pages/admin/profesor/profesor.vue'),
+            },
+            {
+              name: 'nuevo-profesor',
+              path: 'form',
+              component: () => import('../pages/admin/profesor/profesorForm.vue'),
+            },
+            {
+              name: 'editar-profesor',
+              path: 'form/:id',
+              component: () => import('../pages/admin/profesor/profesorForm.vue'),
+            }            
+        ]
+        
+      },
+      {
         name: 'statistics',
         path: 'statistics',
         component: RouteViewComponent,

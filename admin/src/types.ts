@@ -26,7 +26,18 @@ export type Empresa = {
     direccion:string;
     localidad:Localidad;
 }
+export type Profesor = {
+    id?: number;
+    honorarios: number;
+    descripcion: string;
+    especialidad: string
+    persona: Persona;
+}
 
+export type Alumno ={
+    id?: number
+    
+}
 export type Afiliado = {
     id?: number;
     sueldo: number
