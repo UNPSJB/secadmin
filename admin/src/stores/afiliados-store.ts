@@ -11,18 +11,8 @@ export const useAfiliadosStore = defineStore('afiliados', {
     }
   },
   actions: {
-    async guardarAula(
-      codigoAula:string,
-      capacidad:number,
-      localidad:any,
-      direccion:string
-    ) {
-      const response = await request(`afiliados`, 'POST', {
-        localidad: localidad.id, 
-        codigo_aula: codigoAula, 
-        capacidad, 
-        direccion
-      });
+    async guardarAfiliado(formData:any) {
+      const response = await request(`afiliados`, 'POST', formData);
 
       if (!response.ok) {
         const data = await response.json()
@@ -30,20 +20,11 @@ export const useAfiliadosStore = defineStore('afiliados', {
       }
     },
 
-    async actualizarAula(
-      aulaId: string,
-      codigo_aula:string,
-      capacidad:number,
-      localidad:any,
-      direccion:string
+    async actualizarAfiliado(
+      afiliadoId: string,
+      formData: any
     ) {
-      const response = await request(`afiliados/${aulaId}`, 'PATCH', {
-        id: Number(aulaId),
-        localidad: localidad.id, 
-        codigo_aula, 
-        capacidad, 
-        direccion
-      });
+      const response = await request(`afiliados/${afiliadoId}`, 'PATCH', formData);
 
       if (!response.ok) {
         throw new Error('Fallo la actualización');

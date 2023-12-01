@@ -4,14 +4,46 @@ import { FindManyOptions, ILike, Repository } from 'typeorm';
 import { Afiliado } from './afiliado.entity';
 import { CreateAfiliadoDto } from './dto/create-afiliado.dto';
 import { UpdateAfiliadoDto } from './dto/update-afiliado.dto';
+import { PersonaService } from 'src/persona/persona.service';
+import { Localidades } from 'src/localidades/entities/localidades.entity';
+import { LocalidadesService } from 'src/localidades/localidades.service';
+import { Nacionalidad } from 'src/persona/entities/nacionalidades.entity';
 
 @Injectable()
 export class AfiliadosService {
-  constructor(@InjectRepository(Afiliado) private repo: Repository<Afiliado>,) {}
+  constructor(
+    @InjectRepository(Afiliado) private repo: Repository<Afiliado>,
+    private personaService: PersonaService,
+  ) {}
   
 
   async create(dto: CreateAfiliadoDto) {
-    return 'Falta implementar'
+    let conyuge = null;
+    let hijos = []
+
+    if(dto.datosFamiliares.conyuge) {
+      conyuge = await this.personaService.crearPersona(dto.datosFamiliares.conyuge);
+    }
+
+    for(let hijo of dto.datosFamiliares.hijos) {
+      hijos.push(await this.personaService.crearPersona(hijo));
+    }
+
+    
+    let afiliado = this.repo.create({
+      cargaHorariaTipo: dto.datosLaborales.cargaHoraria.tipo,
+      cargaHorariaHoras: dto.datosLaborales.cargaHoraria.horas,
+      fechaIngreso: new Date(dto.datosLaborales.fechaIngreso),
+      ramaDedicacion: dto.datosLaborales.ocupacion,
+      conyuge: conyuge,
+      hijos: hijos,
+    })
+    
+    afiliado = await this.repo.save(afiliado)
+
+    const personaAfiliado = await this.personaService.crearPersona(dto.datosPersonales, afiliado)
+
+    return personaAfiliado
   }
 
   async findAll(filters) {

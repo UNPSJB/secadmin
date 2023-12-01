@@ -15,8 +15,12 @@ import { EmpresaModule } from './empresa/empresa.module';
 import { EmailModule } from './email/email.module';
 import { CursoModule } from './curso/curso.module';
 import emailConfig from './configuracion/email';
+<<<<<<< HEAD
 import {RolModule} from './rol/rol.module';
 
+=======
+import { RolModule } from './rol/rol.module';
+>>>>>>> 9ad12017a14a432b8f40940c64d38239df181682
 
 @Module({
   imports: [

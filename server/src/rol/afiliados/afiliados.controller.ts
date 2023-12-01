@@ -9,8 +9,9 @@ export class AfiliadosController {
     constructor(private readonly afiliadosService: AfiliadosService) {}
 
     @Post()
-    create(@Body() createAulaDto: CreateAfiliadoDto) {
-      return this.afiliadosService.create(createAulaDto);
+    create(@Body() createAfiliadoDto: CreateAfiliadoDto) {
+      console.log(createAfiliadoDto)
+      return this.afiliadosService.create(createAfiliadoDto);
     }
 
     @Get()

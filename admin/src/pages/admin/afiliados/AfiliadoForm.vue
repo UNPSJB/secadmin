@@ -9,19 +9,21 @@
                 </div>
                 <va-stepper
                     v-model="step"
+                    linear
                     :steps="steps"
                     :controlsHidden="esconderControlesPredeterminados"
                     :navigation-disabled="esconderControlesPredeterminados"
+                    @finish="onGuardar"
                     >
                     <template #step-content-0>
                         <DatosPersonalesForm :form-data="datosPersonales"/>
                     </template>
                     <template #step-content-1>
-                        <DatosLaboralesForm :form-data="datosPersonales"/>
+                        <DatosLaboralesForm :form-data="datosLaborales"/>
                     </template>
                     <template #step-content-2>
                         <DatosFamiliaresForm 
-                            :form-data="datosPersonales" 
+                            :form-data="datosFamiliares" 
                             :esconderControlesPredeterminados="esconderControlesPredeterminados"
                             @update:esconderControlesPredeterminados="actualizarEsconderControlesPredeterminados"    
                         />
@@ -50,7 +52,7 @@ import { ref, computed, watch, Ref, ComputedRef } from 'vue';
 import { useRouter, useRoute } from 'vue-router'
 import { useAfiliadosStore } from '../../../stores/afiliados-store';
 import { useToast } from 'vuestic-ui'
-import { Aula, Localidad, DatosPersonalesFormType, Afiliado } from '../../../types';
+import { Localidad, DatosPersonalesFormType, TipoDocumento, Afiliado, DatosProfesionalesFormType, TipoCargaHoraria, DatosFamiliaresFormType } from '../../../types';
 import DatosPersonalesForm from './DatosPersonalesForm.vue';
 import DatosFamiliaresForm from './DatosFamiliaresForm.vue';
 import DatosLaboralesForm from './DatosLaboralesForm.vue';
@@ -68,19 +70,35 @@ const datosPersonales = ref<DatosPersonalesFormType>({
     telefono: '',
     domicilio: '',
     cuil: '',
-
 });
+
+const datosLaborales = ref<DatosProfesionalesFormType>({
+    sueldo: 0,
+    cargaHoraria: { tipo: TipoCargaHoraria.DIARIA, horas:0},
+    fechaIngreso: new Date(),
+    ocupacion: null
+});
+
+
+const datosFamiliares = ref<DatosFamiliaresFormType>({
+    hijos:[]
+});
+
 
 const localidad:Ref<Localidad | null> = ref(null);
 const step = ref(0)
 const esconderControlesPredeterminados = ref(false);
 
-
-const steps = [
-  { label: 'Datos personales' },
-  { label: 'Datos laborales' },
-  { label: 'Datos familiares' },
-]
+const steps = ref([
+  {
+    label: 'Datos personales',
+    beforeLeave: (step:any) => {
+      step.hasError = !validaDatosPersonales()
+    },
+  },
+  { label: 'Datos laborales', beforeLeave: (step:any) => { } },
+  { label: 'Datos familiares', beforeLeave: (step:any) => { } },
+])
 
 
 const esEdicion = route.name === 'editar-aula';
@@ -89,37 +107,38 @@ if(esEdicion) {
     afiliadosStore.obtenerAfiliado(route.params.id as string);
 }
 
-function updateLocalidad (newLocalidad:any) {
-    localidad.value = newLocalidad;
+async function onGuardar() {
+    try {
+        if(esEdicion) {
+            // await afiliadosStore.actualizarAfiliado(
+            //     route.params.id as string,
+            //     razonSocial.value,
+            //     cuit.value, 
+            //     localidad.value, 
+            //     direccion.value
+            // )
+        } else {
+            await afiliadosStore.guardarAfiliado({
+                datosFamiliares: datosFamiliares.value,
+                datosPersonales: datosPersonales.value,
+                datosLaborales: datosLaborales.value,
+            });
+        }
+        init({
+            message: 'Empresa guardada correctamente',
+            position: 'bottom-right',
+            duration: 2500,
+        })
+        router.push({ name: 'empresas' });
+    } catch (e: any) {
+        init({
+            message: e.message,
+            position: 'bottom-right',
+            duration: 2500,
+            color: "danger"
+        })  
+    }
 }
-
-function onCancelar() {
-    router.push({ name: 'aulas' });
-}
-
-// async function onGuardar() {
-//     try {
-//         if(esEdicion) {
-//             await afiliadosStore.actualizarAfiliado({datosPersonales})
-//         } else {
-//             await aulasStore.guardarAula(codigoAula.value,capacidad.value, localidad.value, direccion.value);
-//         }
-//         init({
-//             message: 'Aula guardada correctamente',
-//             position: 'bottom-right',
-//             duration: 2500,
-//         })
-//         router.push({ name: 'aulas' });
-//     } catch (e: any) {
-//         init({
-//             message: e.message,
-//             position: 'bottom-right',
-//             duration: 2500,
-//             color: "danger"
-//         })  
-//     }
-// }
-
 
 const afiliadoParaEditar:ComputedRef<Afiliado | null> = computed(() => afiliadosStore.afiliado)
 
@@ -132,6 +151,10 @@ watch(afiliadoParaEditar as any, (afiliadoAEditar:Afiliado) => {
 
 function actualizarEsconderControlesPredeterminados(nuevoValor:boolean) {
     esconderControlesPredeterminados.value = nuevoValor;
+}
+
+function validaDatosPersonales() {
+    return false
 }
 
 </script>

@@ -3,11 +3,17 @@ export function esEmail(email:string) {
     return regex.test(email);
 }
 
-export function esDocumentoIncompleto(nroDocumento:string) {
-    return nroDocumento !== undefined && (nroDocumento.length > 9 || nroDocumento.length < 8);
+export function esDocumentoValido(nroDocumento:string) {
+    return nroDocumento !== undefined && 
+      (nroDocumento.length === 10)
 }
 
-export function esMayorDe18(fechaNacimiento: Date) {
+export function esEnteroPositivo(str: string): boolean {
+  const numero = parseInt(str);
+  return !isNaN(numero) && numero > 0 && numero.toString() === str;
+}
+
+export function esMayorDeCiertaEdad(edadMinima: number, fechaNacimiento: Date) {
     const fechaActual = new Date();
   
     let edad = fechaActual.getFullYear() - fechaNacimiento.getFullYear();
@@ -19,5 +25,13 @@ export function esMayorDe18(fechaNacimiento: Date) {
       edad--;
     }
   
-    return edad >= 18;
+    return edad >= edadMinima;
   }
+
+export function esNumeroDeTelefonoCompleto(telefono: string){
+  return telefono.length === 18;
+}
+
+export function esCUILValido(cuil: string){
+  return cuil.length === 13;
+}

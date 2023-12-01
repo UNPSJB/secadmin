@@ -65,10 +65,10 @@
   resolved "https://registry.npmjs.org/@babel/parser/-/parser-7.23.0.tgz"
   integrity sha512-vvPKKdMemU85V9WE/l5wZEmImpCtLqbnTvqDS2U1fJ96KrxoW7KrXhNsNCblQlg8Ck4b85yxdTyelsMUgFUXiw==
 
-"@esbuild/win32-x64@0.18.16":
+"@esbuild/linux-x64@0.18.16":
   version "0.18.16"
-  resolved "https://registry.npmjs.org/@esbuild/win32-x64/-/win32-x64-0.18.16.tgz"
-  integrity sha512-sCIVrrtcWN5Ua7jYXNG1xD199IalrbfV2+0k/2Zf2OyV2FtnQnMgdzgpRAbi4AWlKJj1jkX+M+fEGPQj6BQB4w==
+  resolved "https://registry.npmjs.org/@esbuild/linux-x64/-/linux-x64-0.18.16.tgz"
+  integrity sha512-xu86B3647DihHJHv/wx3NCz2Dg1gjQ8bbf9cVYZzWKY+gsvxYmn/lnVlqDRazObc3UMwoHpUhNYaZset4X8IPA==
 
 "@eslint/eslintrc@^1.3.0":
   version "1.3.0"
@@ -3219,6 +3219,11 @@ markerjs2@^2.29.4:
   resolved "https://registry.npmjs.org/markerjs2/-/markerjs2-2.29.5.tgz"
   integrity sha512-hg0dkVyhj+bLd0yCq+xz6ZRWG8SjKh801gUOVb54b39TvRsAVcV7ZWWM7W1p41HiPExUicwGg9xCllXbORS5DQ==
 
+maska@^2.1.10:
+  version "2.1.10"
+  resolved "https://registry.npmjs.org/maska/-/maska-2.1.10.tgz"
+  integrity sha512-oQLLUCJ4qG1YFHSGQB9P6G0LKSmAwHFFBFhmkJ9pcSUXXDZew5NNTBbPACiixqFBaU7M7LydPlrL0DmI1p+ufQ==
+
 medium-editor@^5.23.3:
   version "5.23.3"
   resolved "https://registry.npmjs.org/medium-editor/-/medium-editor-5.23.3.tgz"
@@ -4609,6 +4614,11 @@ vue-router@^4.1.0, vue-router@^4.2.4:
   integrity sha512-9PISkmaCO02OzPVOMq2w82ilty6+xJmQrarYZDkjZBfl4RvYAlt4PKnEX21oW4KTtWfa9OuO/b3qk1Od3AEdCQ==
   dependencies:
     "@vue/devtools-api" "^6.5.0"
+
+vue-the-mask@^0.11.1:
+  version "0.11.1"
+  resolved "https://registry.npmjs.org/vue-the-mask/-/vue-the-mask-0.11.1.tgz"
+  integrity sha512-UquSfnSWejD0zAfcD+3jJ1chUAkOAyoxya9Lxh9acCRtrlmGcAIvd0cQYraWqKenbuZJUdum+S174atv2AuEHQ==
 
 vue-tsc@^0.35.0:
   version "0.35.2"

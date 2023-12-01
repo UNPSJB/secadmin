@@ -1,6 +1,6 @@
 import { ChildEntity, Column, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, OneToOne } from "typeorm";
 import { Rol } from "../rol.entity";
-import { CargaHoraria } from "./cargaHoraria.entity";
+import { TipoCargaHoraria } from "./cargaHoraria.entity";
 import { Persona } from "src/persona/entities/persona.entity";
 import { Empresa } from "src/empresa/entities/empresa.entity";
 
@@ -18,8 +18,11 @@ export class Afiliado extends Rol {
     @Column()
     ramaDedicacion: string
 
-    @OneToMany(() => CargaHoraria, (cargaHoraria) => cargaHoraria.afiliado)
-    cargaHoraria: CargaHoraria[]
+    @Column()
+    cargaHorariaTipo:TipoCargaHoraria;
+
+    @Column()
+    cargaHorariaHoras: number;
 
     @Column()
     fechaIngreso: Date; 

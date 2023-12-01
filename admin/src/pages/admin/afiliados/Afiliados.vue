@@ -34,7 +34,7 @@
                         </va-input>
                     </div>
                     <div class="basis-2/12">
-                        <va-button @click="onNuevaAula"> Nueva aula </va-button>
+                        <va-button @click="onNuevoAfiliado"> Nuevo afiliado </va-button>
                     </div>
                 </div>    
 
@@ -127,7 +127,7 @@
     const listadoDeAFiliados:ComputedRef<Afiliado[]> = computed(() => afiliadosStore.afiliados);
     const botonesDePaginacion:ComputedRef<any[]> = computed(() => generarBotonesPaginacion(afiliadosStore.cantidadDeAfiliados, pagina.value, limitePorPagina));
 
-    function onNuevaAula() {
+    function onNuevoAfiliado() {
         router.push({name: 'nuevo-afiliado'});
     }
 

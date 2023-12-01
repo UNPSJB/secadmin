@@ -21,15 +21,18 @@
                 <va-input 
                     v-model="formData.nroDocumento" 
                     label="Nro de documento" 
-                    mask="numeral" 
-                    @keyup:enter="buscarDocumento"
+                    v-maska
+                    data-maska="###.###.###"
+                    data-maska-reversed
+                    @keyup.enter="buscarDocumento"
+                    :rules="[(v) => esDocumentoValido(v) || `Ingrese un documento válido`]"
                 >
                     <template #appendInner>
                         <va-button
                             icon="search"
                             preset="plain"
                             @click="buscarDocumento"
-                            :disabled="esDocumentoIncompleto(formData.nroDocumento)"
+                            :disabled="!esDocumentoValido(formData.nroDocumento)"
                         />
                     </template>
                 </va-input>
@@ -165,12 +168,13 @@
 </template>
   
 <script setup lang="ts">
+    import { vMaska } from "maska";
     import { ref, reactive, toRefs, defineProps, watch, computed } from 'vue';
     import { DatosPersonalesFormType, listaDocumentos, SelectOption, listadoEstadosCiviles } from '../../../types';
     import NacionalidadesSelect from '../../../components/selectors/NacionalidadesSelect.vue';
     import LocalidadesSelect from '../../../components/selectors/LocalidadesSelect.vue';
     import { usePersonasStore } from '../../../stores/personas-store';
-    import { esEmail, esDocumentoIncompleto } from '../../../services/utils/validaciones'
+    import { esEmail, esDocumentoValido } from '../../../services/utils/validaciones'
 
     const sePuedeEditar = ref(false);
     const mostrarModalDePersonaEncontrada = ref(false);
@@ -181,7 +185,7 @@
     }>()
 
     const personasStore = usePersonasStore();
-    const emit = defineEmits(['cancelarForm']);
+    const emit = defineEmits(['cancelarForm', "guardarForm"]);
 
     // Acceder a las props con toRefs para mantener la reactividad
     const props = toRefs<{formData: DatosPersonalesFormType}>(propsis);
@@ -211,7 +215,7 @@
 
     function buscarDocumento() {
         const {tipoDocumento, nroDocumento } = props.formData.value;
-        if(!esDocumentoIncompleto(nroDocumento)) {
+        if(esDocumentoValido(nroDocumento)) {
             personasStore.obtenerPersonaPorDocumento(tipoDocumento.value, nroDocumento, onPersonaEncontrada)
         }
 
@@ -234,7 +238,7 @@
     }
 
     function onGuardar() {
-
+        emit('guardarForm', props.formData.value);
     }
 
     function onCancelar() {

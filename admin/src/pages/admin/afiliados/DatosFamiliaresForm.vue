@@ -1,8 +1,8 @@
 <template>
     <div v-if="!cargarPersona">
         <DatosFamiliaresTablas
-            :conyuge="conyuge"
-            :hijos="hijos"
+            :conyuge="formData.conyuge"
+            :hijos="formData.hijos"
             @nuevoConyuge="onClickNuevoConyuge"
             @nuevoHijo="onClickNuevoHijo"
             @eliminarConyuge="onEliminarConyuge"
@@ -18,34 +18,31 @@
             :formData="persona"
             :tipoCarga="tipoCarga"
             @cancelar-form="onCancelarForm"
+            @guardar-form="onGuardarForm"
         />
     </div>
 </template>
   
 <script setup lang="ts">
     import { ref, reactive, toRefs, defineProps, watch } from 'vue';
-    import { DatosPersonalesFormType, SelectOption, Persona, EstadoCivil, Localidad, TipoDocumento } from '../../../types';
+    import { DatosFamiliaresFormType, SelectOption, Persona, EstadoCivil, Localidad, TipoDocumento, DatosPersonalesFormType } from '../../../types';
     import DatosFamiliaresTablas from './DatosFamiliaresTablas.vue';
     import DatosPersonalesFamiliaresForm from './DatosPersonalesFamiliaresForm.vue';
 
-
     const propsis = defineProps<{
-        formData: DatosPersonalesFormType;
+        formData: DatosFamiliaresFormType;
         esconderControlesPredeterminados: boolean;
     }>()
 
 
     // Acceder a las props con toRefs para mantener la reactividad
-    const props = toRefs<{formData: DatosPersonalesFormType, esconderControlesPredeterminados:boolean}>(propsis);
+    const props = toRefs<{formData: DatosFamiliaresFormType, esconderControlesPredeterminados:boolean}>(propsis);
     const localFormData = reactive({ ...props.formData.value });
     const emit = defineEmits(['update:esconderControlesPredeterminados']);
 
-
-    const conyuge = ref<Persona | null>(null);
-    const hijos = ref<{orden:number, persona: Persona}[]>([]);
     const orden = ref(0);
     const cargarPersona = ref(false);
-    const persona = ref<DatosPersonalesFormType>({
+    const personaDefault: DatosPersonalesFormType = {
         nroDocumento: '',
         nombre: '',
         apellido: '',
@@ -53,8 +50,9 @@
         telefono: '',
         domicilio: '',
         cuil: '',
+    }
 
-    });
+    const persona = ref<DatosPersonalesFormType>({...personaDefault});
 
     const tipoCarga = ref<'CONYUGE'| 'HIJO' | null>()
 
@@ -69,7 +67,7 @@
         emit('update:esconderControlesPredeterminados', true);
     }
 
-    function onGuardarNuevoConyuge () {
+    function onGuardarNuevoConyuge (personaNueva: DatosPersonalesFormType) {
         const {
             apellido, 
             nombre, 
@@ -83,10 +81,10 @@
             localidad, 
             nacionalidad, 
             tipoDocumento
-        } = persona.value;
+        } = personaNueva;
         
         if (estadoCivil && fechaNacimiento && localidad && nacionalidad && tipoDocumento) {
-            conyuge.value = {
+            props.formData.value.conyuge.value = {
                 apellido,
                 nombre,
                 cuil,
@@ -101,16 +99,69 @@
                 tipo_documento: tipoDocumento.value as TipoDocumento
             }
         }
-
-
-        cargarPersona.value = false;
-        emit('update:esconderControlesPredeterminados', false);
+        Object.assign(persona.value, personaDefault);
     }
+
+    function onGuardarNuevoHijo (personaNueva: DatosPersonalesFormType) {
+        const {
+            apellido, 
+            nombre, 
+            cuil, 
+            domicilio, 
+            email, 
+            nroDocumento, 
+            telefono, 
+            estadoCivil, 
+            fechaNacimiento, 
+            localidad, 
+            nacionalidad, 
+            tipoDocumento
+        } = personaNueva;
+        
+        if (estadoCivil && fechaNacimiento && localidad && nacionalidad && tipoDocumento) {
+            const listadoDeHijos = props.formData.value.hijos;
+            if (listadoDeHijos) {
+                const orden = listadoDeHijos.length + 1;
+                props.formData.value.hijos = [ 
+                    ...listadoDeHijos,    
+                    {
+                        orden,
+                        persona: {
+                            apellido,
+                            nombre,
+                            cuil,
+                            direccion: domicilio,
+                            email,
+                            nroDocumento,
+                            telefono,
+                            estado_civil: estadoCivil.value as EstadoCivil,
+                            fecha_nacimiento: fechaNacimiento, 
+                            localidad: localidad.value, 
+                            nacionalidad: nacionalidad.value , 
+                            tipo_documento: tipoDocumento.value as TipoDocumento
+                        }
+                    }
+                ]
+            }   
+        }
+        Object.assign(persona.value, personaDefault);
+    }
+
 
 
     function onCancelarForm () {
         cargarPersona.value = false;
         emit('update:esconderControlesPredeterminados', false);
+    }
+
+    function onGuardarForm(persona:DatosPersonalesFormType) {
+        cargarPersona.value = false;
+        emit('update:esconderControlesPredeterminados', false);
+        if (tipoCarga.value === 'CONYUGE') {
+            onGuardarNuevoConyuge(persona)
+        } else {
+           onGuardarNuevoHijo(persona); 
+        }
     }
 
 
@@ -121,7 +172,7 @@
     }
 
     function onEliminarConyuge() {
-        conyuge.value = null;
+        props.formData.value.conyuge = null;
     }
 
     function onEditarConyuge() {

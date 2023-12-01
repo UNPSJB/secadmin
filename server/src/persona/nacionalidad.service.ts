@@ -5,15 +5,12 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Persona } from './entities/persona.entity';
 import { DeepPartial, FindManyOptions, ILike, Repository } from 'typeorm';
 import { Nacionalidad } from './entities/nacionalidades.entity';
-import { LocalidadesService } from 'src/localidades/localidades.service';
-import { Rol } from 'src/rol/rol.entity';
 
 @Injectable()
-export class PersonaService {
+export class NacionalidadService {
   constructor(
     @InjectRepository(Persona) private repo: Repository<Persona>,
     @InjectRepository(Nacionalidad) private nacionalidadRepository: Repository<Nacionalidad>,
-    private localidadesService: LocalidadesService,
     
   ) { }
 
@@ -41,39 +38,8 @@ export class PersonaService {
     );
   }
 
-  async crearPersona(personaACrear: DeepPartial<Persona>, rol?: Rol) {
-    let persona = await this.findOnePorDocumento(personaACrear.tipoDocumento, personaACrear.nroDocumento);
-
-    if(!persona){
-        persona = new Persona();
-    } 
-
-    persona.nombre = personaACrear.nombre
-    persona.apellido = personaACrear.apellido
-    persona.direccion = personaACrear.direccion
-    persona.estado_civil = personaACrear.estado_civil
-    persona.nroDocumento = personaACrear.nroDocumento
-    persona.tipoDocumento = personaACrear.tipoDocumento
-    persona.telefono = personaACrear.telefono;
-
-    if(personaACrear.fecha_nacimiento){
-      persona.fecha_nacimiento = new Date(personaACrear.fecha_nacimiento as string)
-    }
-
-    if(personaACrear.localidad) {
-      const localidad = await this.localidadesService.findOne(personaACrear.localidad as number);
-      persona.localidad = localidad;
-    }
-
-    if(personaACrear.nacionalidad) {
-      const nacionalidad = await this.nacionalidadRepository.findOne({where:{id:personaACrear.nacionalidad as number}});
-      persona.nacionalidad = nacionalidad;
-    }
-
-    if(rol) {
-      persona.roles = [...persona.roles, rol]
-    }
-    return this.repo.save(persona);
+  crearPersona(persona:DeepPartial<Persona>) {
+    return this.repo.create(persona)
   }
 
   update(id: number, updatePersonaDto: UpdatePersonaDto) {
@@ -96,9 +62,5 @@ export class PersonaService {
     }
 
     return this.nacionalidadRepository.find(processed_filter);
-  }
-
-  findOneNacionalidad(id) {
-    return this.nacionalidadRepository.findOne({where:{id}})
   }
 }

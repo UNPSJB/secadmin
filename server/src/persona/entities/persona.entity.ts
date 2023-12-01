@@ -3,6 +3,7 @@ import { Nacionalidad } from "./nacionalidades.entity";
 import { EstadoCivil } from "./estados-civiles.enum";
 import { Localidades } from "src/localidades/entities/localidades.entity";
 import { Rol } from "../../rol/rol.entity";
+import { Usuario } from "src/usuarios/entities/usuarios.entity";
 
 @Entity('personas')
 export class Persona {
@@ -56,8 +57,8 @@ export class Persona {
     @ManyToOne(() => Localidades)
     localidad: Localidades;
 
-    @OneToOne(() => Persona, (persona) => persona.usuario)
-    usuario: Persona;    
+    @OneToOne(() => Usuario, (usuario) => usuario.persona)
+    usuario: Usuario;    
 
     @OneToMany(() => Rol, (rol:Rol) => rol.persona)
     roles: Rol[]
