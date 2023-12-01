@@ -93,6 +93,28 @@ const routes: Array<RouteRecordRaw> = [
         
       },
       {
+        name: 'cursos-menu',
+        path: 'cursos',
+        component: RouteViewComponent,
+        children: [
+          {
+            name: 'cursos',
+            path: '',
+            component: () => import('../pages/admin/cursos/Cursos.vue'),
+          },
+          {
+            name: 'nuevo-curso',
+            path: 'form',
+            component: () => import('../pages/admin/cursos/CursoForm.vue'),
+          },
+          {
+            name: 'editar-curso',
+            path: 'form/:id',
+            component: () => import('../pages/admin/cursos/CursoForm.vue'),
+          },
+        ],
+      },
+      {
         name: 'statistics',
         path: 'statistics',
         component: RouteViewComponent,

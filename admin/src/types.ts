@@ -172,3 +172,37 @@ export const ocupacionesComercio: SelectOption[]  = [
     { text: 'Visual Merchandiser', value: TipoOcupacion.VISUAL_MERCHANDISER },
     { text: 'Demostrador de Productos', value: TipoOcupacion.DEMOSTRADOR_PRODUCTO }
 ];
+
+export enum categoriaCurso{
+    CAPACITACION = 'Capacitacion',
+    GIMNASIOSALUDABLE = 'Gimnasio Saludable',
+    CULTURA = 'Cultura'
+}
+
+export enum tipoCurso{
+    UNICO ='Curso unico',
+    PERIODO = 'Curso por periodo', 
+    NORMAL = 'Curso normal'
+}
+
+export type Curso = {
+    id?: number;
+    codigo_curso: string;
+    nombre_curso: string;
+    categoria_curso: categoriaCurso;
+    tipo_curso: tipoCurso
+}
+
+export const duracionCurso: SelectOption[]  = [
+    { text: 'Curso único', value: tipoCurso.UNICO },
+    { text: 'Curso por período', value: tipoCurso.PERIODO },
+    { text: 'Curso normal', value: tipoCurso.NORMAL },
+    
+];
+
+export const areaCurso: SelectOption[]  = [
+    { text: 'Cultura', value: categoriaCurso.CULTURA },
+    { text: 'Gimnasio saludable', value: categoriaCurso.GIMNASIOSALUDABLE },
+    { text: 'Capacitación', value: categoriaCurso.CAPACITACION },
+    
+];
