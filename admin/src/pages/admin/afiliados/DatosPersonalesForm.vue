@@ -72,7 +72,7 @@
             
             <div class="flex md:col-span-6 sm:col-span-6 col-span-12">
                 <va-date-input
-                    v-model="formData.fechaNacimiento"
+                    v-model="formData.fecha_nacimiento"
                     label="Fecha nacimiento"
                     :disabled="!sePuedeEditar"
                     :rules="[(v)=> !v || esMayorDeCiertaEdad(14, v) || 'La fecha de nacimiento ingresada no es válida']"
@@ -84,7 +84,7 @@
             
             <div class="flex md:col-span-6 sm:col-span-6 col-span-12">
                 <va-select
-                    v-model="formData.estadoCivil"
+                    v-model="formData.estado_civil"
                     :options="listadoEstadosCiviles"
                     label="Estado Civil"
                     text-by="text"
@@ -119,7 +119,7 @@
             
             <div class="flex md:col-span-6 sm:col-span-6 col-span-12">
                 <va-input 
-                    v-model="formData.domicilio" 
+                    v-model="formData.direccion" 
                     label="Domicilio"
                     :disabled="!sePuedeEditar"
                 />
@@ -236,10 +236,10 @@
         props.formData.value.nombre = data.nombre; 
         props.formData.value.apellido = data.apellido;
         props.formData.value.telefono = data.telefono;
-        props.formData.value.domicilio = data.direccion;
+        props.formData.value.direccion = data.direccion;
         props.formData.value.cuil = data.cuil;
         props.formData.value.email = data.usuario.email;
-        props.formData.value.fechaNacimiento = new Date(data.fecha_nacimiento);
-        props.formData.value.estadoCivil = data.estado_civil;
+        props.formData.value.fecha_nacimiento = new Date(data.fecha_nacimiento);
+        props.formData.value.estado_civil = data.estado_civil;
     }
 </script>

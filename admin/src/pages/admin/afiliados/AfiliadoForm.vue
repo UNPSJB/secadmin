@@ -68,7 +68,7 @@ const datosPersonales = ref<DatosPersonalesFormType>({
     apellido: '',
     email: '',
     telefono: '',
-    domicilio: '',
+    direccion: '',
     cuil: '',
 });
 
@@ -120,16 +120,21 @@ async function onGuardar() {
         } else {
             await afiliadosStore.guardarAfiliado({
                 datosFamiliares: datosFamiliares.value,
-                datosPersonales: datosPersonales.value,
+                datosPersonales: {
+                    ...datosPersonales.value,
+                    localidad: datosPersonales.value.localidad.value,
+                    nacionalidad: datosPersonales.value.nacionalidad.id,
+
+                },
                 datosLaborales: datosLaborales.value,
             });
         }
         init({
-            message: 'Empresa guardada correctamente',
+            message: 'Afiliado guardado correctamente',
             position: 'bottom-right',
             duration: 2500,
         })
-        router.push({ name: 'empresas' });
+        router.push({ name: 'afiliados' });
     } catch (e: any) {
         init({
             message: e.message,
