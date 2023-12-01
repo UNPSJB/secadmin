@@ -25,7 +25,7 @@
   
 <script setup lang="ts">
     import { ref, reactive, toRefs, defineProps, watch } from 'vue';
-    import { DatosFamiliaresFormType, SelectOption, Persona, EstadoCivil, Localidad, TipoDocumento, DatosPersonalesFormType } from '../../../types';
+    import { DatosFamiliaresFormType, SelectOption, Persona, estado_civil, Localidad, TipoDocumento, DatosPersonalesFormType } from '../../../types';
     import DatosFamiliaresTablas from './DatosFamiliaresTablas.vue';
     import DatosPersonalesFamiliaresForm from './DatosPersonalesFamiliaresForm.vue';
 
@@ -48,7 +48,7 @@
         apellido: '',
         email: '',
         telefono: '',
-        domicilio: '',
+        direccion: '',
         cuil: '',
     }
 
@@ -72,28 +72,28 @@
             apellido, 
             nombre, 
             cuil, 
-            domicilio, 
+            direccion, 
             email, 
             nroDocumento, 
             telefono, 
-            estadoCivil, 
-            fechaNacimiento, 
+            estado_civil, 
+            fecha_nacimiento, 
             localidad, 
             nacionalidad, 
             tipoDocumento
         } = personaNueva;
         
-        if (estadoCivil && fechaNacimiento && localidad && nacionalidad && tipoDocumento) {
+        if (estado_civil && fecha_nacimiento && localidad && nacionalidad && tipoDocumento) {
             props.formData.value.conyuge.value = {
                 apellido,
                 nombre,
                 cuil,
-                direccion: domicilio,
+                direccion: direccion,
                 email,
                 nroDocumento,
                 telefono,
-                estado_civil: estadoCivil.value as EstadoCivil,
-                fecha_nacimiento: fechaNacimiento, 
+                estado_civil: estado_civil.value as estado_civil,
+                fecha_nacimiento: fecha_nacimiento, 
                 localidad: { id: Number(localidad.value), codigo_postal:1, nombre:"efe"}, 
                 nacionalidad: { nombre_en: "", nombre_es:""} , 
                 tipo_documento: tipoDocumento.value as TipoDocumento
@@ -107,18 +107,18 @@
             apellido, 
             nombre, 
             cuil, 
-            domicilio, 
+            direccion, 
             email, 
             nroDocumento, 
             telefono, 
-            estadoCivil, 
-            fechaNacimiento, 
+            estado_civil, 
+            fecha_nacimiento, 
             localidad, 
             nacionalidad, 
             tipoDocumento
         } = personaNueva;
         
-        if (estadoCivil && fechaNacimiento && localidad && nacionalidad && tipoDocumento) {
+        if (estado_civil && fecha_nacimiento && localidad && nacionalidad && tipoDocumento) {
             const listadoDeHijos = props.formData.value.hijos;
             if (listadoDeHijos) {
                 const orden = listadoDeHijos.length + 1;
@@ -130,12 +130,12 @@
                             apellido,
                             nombre,
                             cuil,
-                            direccion: domicilio,
+                            direccion,
                             email,
                             nroDocumento,
                             telefono,
-                            estado_civil: estadoCivil.value as EstadoCivil,
-                            fecha_nacimiento: fechaNacimiento, 
+                            estado_civil: estado_civil.value as estado_civil,
+                            fecha_nacimiento: fecha_nacimiento, 
                             localidad: localidad.value, 
                             nacionalidad: nacionalidad.value , 
                             tipo_documento: tipoDocumento.value as TipoDocumento

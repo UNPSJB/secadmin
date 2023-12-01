@@ -75,7 +75,7 @@
 
             <div class="flex md:col-span-6 sm:col-span-6 col-span-12">
                 <va-date-input
-                    v-model="formData.fechaNacimiento"
+                    v-model="formData.fecha_nacimiento"
                     label="Fecha nacimiento"
                     :disabled="!sePuedeEditar"
                 />            
@@ -83,7 +83,7 @@
             
             <div class="flex md:col-span-6 sm:col-span-6 col-span-12">
                 <va-select
-                    v-model="formData.estadoCivil"
+                    v-model="formData.estado_civil"
                     :options="listadoEstadosCiviles"
                     label="Estado Civil"
                     text-by="text"
@@ -118,7 +118,7 @@
             
             <div class="flex md:col-span-6 sm:col-span-6 col-span-12">
                 <va-input 
-                    v-model="formData.domicilio" 
+                    v-model="formData.direccion" 
                     label="Domicilio"
                     :disabled="!sePuedeEditar"
                 />

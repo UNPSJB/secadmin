@@ -55,6 +55,7 @@ export class PersonaService {
     persona.nroDocumento = personaACrear.nroDocumento
     persona.tipoDocumento = personaACrear.tipoDocumento
     persona.telefono = personaACrear.telefono;
+    persona.cuil = personaACrear.cuil;
 
     if(personaACrear.fecha_nacimiento){
       persona.fecha_nacimiento = new Date(personaACrear.fecha_nacimiento as string)
@@ -71,7 +72,11 @@ export class PersonaService {
     }
 
     if(rol) {
-      persona.roles = [...persona.roles, rol]
+      if(persona.roles) {
+        persona.roles = [...persona.roles, rol]
+      } else {
+        persona.roles = [ rol ]
+      }
     }
     return this.repo.save(persona);
   }

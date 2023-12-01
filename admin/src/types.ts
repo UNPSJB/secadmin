@@ -119,12 +119,12 @@ export type DatosPersonalesFormType = {
     apellido: string;
     email: string;
     telefono: string;
-    fechaNacimiento?: Date;
-    nacionalidad?: SelectOption;
-    estadoCivil?:  SelectOption;
-    domicilio: string;
+    fecha_nacimiento?: Date;
+    nacionalidad?: any;
+    estado_civil?:  SelectOption;
+    direccion: string;
     cuil: string;
-    localidad?: SelectOption;
+    localidad?: any;
 }
 
 export type DatosProfesionalesFormType = {
