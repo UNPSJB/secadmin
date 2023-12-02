@@ -91,6 +91,24 @@ export default {
       ],
     },
     {
+      name: 'cursos',
+      displayName: 'Cursos',
+      meta: {
+        icon: 'material-icons-school',
+      },
+      disabled: true,
+      children: [
+        {
+          name: 'cursos',
+          displayName: 'Listado de cursos',
+        },
+        {
+          name: 'nuevo-curso',
+          displayName: 'Nuevo curso',
+        },
+      ],
+    },
+    {
       name: 'statistics',
       displayName: 'menu.statistics',
       meta: {

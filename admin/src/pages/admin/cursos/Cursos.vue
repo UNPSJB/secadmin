@@ -76,7 +76,7 @@
       :message="obtenerMensajeDeEliminacion()"
       ok-text="Eliminar"
       cancel-text="Cancelar"
-      @ok="onEliminarCurso"
+      @ok="eliminarCurso"
     />
   </va-content>
 </template>

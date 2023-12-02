@@ -22,6 +22,7 @@
                   label="Área curso"
                   text-by="text"
                   track-by="value"
+                  value-by="value"
                 />
               </div>
 
@@ -32,7 +33,8 @@
                   label="Duración curso"
                   text-by="text"
                   track-by="value"
-                />
+                  value-by="value"
+               />
               </div>
           </div>
         </form>
