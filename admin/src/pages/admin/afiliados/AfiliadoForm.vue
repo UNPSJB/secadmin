@@ -101,7 +101,7 @@ const steps = ref([
 ])
 
 
-const esEdicion = route.name === 'editar-aula';
+const esEdicion = route.name === 'editar-afiliado';
 
 if(esEdicion) {
     afiliadosStore.obtenerAfiliado(route.params.id as string);

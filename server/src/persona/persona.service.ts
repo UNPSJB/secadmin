@@ -71,22 +71,14 @@ export class PersonaService {
       persona.nacionalidad = nacionalidad;
     }
 
-<<<<<<< HEAD
-    if(rol ) {
-      if(persona.roles){
-        persona.roles = [...persona.roles, rol]
-      }else{
-        persona.roles= [rol]
-=======
-    if(rol) {
-      if(persona.roles) {
-        persona.roles = [...persona.roles, rol]
-      } else {
-        persona.roles = [ rol ]
->>>>>>> 6853211e30d9b4cdaaae3b536acbeb9d758ab8cd
-      }
-    }
-    return this.repo.save(persona);
+   // if(rol) {
+     // if(persona.roles) {
+       // persona.roles = [...persona.roles, rol]
+      //} else {
+       // persona.roles = [ rol ]
+     // }
+   // }
+    //return this.repo.save(persona);
   }
 
   update(id: number, updatePersonaDto: UpdatePersonaDto) {

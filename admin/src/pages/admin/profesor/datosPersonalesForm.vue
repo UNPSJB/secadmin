@@ -63,6 +63,83 @@
                     :disabled="!sePuedeEditar"
                 />
             </div>
+            <div class="flex md:col-span-6 sm:col-span-6 col-span-12">
+                <va-input 
+                    v-model="telefono" 
+                    label="Telefono"
+                    :disabled="!sePuedeEditar"
+                    v-maska
+                    data-maska="+54 (###) ###-####"
+                    :rules="[(v)=> !v || esNumeroDeTelefonoCompleto(v) || 'Ingrese un número de teléfono válido']"
+                />
+            </div>
+            
+            <div class="flex md:col-span-6 sm:col-span-6 col-span-12">
+                <va-date-input
+                    v-model="formData.fecha_nacimiento"
+                    label="Fecha nacimiento"
+                    :disabled="!sePuedeEditar"
+                    :rules="[(v)=> !v || esMayorDeCiertaEdad(14, v) || 'La fecha de nacimiento ingresada no es válida']"
+                    v-model:view="fechaDeNacimientoView"
+                    :monthNames="['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic']"
+                    :weekdayNames="['Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab', 'Dom']"
+                />            
+            </div>
+            
+            <div class="flex md:col-span-6 sm:col-span-6 col-span-12">
+                <va-select
+                    v-model="formData.estado_civil"
+                    :options="listadoEstadosCiviles"
+                    label="Estado Civil"
+                    text-by="text"
+                    value-by="value"
+                    :disabled="!sePuedeEditar"
+                />
+            </div>
+            <div class="flex md:col-span-6 sm:col-span-6 col-span-12">
+                <Suspense>
+                    <LocalidadesSelect 
+                        @update-localidad="updateLocalidad"
+                        :localidad="formData.localidad"                    
+                        :disabled="!sePuedeEditar"
+                    />
+                    <template #fallback>
+                        Loading...
+                    </template>
+                </Suspense>
+            </div>
+            <div class="flex md:col-span-6 sm:col-span-6 col-span-12">
+                <Suspense>
+                    <NacionalidadesSelect 
+                        @update-nacionalidad="updateNacionalidad"
+                        :nacionalidad="formData.nacionalidad"
+                        :disabled="!sePuedeEditar"
+                    />
+                    <template #fallback>
+                        Loading...
+                    </template>
+                </Suspense>
+            </div>
+            
+            <div class="flex md:col-span-6 sm:col-span-6 col-span-12">
+                <va-input 
+                    v-model="formData.direccion" 
+                    label="Domicilio"
+                    :disabled="!sePuedeEditar"
+                />
+            </div>
+            
+
+            <div class="flex md:col-span-6 sm:col-span-6 col-span-12">
+                <va-input 
+                    v-model="formData.cuil" 
+                    label="CUIL" 
+                    :disabled="!sePuedeEditar"
+                    v-maska
+                    data-maska="##-########-#"
+                    :rules="[(v)=> !v || esCUILValido(v) || 'El CUIL ingresado no es válido']"
+                />
+            </div>
         </div>
       </form>
     <va-modal
@@ -114,13 +191,21 @@
 
     }
 
+    function updateLocalidad (newLocalidad:SelectOption) {
+        props.formData.value.localidad = newLocalidad;
+    }
+
+    function updateNacionalidad (newNacionalidad:SelectOption) {
+        props.formData.value.nacionalidad = newNacionalidad;
+    }
+
     function puedeCompletarDatos() {
         return sePuedeEditar
     }
 
-    function buscarDocumento() {
+     function buscarDocumento() {
         const {tipoDocumento, nroDocumento } = props.formData.value;
-        if(tipoDocumento && !esDocumentoIncompleto(nroDocumento) ) {
+        if(esDocumentoValido(nroDocumento)) {
             personasStore.obtenerPersonaPorDocumento(tipoDocumento.value, nroDocumento, onPersonaEncontrada)
         }
 
