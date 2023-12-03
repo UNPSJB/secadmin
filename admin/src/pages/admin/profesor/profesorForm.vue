@@ -18,9 +18,9 @@
                         value-by="value"
                       />
                     </div>
-                  </div>
+                  
 
-                  <div class="flex md:col-span-6 sm:col-span-6 col-span-12">
+                    <div class="flex md:col-span-6 sm:col-span-6 col-span-12">
                       <va-input 
                         v-model="datosPersonales.nroDocumento" 
                         label="Nro de documento" 
@@ -39,120 +39,121 @@
                           />
                         </template>
                       </va-input>
-                  </div>
+                    </div>
             
-                  <div class="flex md:col-span-6 sm:col-span-6 col-span-12">
+                    <div class="flex md:col-span-6 sm:col-span-6 col-span-12">
                     <va-input 
                       v-model="datosPersonales.nombre" 
                       label="Nombre"
                       :disabled="!sePuedeEditar"
                     />
-                  </div>
+                    </div>
             
-                  <div class="flex md:col-span-6 sm:col-span-6 col-span-12">
-                    <va-input 
-                      v-model="datosPersonales.apellido" 
-                      label="Apellido" 
-                      :disabled="!sePuedeEditar"
-                    />
-                  </div>
-            
-                  <div class="flex md:col-span-6 sm:col-span-6 col-span-12">
-                    <va-input 
-                      v-model="datosPersonales.email" 
-                      label="Email"
-                      :disabled="!sePuedeEditar"
-                      :rules="[(v) => esEmail(v) || `Ingresa un email válido`]"
-                    />
-                  </div>
-
-                  <div class="flex md:col-span-6 sm:col-span-6 col-span-12">
-                    <va-input 
-                      v-model="telefono" 
-                      label="Telefono"
-                      :disabled="!sePuedeEditar"
-                      v-maska
-                      data-maska="+54 (###) ###-####"
-                      :rules="[(v)=> !v || esNumeroDeTelefonoCompleto(v) || 'Ingrese un número de teléfono válido']"
-                    />
-                  </div>
-            
-                  <div class="flex md:col-span-6 sm:col-span-6 col-span-12">
-                    <va-date-input
-                      v-model="datosPersonales.fecha_nacimiento"
-                      label="Fecha nacimiento"
-                      :disabled="!sePuedeEditar"
-                      :rules="[(v)=> !v || esMayorDeCiertaEdad(14, v) || 'La fecha de nacimiento ingresada no es válida']"
-                      v-model:view="fechaDeNacimientoView"
-                      :monthNames="['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic']"
-                      :weekdayNames="['Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab', 'Dom']"
-                    />            
-                  </div>
-            
-                  <div class="flex md:col-span-6 sm:col-span-6 col-span-12">
-                    <va-select
-                      v-model="datosPersonales.estado_civil"
-                      :options="listadoEstadosCiviles"
-                      label="Estado Civil"
-                      text-by="text"
-                      value-by="value"
-                      :disabled="!sePuedeEditar"
-                    />
-                  </div>
-
-                  <div class="flex md:col-span-6 sm:col-span-6 col-span-12">
-                    <Suspense>
-                      <LocalidadesSelect 
-                        @update-localidad="updateLocalidad"
-                        :localidad="datosPersonales.localidad"                    
+                    <div class="flex md:col-span-6 sm:col-span-6 col-span-12">
+                      <va-input 
+                        v-model="datosPersonales.apellido" 
+                        label="Apellido" 
                         :disabled="!sePuedeEditar"
                       />
+                    </div>
+            
+                    <div class="flex md:col-span-6 sm:col-span-6 col-span-12">
+                      <va-input 
+                        v-model="datosPersonales.email" 
+                        label="Email"
+                        :disabled="!sePuedeEditar"
+                        :rules="[(v) => esEmail(v) || `Ingresa un email válido`]"
+                      />
+                    </div>
+
+                    <div class="flex md:col-span-6 sm:col-span-6 col-span-12">
+                      <va-input 
+                        v-model="telefono" 
+                        label="Telefono"
+                        :disabled="!sePuedeEditar"
+                        v-maska
+                        data-maska="+54 (###) ###-####"
+                        :rules="[(v)=> !v || esNumeroDeTelefonoCompleto(v) || 'Ingrese un número de teléfono válido']"
+                      />
+                    </div>
+              
+                    <div class="flex md:col-span-6 sm:col-span-6 col-span-12">
+                      <va-date-input
+                        v-model="datosPersonales.fecha_nacimiento"
+                        label="Fecha nacimiento"
+                        :disabled="!sePuedeEditar"
+                        :rules="[(v)=> !v || esMayorDeCiertaEdad(14, v) || 'La fecha de nacimiento ingresada no es válida']"
+                        v-model:view="fechaDeNacimientoView"
+                        :monthNames="['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic']"
+                        :weekdayNames="['Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab', 'Dom']"
+                      />            
+                    </div>
+              
+                    <div class="flex md:col-span-6 sm:col-span-6 col-span-12">
+                      <va-select
+                        v-model="datosPersonales.estado_civil"
+                        :options="listadoEstadosCiviles"
+                        label="Estado Civil"
+                        text-by="text"
+                        value-by="value"
+                        :disabled="!sePuedeEditar"
+                      />
+                    </div>
+
+                    <div class="flex md:col-span-6 sm:col-span-6 col-span-12">
+                      <Suspense>
+                        <LocalidadesSelect 
+                          @update-localidad="updateLocalidad"
+                          :localidad="datosPersonales.localidad"                    
+                          :disabled="!sePuedeEditar"
+                        />
+                          <template #fallback>
+                            Loading...
+                          </template>
+                      </Suspense>
+                    </div>
+
+                    <div class="flex md:col-span-6 sm:col-span-6 col-span-12">
+                      <Suspense>
+                        <NacionalidadesSelect 
+                          @update-nacionalidad="updateNacionalidad"
+                          :nacionalidad="datosPersonales.nacionalidad"
+                          :disabled="!sePuedeEditar"
+                        />
                         <template #fallback>
                           Loading...
                         </template>
-                    </Suspense>
-                  </div>
-
-                  <div class="flex md:col-span-6 sm:col-span-6 col-span-12">
-                    <Suspense>
-                      <NacionalidadesSelect 
-                        @update-nacionalidad="updateNacionalidad"
-                        :nacionalidad="datosPersonales.nacionalidad"
-                        :disabled="!sePuedeEditar"
-                      />
-                      <template #fallback>
-                        Loading...
-                      </template>
-                    </Suspense>
-                  </div>
-            
-                  <div class="flex md:col-span-6 sm:col-span-6 col-span-12">
+                      </Suspense>
+                    </div>
+              
+                    <div class="flex md:col-span-6 sm:col-span-6 col-span-12">
+                        <va-input 
+                          v-model="datosPersonales.direccion" 
+                          label="Domicilio"
+                          :disabled="!sePuedeEditar"
+                        />
+                    </div>
+              
+                    <div class="flex md:col-span-6 sm:col-span-6 col-span-12">
                       <va-input 
-                        v-model="datosPersonales.direccion" 
-                        label="Domicilio"
+                        v-model="datosPersonales.cuil" 
+                        label="CUIL" 
                         :disabled="!sePuedeEditar"
-                      />
-                  </div>
-            
-                  <div class="flex md:col-span-6 sm:col-span-6 col-span-12">
-                    <va-input 
-                      v-model="datosPersonales.cuil" 
-                      label="CUIL" 
-                      :disabled="!sePuedeEditar"
-                      v-maska
-                      data-maska="##-########-#"
-                      :rules="[(v)=> !v || esCUILValido(v) || 'El CUIL ingresado no es válido']"
+                        v-maska
+                        data-maska="##-########-#"
+                        :rules="[(v)=> !v || esCUILValido(v) || 'El CUIL ingresado no es válido']"
 
-                    />
-                  </div>
-                  <div class="flex md:col-span-6 sm:col-span-6 col-span-12">
-                      <va-input v-model="especialidad" label="Especialidad" />
-                  </div>
-                  <div class="flex md:col-span-6 sm:col-span-6 col-span-12">
-                      <va-input v-model="descripcion" label="Descripción" />
-                  </div>
-                  <div class="flex md:col-span-6 sm:col-span-6 col-span-12">
-                      <va-input v-model="honorarios" label="Honorarios" />
+                      />
+                    </div>
+                    <div class="flex md:col-span-6 sm:col-span-6 col-span-12">
+                        <va-input v-model="especialidad" label="Especialidad" />
+                    </div>
+                    <div class="flex md:col-span-6 sm:col-span-6 col-span-12">
+                        <va-input v-model="descripcion" label="Descripción" />
+                    </div>
+                    <div class="flex md:col-span-6 sm:col-span-6 col-span-12">
+                        <va-input v-model="honorarios" label="Honorarios" />
+                    </div>
                   </div>
               </form>
             <va-modal
@@ -190,10 +191,13 @@ import { ref,watch, computed, Ref, ComputedRef, toRefs } from 'vue';
 import { useRouter, useRoute } from 'vue-router'
 import { useProfesorStore } from '../../../stores/profesores-store'
 import { useToast } from 'vuestic-ui'
-//import { vMaska } from 'maska'
+import { vMaska } from 'maska'
+import NacionalidadesSelect from '../../../components/selectors/NacionalidadesSelect.vue';
+import LocalidadesSelect from '../../../components/selectors/LocalidadesSelect.vue';
 import { Profesor, DatosPersonalesFormType,TipoDocumento, Localidad, SelectOption, listadoEstadosCiviles, listaDocumentos } from '../../../types'
 import { esEmail, esDocumentoValido, esNumeroDeTelefonoCompleto, esMayorDeCiertaEdad, esCUILValido } from '../../../services/utils/validaciones'
 import { usePersonasStore } from '../../../stores/personas-store';
+import { DatePickerView } from 'vuestic-ui/dist/types/components/va-date-picker/types';
 
 
 const personasStore = usePersonasStore()
@@ -201,6 +205,7 @@ const router = useRouter()
 const route = useRoute()
 const profesorStore = useProfesorStore()
 const { init } = useToast()
+const fechaDeNacimientoView = ref<DatePickerView>({type: "year", year: 2000, month:1})    
 const sePuedeEditar = ref(false);
 
 const datosPersonales = ref<DatosPersonalesFormType>({
@@ -264,6 +269,7 @@ async function onGuardar() {
     //    honorarios.value,
     //  )
     } else {
+      debugger
        await profesorStore.guardarProfesor({
             datosPersonales: {
               ...datosPersonales.value,
@@ -302,7 +308,7 @@ watch(profesorParaEditar as any, (profesorAEditar: Profesor) => {
 })
 
 function buscarDocumento() {
-        const {tipoDocumento, nroDocumento } = props.formData.value;
+        const {tipoDocumento, nroDocumento } = datosPersonales.value;
         if(esDocumentoValido(nroDocumento)) {
             personasStore.obtenerPersonaPorDocumento(tipoDocumento.value, nroDocumento, onPersonaEncontrada)
         }
@@ -323,30 +329,23 @@ function onCargarManualmente(){
 function onCargarAutomaticamente(){
         sePuedeEditar.value = true;
         const data = personaEncontrada.value;
-        props.formData.value.nombre = data.nombre; 
-        props.formData.value.apellido = data.apellido;
-        props.formData.value.telefono = data.telefono;
-        props.formData.value.direccion = data.direccion;
-        props.formData.value.cuil = data.cuil;
-        props.formData.value.email = data.usuario.email;
-        props.formData.value.fecha_nacimiento = new Date(data.fecha_nacimiento);
-        props.formData.value.estado_civil = data.estado_civil;
+        datosPersonales.value.nombre = data.nombre; 
+        datosPersonales.value.apellido = data.apellido;
+        datosPersonales.value.telefono = data.telefono;
+        datosPersonales.value.direccion = data.direccion;
+        datosPersonales.value.cuil = data.cuil;
+        datosPersonales.value.email = data.usuario.email;
+        datosPersonales.value.fecha_nacimiento = new Date(data.fecha_nacimiento);
+        datosPersonales.value.estado_civil = data.estado_civil;
 }
 
 
-
-
-const propsis = defineProps<{
-        formData: DatosPersonalesFormType;
-}>()
-
-const props = toRefs<{formData: DatosPersonalesFormType}>(propsis);
 function updateLocalidad (newLocalidad:SelectOption) {
-        props.formData.value.localidad = newLocalidad;
+        datosPersonales.value.localidad = newLocalidad;
     }
 
     function updateNacionalidad (newNacionalidad:SelectOption) {
-        props.formData.value.nacionalidad = newNacionalidad;
+        datosPersonales.value.nacionalidad = newNacionalidad;
     }
 
 </script>

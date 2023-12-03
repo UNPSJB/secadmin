@@ -163,7 +163,7 @@
     import LocalidadesSelect from '../../../components/selectors/LocalidadesSelect.vue';
     import { usePersonasStore } from '../../../stores/personas-store';
     import { esEmail, esDocumentoValido, esNumeroDeTelefonoCompleto, esMayorDeCiertaEdad, esCUILValido } from '../../../services/utils/validaciones'
-    //import { vMaska } from 'maska'
+    import { vMaska } from 'maska'
     import { DatePickerView } from 'vuestic-ui/dist/types/components/va-date-picker/types';
 
     const sePuedeEditar = ref(false);

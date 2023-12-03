@@ -8,7 +8,7 @@
                     :options="listaDocumentos"
                     label="Tipo de documento"
                     text-by="text"
-                    track-by="value"
+                    value-by="value"
                 />
             </div>
 
@@ -16,15 +16,18 @@
                 <va-input 
                     v-model="formData.nroDocumento" 
                     label="Nro de documento" 
-                    mask="numeral" 
-                    @keyup:enter="buscarDocumento"
+                    v-maska
+                    data-maska="###.###.###"
+                    data-maska-reversed
+                    @keyup.enter="buscarDocumento"
+                    :rules="[(v) => esDocumentoValido(v) || `Ingrese un documento válido`]"
                 >
                     <template #appendInner>
                         <va-button
                             icon="search"
                             preset="plain"
                             @click="buscarDocumento"
-                            :disabled="esDocumentoIncompleto(formData.nroDocumento)"
+                            :disabled="!esDocumentoValido(formData.nroDocumento)"
                         />
                     </template>
                 </va-input>
@@ -65,7 +68,7 @@
             </div>
             <div class="flex md:col-span-6 sm:col-span-6 col-span-12">
                 <va-input 
-                    v-model="telefono" 
+                    v-model="formData.telefono" 
                     label="Telefono"
                     :disabled="!sePuedeEditar"
                     v-maska
@@ -164,7 +167,7 @@
     import { DatosPersonalesFormType, listaDocumentos, SelectOption, listadoEstadosCiviles } from '../../../types';
     import { usePersonasStore } from '../../../stores/personas-store';
     import { esEmail, esDocumentoValido, esNumeroDeTelefonoCompleto, esMayorDeCiertaEdad, esCUILValido } from '../../../services/utils/validaciones'
-    import { vMaska } from "maska";
+    import { vMaska } from 'maska';
     import { DatePickerView } from 'vuestic-ui/dist/types/components/va-date-picker/types';
 
     const sePuedeEditar = ref(false);
@@ -229,11 +232,11 @@
         props.formData.value.nombre = data.nombre; 
         props.formData.value.apellido = data.apellido;
         props.formData.value.telefono = data.telefono;
-        props.formData.value.domicilio = data.direccion;
+        props.formData.value.direccion = data.direccion;
         props.formData.value.cuil = data.cuil;
         props.formData.value.email = data.usuario.email;
-        props.formData.value.fechaNacimiento = new Date(data.fecha_nacimiento);
-        props.formData.value.estadoCivil = data.estado_civil;
+        props.formData.value.fecha_nacimiento = new Date(data.fecha_nacimiento);
+        props.formData.value.estado_civil = data.estado_civil;
     }
 </script>
   
