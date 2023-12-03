@@ -24,7 +24,7 @@
               </va-input>
             </div>
             <div class="basis-2/12">
-              <va-button @click="onNuevaDictado"> Nueva dictado </va-button>
+              <va-button @click="onNuevaDictado"> Nuevo dictado </va-button>
             </div>
           </div>
   
@@ -119,8 +119,12 @@
   )
   const route = useRoute()
 
+  const props = defineProps<{
+    cursoId: number
+  }>()
+
   function onNuevaDictado() {
-    router.push({ name: 'nueva-dictado' })
+    router.push({ name: 'nuevo-dictado', params:{cursoId: props.cursoId} })
   }
 
   async function onEliminarDictado(dictado: Dictado) {

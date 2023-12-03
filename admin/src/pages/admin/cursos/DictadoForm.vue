@@ -9,7 +9,57 @@
         </div>
         <form>
           <div class="grid grid-cols-12 gap-6">
-            
+            <div class="flex md:col-span-6 sm:col-span-6 col-span-12">
+              <Suspense>
+                <profesores-select 
+                  @update-profesor="updateProfesor"
+                  :profesor="profesor" 
+                />
+                  <template #fallback>
+                    Loading...
+                  </template>
+              </Suspense>
+            </div>
+
+            <div class="flex md:col-span-6 sm:col-span-6 col-span-12">
+                <va-input 
+                  v-model="precio" 
+                  label="Precio general"
+                  mask="numeral"                      
+                />
+            </div>
+            <div class="flex md:col-span-6 sm:col-span-6 col-span-12">
+                <va-input 
+                  v-model="precio_afiliado" 
+                  label="Precio para afiliado"
+                  mask="numeral"                      
+                />
+            </div>
+            <div class="flex md:col-span-6 sm:col-span-6 col-span-12">
+                <va-input 
+                  v-model="capacidad" 
+                  label="Capacidad"
+                  mask="numeral"                      
+                />
+            </div>
+
+            <div class="flex md:col-span-6 sm:col-span-6 col-span-12">
+                <va-date-input
+                    v-model="fecha_inicio"
+                    label="Fecha de inicio"
+                    :monthNames="['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic']"
+                    :weekdayNames="['Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab', 'Dom']"
+                />            
+            </div>
+
+            <div class="flex md:col-span-6 sm:col-span-6 col-span-12">
+                <va-date-input
+                    v-model="fecha_fin"
+                    label="Fecha de finalización"
+                    :monthNames="['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic']"
+                    :weekdayNames="['Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab', 'Dom']"
+                />            
+            </div>
           </div>
         </form>
         <div class="grid grid-cols-12 gap-6">
@@ -25,7 +75,6 @@
         </div>
       </va-card-content>
     </va-card>
-    <dictados />
   </va-content>
 </template>
 
@@ -34,18 +83,21 @@ import { ref, computed, watch, ComputedRef } from 'vue';
 import { useRouter, useRoute } from 'vue-router'
 import { useDictadosStore } from '../../../stores/dictados-store';
 import { useToast } from 'vuestic-ui'
-import { Dictado, CategoriaDictado, TipoDictado, duracionDictado, areaDictado, SelectOption } from '../../../types';
+import { Dictado, Profesor } from '../../../types';
 import Dictados from './Dictados.vue';
+import ProfesoresSelect from '../../../components/selectors/ProfesoresSelect.vue';
 
 const router = useRouter()
 const route = useRoute()
 const dictadosStore = useDictadosStore()
 const { init } = useToast()
 
-const codigoDictado = ref('')
-const nombreDictado = ref('')
-const categoriaDictado = ref<CategoriaDictado>()
-const tipoDictado = ref<TipoDictado>()
+const profesor = ref<Profesor | null>(null) 
+const precio = ref<number>(0);
+const precio_afiliado = ref<number>(0);
+const capacidad = ref<number>(0);
+const fecha_inicio = ref <Date>(new Date());
+const fecha_fin = ref <Date>(new Date());
 
 const esEdicion = route.name === 'editar-dictado';
 
@@ -54,39 +106,33 @@ if (esEdicion) {
 }
 
 function onCancelar() {
-  router.push({ name: 'dictados' })
+  router.push({ name: 'editar-curso', params: {id: route.params.cursoId } })
 }
 
 const sePuedeGuardar = computed(
-  () => codigoDictado.value !== '' && nombreDictado.value !== '' && categoriaDictado.value !== null && tipoDictado.value !== null,
+  () => true
 )
 
 function onLimpiar() {
-  codigoDictado.value = '';
-  nombreDictado.value = '';
-  categoriaDictado.value = undefined;
-  tipoDictado.value = undefined;
+}
+
+function updateProfesor(profesor:any) {
+  profesor.value = profesor;
 }
 
 async function onGuardar() {
   try {
     if (esEdicion) {
-      await dictadosStore.actualizarDictado(
-        route.params.id as string,
-        codigoDictado.value,
-        nombreDictado.value,
-        categoriaDictado.value,
-        tipoDictado.value,
-      )
+      //await dictadosStore.actualizarDictado()
     } else {
-      await dictadosStore.guardarDictado(codigoDictado.value, nombreDictado.value, categoriaDictado.value, tipoDictado.value)
+      //await dictadosStore.guardarDictado(codigoDictado.value, nombreDictado.value, categoriaDictado.value, tipoDictado.value)
     }
     init({
       message: 'Dictado guardado correctamente',
       position: 'bottom-right',
       duration: 2500,
     })
-    router.push({ name: 'dictados' })
+    router.push({ name: 'editar-curso', params:{id:route.params.cursoId} })
     } catch (e: any) {
       init({
         message: e.message,
@@ -101,10 +147,12 @@ const dictadoParaEditar: ComputedRef<Dictado | null> = computed(() => dictadosSt
 
 watch(dictadoParaEditar as any, (dictadoAEditar: Dictado) => {
   if (dictadoAEditar) {
-    codigoDictado.value = dictadoAEditar.codigo_dictado
-    nombreDictado.value = dictadoAEditar.nombre_dictado
-    categoriaDictado.value = dictadoAEditar.categoria_dictado
-    tipoDictado.value = dictadoAEditar.tipo_dictado
+    profesor.value = dictadoAEditar.profesor;
+    precio.value = dictadoAEditar.precio
+    precio_afiliado.value = dictadoAEditar.precio_afiliado;
+    capacidad.value = dictadoAEditar.capacidad;
+    fecha_inicio.value = dictadoAEditar.fecha_inicio;
+    fecha_fin.value = dictadoAEditar.fecha_fin;
   }
 })
 </script>

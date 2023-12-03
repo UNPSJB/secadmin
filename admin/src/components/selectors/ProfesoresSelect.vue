@@ -5,7 +5,7 @@
         searchable 
         :text-by="getTextBy" 
         track-by="id"
-        :options="profesor" 
+        :options="profesores" 
         :search="searchText"
         noOptionsText="No se encontró coincidencia"
         searchPlaceholderText="Buscar profesor" 
@@ -47,7 +47,7 @@ import { Profesor } from '../../types';
 
   await profesorStore.obtenerListadoDeProfesores()
 
-  const profesors = computed(() => profesorStore.profesor)
+  const profesores = computed(() => profesorStore.profesores)
 
   const emit = defineEmits(['update-profesor'])
 

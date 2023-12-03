@@ -63,7 +63,6 @@ export const useProfesorStore = defineStore('profesores', {
         throw new Error('Error obteniendo los datos');
       }
       const respuesta = await response.json();
-      debugger
       this.profesores = respuesta.profesores;
       this.cantidadDeProfesores = respuesta.cantidadDeProfesores;
     },
