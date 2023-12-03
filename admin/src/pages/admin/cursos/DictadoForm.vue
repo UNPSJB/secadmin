@@ -116,8 +116,8 @@ const sePuedeGuardar = computed(
 function onLimpiar() {
 }
 
-function updateProfesor(profesor:any) {
-  profesor.value = profesor;
+function updateProfesor(profesorAGuardar:any) {
+  profesor.value = profesorAGuardar;
 }
 
 async function onGuardar() {
@@ -125,8 +125,18 @@ async function onGuardar() {
     if (esEdicion) {
       //await dictadosStore.actualizarDictado()
     } else {
-      //await dictadosStore.guardarDictado(codigoDictado.value, nombreDictado.value, categoriaDictado.value, tipoDictado.value)
-    }
+      if (profesor.value) {
+        await dictadosStore.guardarDictado({
+          curso: route.params.cursoId,
+          profesor: profesor.value.id,
+          precio: precio.value,
+          precio_afiliado: precio_afiliado.value,
+          capacidad: capacidad.value,
+          fecha_fin: fecha_fin.value,
+          fecha_inicio: fecha_inicio.value
+        })
+      }
+      }
     init({
       message: 'Dictado guardado correctamente',
       position: 'bottom-right',

@@ -62,6 +62,7 @@ import { Profesor } from '../../types';
   })
 
   watch(profesorSeleccionada, (newProfesor) => {
+    debugger
     emit('update-profesor', newProfesor)
   })
 </script>
