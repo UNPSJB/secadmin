@@ -156,20 +156,20 @@
                     </div>
                   </div>
               </form>
-            <va-modal
-              v-model="mostrarModalDePersonaEncontrada"
-              ok-text="Cargar automaticamente"
-              cancel-text="Cargar manualmente"
-              @ok="onCargarAutomaticamente"
-              @cancel="onCargarManualmente"
-            >
-              <h3 class="va-h3">
-                Persona encontrada en el sistema
-              </h3>
-              <p>
-                Se ha encontrado una persona con el documento ingresado. ¿Quieres cargarlo automaticamente o quieres cargarlo manualmente de nuevo? Esta acción modificará los datos ya cargados en el sistema.
-              </p>
-          </va-modal>
+              <va-modal
+                v-model="mostrarModalDePersonaEncontrada"
+                ok-text="Cargar automaticamente"
+                cancel-text="Cargar manualmente"
+                @ok="onCargarAutomaticamente"
+                @cancel="onCargarManualmente"
+              >
+                <h3 class="va-h3">
+                  Persona encontrada en el sistema
+                </h3>
+                <p>
+                  Se ha encontrado una persona con el documento ingresado. ¿Quieres cargarlo automaticamente o quieres cargarlo manualmente de nuevo? Esta acción modificará los datos ya cargados en el sistema.
+                </p>
+              </va-modal>
               <div class="grid grid-cols-12 gap-6">
                 <div class="flex md:col-span-4 sm:col-span-4 col-span-4">
                   <va-button preset="outline" border-color="primary" @click="onCancelar"> Cancelar </va-button>
@@ -241,18 +241,18 @@ const sePuedeGuardar = computed(
 )
 
 function onLimpiar() {
-datosPersonales.value = {
-    nroDocumento: '',
-    nombre: '',
-    apellido: '',
-    email: '',
-    telefono: '',
-    direccion: '',
-    cuil: '',
-}
-descripcion.value = ('') 
-especialidad.value = ('') 
-honorarios.value = 0
+  datosPersonales.value = {
+      nroDocumento: '',
+      nombre: '',
+      apellido: '',
+      email: '',
+      telefono: '',
+      direccion: '',
+      cuil: '',
+  }
+  descripcion.value = ('') 
+  especialidad.value = ('') 
+  honorarios.value = 0
 }
 
 async function onGuardar() {
@@ -269,7 +269,6 @@ async function onGuardar() {
     //    honorarios.value,
     //  )
     } else {
-      debugger
        await profesorStore.guardarProfesor({
          especialidad: especialidad.value,
          honorarios: honorarios.value,

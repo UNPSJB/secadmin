@@ -75,6 +75,7 @@
         </div>
       </va-card-content>
     </va-card>
+    <inscriptos v-if="esEdicion"/>
   </va-content>
 </template>
 
@@ -86,7 +87,8 @@ import { useToast } from 'vuestic-ui'
 import { Dictado, Profesor } from '../../../types';
 import Dictados from './Dictados.vue';
 import ProfesoresSelect from '../../../components/selectors/ProfesoresSelect.vue';
-
+import Inscriptos from './Inscriptos.vue';
+ 
 const router = useRouter()
 const route = useRoute()
 const dictadosStore = useDictadosStore()
@@ -102,7 +104,7 @@ const fecha_fin = ref <Date>(new Date());
 const esEdicion = route.name === 'editar-dictado';
 
 if (esEdicion) {
-  dictadosStore.obtenerDictado(route.params.id as string)
+  dictadosStore.obtenerDictado(route.params.dictadoId as string)
 }
 
 function onCancelar() {

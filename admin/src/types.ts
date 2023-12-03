@@ -229,3 +229,9 @@ export type Dictado = {
     fecha_inicio: Date;
     fecha_fin: Date;
 }
+
+export type Inscripto = {
+    id?: number;
+    persona:Persona;
+    fecha_creacion: Date | string;
+}

@@ -133,6 +133,23 @@ const routes: Array<RouteRecordRaw> = [
       },
       
       {
+        name: 'inscripto-menu',
+        path: 'inscriptos',
+        component: RouteViewComponent,
+        children: [
+          {
+            name: 'nuevo-inscripto',
+            path: 'form/:dictadoId',
+            component: () => import('../pages/admin/cursos/InscriptoForm.vue'),
+          },
+          {
+            name: 'editar-inscripto',
+            path: 'form/:cursoId/:inscriptoId',
+            component: () => import('../pages/admin/cursos/InscriptoForm.vue'),
+          },
+        ],
+      },
+      {
       name: 'profesores-menu',
         path: 'profesores',
         component: RouteViewComponent,

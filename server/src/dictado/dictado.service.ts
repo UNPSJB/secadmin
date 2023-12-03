@@ -86,7 +86,7 @@ export class DictadoService {
   
 
   findOne(id: number) {
-    return this.repo.findOne({where:{ id }});
+    return this.repo.findOne({where:{ id }, relations: ['profesor.persona']});
   }
 
   async update(id: number, updateDictadoDto: UpdateDictadoDto) {
