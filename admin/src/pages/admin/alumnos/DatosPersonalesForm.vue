@@ -24,7 +24,7 @@
                             icon="search"
                             preset="plain"
                             @click="buscarDocumento"
-                            :disabled="esDocumentoIncompleto(formData.nroDocumento)"
+                            :disabled="esDocumentoValido(formData.nroDocumento)"
                         />
                     </template>
                 </va-input>
@@ -63,23 +63,36 @@
                     :disabled="!sePuedeEditar"
                 />
             </div>
+            <div class="flex md:col-span-6 sm:col-span-6 col-span-12">
+                <va-input 
+                    v-model="formData.telefono" 
+                    label="Telefono"
+                    :disabled="!sePuedeEditar"
+                    v-maska
+                    data-maska="+54 (###) ###-####"
+                    :rules="[(v)=> !v || esNumeroDeTelefonoCompleto(v) || 'Ingrese un número de teléfono válido']"
+                />
+            </div>
             
-
             <div class="flex md:col-span-6 sm:col-span-6 col-span-12">
                 <va-date-input
-                    v-model="formData.fechaNacimiento"
+                    v-model="formData.fecha_nacimiento"
                     label="Fecha nacimiento"
                     :disabled="!sePuedeEditar"
+                    :rules="[(v)=> !v || esMayorDeCiertaEdad(14, v) || 'La fecha de nacimiento ingresada no es válida']"
+                    v-model:view="fechaDeNacimientoView"
+                    :monthNames="['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic']"
+                    :weekdayNames="['Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab', 'Dom']"
                 />            
             </div>
             
             <div class="flex md:col-span-6 sm:col-span-6 col-span-12">
                 <va-select
-                    v-model="formData.estadoCivil"
+                    v-model="formData.estado_civil"
                     :options="listadoEstadosCiviles"
                     label="Estado Civil"
                     text-by="text"
-                    track-by="value"
+                    value-by="value"
                     :disabled="!sePuedeEditar"
                 />
             </div>
@@ -110,7 +123,7 @@
             
             <div class="flex md:col-span-6 sm:col-span-6 col-span-12">
                 <va-input 
-                    v-model="formData.domicilio" 
+                    v-model="formData.direccion" 
                     label="Domicilio"
                     :disabled="!sePuedeEditar"
                 />
@@ -122,12 +135,13 @@
                     v-model="formData.cuil" 
                     label="CUIL" 
                     :disabled="!sePuedeEditar"
-                    mask="numeral" 
+                    v-maska
+                    data-maska="##-########-#"
+                    :rules="[(v)=> !v || esCUILValido(v) || 'El CUIL ingresado no es válido']"
                 />
             </div>
         </div>
       </form>
-    </div>
     <va-modal
         v-model="mostrarModalDePersonaEncontrada"
         ok-text="Cargar automaticamente"
@@ -142,72 +156,83 @@
             Se ha encontrado una persona con el documento ingresado. ¿Quieres cargarlo automaticamente o quieres cargarlo manualmente de nuevo? Esta acción modificará los datos ya cargados en el sistema.
         </p>
     </va-modal>
+    </div>
 </template>
   
-<script setup lang="ts">
-    import { ref, reactive, toRefs, defineProps, watch, computed } from 'vue';
-    import { DatosPersonalesFormType, listaDocumentos, SelectOption, listadoEstadosCiviles } from '../../../types';
-    import NacionalidadesSelect from '../../../components/selectors/NacionalidadesSelect.vue';
-    import LocalidadesSelect from '../../../components/selectors/LocalidadesSelect.vue';
-    import { usePersonasStore } from '../../../stores/personas-store';
-    import { esEmail, esDocumentoIncompleto } from '../../../services/utils/validaciones'
+<<script setup lang="ts">
+import { ref, reactive, toRefs, defineProps, watch, computed } from 'vue';
+import { DatosPersonalesFormType, listaDocumentos, SelectOption, listadoEstadosCiviles } from '../../../types';
+import { usePersonasStore } from '../../../stores/personas-store';
+import { esEmail, esDocumentoValido, esNumeroDeTelefonoCompleto, esMayorDeCiertaEdad, esCUILValido } from '../../../services/utils/validaciones'
+import { vMaska } from "maska";
+import { DatePickerView } from 'vuestic-ui/dist/types/components/va-date-picker/types';
 
-    const sePuedeEditar = ref(false);
-    const mostrarModalDePersonaEncontrada = ref(false);
+const sePuedeEditar = ref(false);
+const mostrarModalDePersonaEncontrada = ref(false);
 
-    const propsis = defineProps<{
-        formData: DatosPersonalesFormType;
-    }>()
+const propsis = defineProps<{
+    formData: DatosPersonalesFormType;
+}>()
 
-    const personasStore = usePersonasStore();
+const personasStore = usePersonasStore();
 
-    // Acceder a las props con toRefs para mantener la reactividad
-    const props = toRefs<{formData: DatosPersonalesFormType}>(propsis);
-    const localFormData = reactive({ ...props.formData.value });
+// Acceder a las props con toRefs para mantener la reactividad
+const props = toRefs<{formData: DatosPersonalesFormType}>(propsis);
+const localFormData = reactive({ ...props.formData.value });
 
-    // Observar cambios en props.formData y actualizar localFormData
-    watch(props.formData, (newFormData) => {
-        Object.assign(localFormData, newFormData);
-    });
+const personaEncontrada = ref<any>(null)
 
-    function siguientePaso() {
+// Observar cambios en props.formData y actualizar localFormData
+watch(props.formData, (newFormData) => {
+    Object.assign(localFormData, newFormData);
+});
 
+function siguientePaso() {
+
+}
+
+function updateLocalidad (newLocalidad:SelectOption) {
+    props.formData.value.localidad = newLocalidad;
+}
+
+function updateNacionalidad (newNacionalidad:SelectOption) {
+    props.formData.value.nacionalidad = newNacionalidad;
+}
+
+function puedeCompletarDatos() {
+    return sePuedeEditar
+}
+
+ function buscarDocumento() {
+    const {tipoDocumento, nroDocumento } = props.formData.value;
+    if(esDocumentoValido(nroDocumento)) {
+        personasStore.obtenerPersonaPorDocumento(tipoDocumento.value, nroDocumento, onPersonaEncontrada)
     }
 
-    function updateLocalidad (newLocalidad:SelectOption) {
-        props.formData.value.localidad = newLocalidad;
-    }
+}
 
-    function updateNacionalidad (newNacionalidad:SelectOption) {
-        props.formData.value.nacionalidad = newNacionalidad;
-    }
-
-
-    function puedeCompletarDatos() {
-        return sePuedeEditar
-    }
-
-    function buscarDocumento() {
-        const {tipoDocumento, nroDocumento } = props.formData.value;
-        if(!esDocumentoIncompleto(nroDocumento)) {
-            personasStore.obtenerPersonaPorDocumento(tipoDocumento.value, nroDocumento, onPersonaEncontrada)
-        }
-
-    }
-
-    function onPersonaEncontrada(persona:any){ 
-        if (persona) {
-            mostrarModalDePersonaEncontrada.value = true;
-        } else {
-            sePuedeEditar.value = true;
-        }
-    }
-
-    function onCargarManualmente(){
+function onPersonaEncontrada(persona:any){ 
+    if (persona) {
+        mostrarModalDePersonaEncontrada.value = true;
+    } else {
         sePuedeEditar.value = true;
     }
+}
 
-    function onCargarAutomaticamente(){
-        sePuedeEditar.value = true;
-    }
+function onCargarManualmente(){
+    sePuedeEditar.value = true;
+}
+
+function onCargarAutomaticamente(){
+    sePuedeEditar.value = true;
+    const data = personaEncontrada.value;
+    props.formData.value.nombre = data.nombre; 
+    props.formData.value.apellido = data.apellido;
+    props.formData.value.telefono = data.telefono;
+    props.formData.value.direccion = data.direccion;
+    props.formData.value.cuil = data.cuil;
+    props.formData.value.email = data.usuario.email;
+    props.formData.value.fecha_nacimiento = new Date(data.fecha_nacimiento);
+    props.formData.value.estado_civil = data.estado_civil;
+}
 </script>

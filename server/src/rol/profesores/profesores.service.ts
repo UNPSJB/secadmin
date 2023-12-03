@@ -19,8 +19,7 @@ export class ProfesoresService {
     let profesor = this.repo.create({
       especialidad: dto.especialidad,
       honorarios: dto.honorarios,
-      descripcion: dto.descripcion,
-      persona: dto.persona
+      descripcion: dto.descripcion
     })
 
     profesor = await this.repo.save(profesor)

@@ -11,26 +11,9 @@ export const useAlumnosStore = defineStore('alumnos', {
     }
   },
   actions: {
-    async guardarAlumno(
-      alumnoId: string,
-      nombre: string,
-      apellido:string,
-      dni:string,
-      email:string,
-      descripcion:string,
-      especialidad: string,
-      honorarios: number
-    ) {
-      const response = await request(`alumnos`, 'POST', {
-        id: Number(alumnoId),
-        nombre, 
-        apellido, 
-        dni, 
-        email,
-        descripcion,
-        especialidad,
-        honorarios
-      });
+    async guardarAlumno(formData:any) {
+      const response = await request(`alumnos`, 'POST', formData);
+     
 
       if (!response.ok) {
         const data = await response.json()
@@ -43,21 +26,14 @@ export const useAlumnosStore = defineStore('alumnos', {
       nombre: string,
       apellido:string,
       dni:string,
-      email:string,
-      descripcion:string,
-      especialidad: string,
-      honorarios: number
+      email:string
     ) {
       const response = await request(`alumnos/${alumnoId}`, 'PATCH', {
         id: Number(alumnoId),
         nombre, 
         apellido, 
         dni, 
-        email,
-        descripcion,
-        especialidad,
-        honorarios
-
+        email
       });
 
       if (!response.ok) {
