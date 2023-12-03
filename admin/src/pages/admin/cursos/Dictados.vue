@@ -41,10 +41,10 @@
   
             <tbody>
               <tr v-for="dictado in listadoDeDictados" :key="dictado.id">
-                <td>{{ dictado.profesor.persona.nombre }}</td>
+                <td>{{ dictado.profesor.persona.nombre }} {{ dictado.profesor.persona.apellido }}</td>
                 <td>{{ dictado.capacidad }}</td>
-                <td>{{ dictado.fecha_inicio }}</td>
-                <td>{{ dictado.fecha_fin }}</td>
+                <td>{{ transformarAFechaBostera(dictado.fecha_inicio) }}</td>
+                <td>{{ transformarAFechaBostera(dictado.fecha_fin) }}</td>
                 <td>
                   <va-button-group class="col-span-12 xl:col-span-6" preset="plain">
                     <va-button round icon="md_edit" @click="onEditarDictado(dictado)" />
@@ -87,6 +87,7 @@
     import { generarBotonesPaginacion } from '../../../services/paginacion/paginacion.service';
     import { Dictado, OrderDeOrdenamiento } from '../../../types';
     import { SelectOption } from 'vuestic-ui/web-components';
+    import {transformarAFechaBostera} from '../../../services/utils/formatos'
     const dictadosStore = useDictadosStore();
     const router = useRouter();
     
