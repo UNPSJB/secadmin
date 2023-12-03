@@ -32,61 +32,61 @@
 <script setup lang="ts">
 import { ref, computed, watch, ComputedRef } from 'vue';
 import { useRouter, useRoute } from 'vue-router'
-import { useCursosStore } from '../../../stores/cursos-store';
+import { useDictadosStore } from '../../../stores/dictados-store';
 import { useToast } from 'vuestic-ui'
-import { Curso, CategoriaCurso, TipoCurso, duracionCurso, areaCurso, SelectOption } from '../../../types';
+import { Dictado, CategoriaDictado, TipoDictado, duracionDictado, areaDictado, SelectOption } from '../../../types';
 import Dictados from './Dictados.vue';
 
 const router = useRouter()
 const route = useRoute()
-const cursosStore = useCursosStore()
+const dictadosStore = useDictadosStore()
 const { init } = useToast()
 
-const codigoCurso = ref('')
-const nombreCurso = ref('')
-const categoriaCurso = ref<CategoriaCurso>()
-const tipoCurso = ref<TipoCurso>()
+const codigoDictado = ref('')
+const nombreDictado = ref('')
+const categoriaDictado = ref<CategoriaDictado>()
+const tipoDictado = ref<TipoDictado>()
 
-const esEdicion = route.name === 'editar-curso';
+const esEdicion = route.name === 'editar-dictado';
 
 if (esEdicion) {
-  cursosStore.obtenerCurso(route.params.id as string)
+  dictadosStore.obtenerDictado(route.params.id as string)
 }
 
 function onCancelar() {
-  router.push({ name: 'cursos' })
+  router.push({ name: 'dictados' })
 }
 
 const sePuedeGuardar = computed(
-  () => codigoCurso.value !== '' && nombreCurso.value !== '' && categoriaCurso.value !== null && tipoCurso.value !== null,
+  () => codigoDictado.value !== '' && nombreDictado.value !== '' && categoriaDictado.value !== null && tipoDictado.value !== null,
 )
 
 function onLimpiar() {
-  codigoCurso.value = '';
-  nombreCurso.value = '';
-  categoriaCurso.value = undefined;
-  tipoCurso.value = undefined;
+  codigoDictado.value = '';
+  nombreDictado.value = '';
+  categoriaDictado.value = undefined;
+  tipoDictado.value = undefined;
 }
 
 async function onGuardar() {
   try {
     if (esEdicion) {
-      await cursosStore.actualizarCurso(
+      await dictadosStore.actualizarDictado(
         route.params.id as string,
-        codigoCurso.value,
-        nombreCurso.value,
-        categoriaCurso.value,
-        tipoCurso.value,
+        codigoDictado.value,
+        nombreDictado.value,
+        categoriaDictado.value,
+        tipoDictado.value,
       )
     } else {
-      await cursosStore.guardarCurso(codigoCurso.value, nombreCurso.value, categoriaCurso.value, tipoCurso.value)
+      await dictadosStore.guardarDictado(codigoDictado.value, nombreDictado.value, categoriaDictado.value, tipoDictado.value)
     }
     init({
-      message: 'Curso guardado correctamente',
+      message: 'Dictado guardado correctamente',
       position: 'bottom-right',
       duration: 2500,
     })
-    router.push({ name: 'cursos' })
+    router.push({ name: 'dictados' })
     } catch (e: any) {
       init({
         message: e.message,
@@ -97,14 +97,14 @@ async function onGuardar() {
   }
 }
 
-const cursoParaEditar: ComputedRef<Curso | null> = computed(() => cursosStore.curso)
+const dictadoParaEditar: ComputedRef<Dictado | null> = computed(() => dictadosStore.dictado)
 
-watch(cursoParaEditar as any, (cursoAEditar: Curso) => {
-  if (cursoAEditar) {
-    codigoCurso.value = cursoAEditar.codigo_curso
-    nombreCurso.value = cursoAEditar.nombre_curso
-    categoriaCurso.value = cursoAEditar.categoria_curso
-    tipoCurso.value = cursoAEditar.tipo_curso
+watch(dictadoParaEditar as any, (dictadoAEditar: Dictado) => {
+  if (dictadoAEditar) {
+    codigoDictado.value = dictadoAEditar.codigo_dictado
+    nombreDictado.value = dictadoAEditar.nombre_dictado
+    categoriaDictado.value = dictadoAEditar.categoria_dictado
+    tipoDictado.value = dictadoAEditar.tipo_dictado
   }
 })
 </script>

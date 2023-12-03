@@ -271,23 +271,23 @@ async function onGuardar() {
     } else {
       debugger
        await profesorStore.guardarProfesor({
-            datosPersonales: {
-              ...datosPersonales.value,
-              localidad: datosPersonales.value.localidad.value,
-              nacionalidad: datosPersonales.value.nacionalidad.id,
-              especialidad: especialidad.value,
-              honorarios: honorarios.value,
-              descripcion: descripcion.value
-            }
+         especialidad: especialidad.value,
+         honorarios: honorarios.value,
+         descripcion: descripcion.value,
+        datosPersonales: {
+          ...datosPersonales.value,
+          localidad: datosPersonales.value.localidad.value,
+          nacionalidad: datosPersonales.value.nacionalidad.id,
+        }
 
         
-        })
+      })
       init({
         message: 'Profesor guardado correctamente',
         position: 'bottom-right',
         duration: 2500,
       })
-      router.push({ name: 'Profesor' })
+      router.push({ name: 'profesores' })
     }
   } catch (e: any) {
     init({

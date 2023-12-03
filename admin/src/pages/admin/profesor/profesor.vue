@@ -35,20 +35,16 @@
               <tr>
                 <th>Nombre completo</th>
                 <th>DNI</th>
-                <th>Email</th>
                 <th>Especialidad</th>
+                <th>Acciones</th>
               </tr>
             </thead>
   
             <tbody>
               <tr v-for="profesor in listadoDeProfesores" :key="profesor.id">
                 <td>{{ `${profesor.persona.nombre} ${profesor.persona.apellido}`}} </td>
-                <td>{{ profesor.persona.apellido }}</td>
                 <td>{{ profesor.persona.nroDocumento }}</td>
-                <td>{{ profesor.persona.email }}</td>
                 <td>{{ profesor.especialidad }}</td>
-                <td>{{ profesor.descripcion }}</td>
-                <td>{{ profesor.honorarios }}</td>
                 <td>
                   <va-button-group class="col-span-12 xl:col-span-6" preset="plain">
                     <va-button round icon="md_edit" @click="onEditarProfesor(profesor)" />
@@ -117,7 +113,7 @@ let ordenDeOrdenamiento: Ref<SelectOption> = ref(opcionesDeOrdenamientoListado[0
 let pagina: Ref<number> = ref(1)
 let limitePorPagina = 10
 
-const listadoDeProfesores: ComputedRef<Profesor[]> = computed(() => profesorStore.profesor || [])
+const listadoDeProfesores: ComputedRef<Profesor[]> = computed(() => profesorStore.profesores || [])
 const botonesDePaginacion: ComputedRef<any[]> = computed(() =>
   generarBotonesPaginacion(profesorStore.cantidadDeProfesores, pagina.value, limitePorPagina),
 )
