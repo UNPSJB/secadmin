@@ -36,19 +36,15 @@
                 <th>Nombre completo</th>
                 <th>DNI</th>
                 <th>Email</th>
-                <th>Especialidad</th>
+                <th>Acciones</th>
               </tr>
             </thead>
   
             <tbody>
               <tr v-for="alumno in listadoDeAlumnos" :key="alumno.id">
                 <td>{{ `${alumno.persona.nombre} ${alumno.persona.apellido}`}} </td>
-                <td>{{ alumno.persona.apellido }}</td>
                 <td>{{ alumno.persona.nroDocumento }}</td>
                 <td>{{ alumno.persona.email }}</td>
-                <td>{{ alumno.curso }}</td>
-                <td>{{ alumno.descripcion }}</td>
-                <td>{{ alumno.honorarios }}</td>
                 <td>
                   <va-button-group class="col-span-12 xl:col-span-6" preset="plain">
                     <va-button round icon="md_edit" @click="onEditarAlumno(alumno)" />
@@ -87,11 +83,11 @@
 <script setup lang="ts">
 import { computed, ComputedRef, ref, Ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
-import { useAlumnoStore } from '../../../stores/alumnos-store'
+import { useAlumnosStore } from '../../../stores/alumnos-store'
 import { Alumno, OrderDeOrdenamiento } from '../../../types';
 import { generarBotonesPaginacion } from '../../../services/paginacion/paginacion.service'
 import { SelectOption } from 'vuestic-ui/web-components';
-const alumnoStore = useAlumnoStore()
+const alumnoStore = useAlumnosStore()
 const router = useRouter()
 
 alumnoStore.obtenerListadoDeAlumnos()
@@ -104,9 +100,6 @@ const opcionesOrdenarPor: SelectOption[] = [
   { value: 'nombre', text: 'Nombre' },
   { value: 'apellido', text: 'Apellido' },
   { value: 'dni', text: 'DNI' },
-  { value: 'especilidad', text: 'Especialidad' },
-  { value: 'descripcion', text: 'Descripcion' },
-  { value: 'honorarios', text: 'Honorarios' },
 ]
 
 let showSmallModal = ref(false)
@@ -117,9 +110,9 @@ let ordenDeOrdenamiento: Ref<SelectOption> = ref(opcionesDeOrdenamientoListado[0
 let pagina: Ref<number> = ref(1)
 let limitePorPagina = 10
 
-const listadoDeAlumnos: ComputedRef<Alumnos[]> = computed(() => alumnoStore.alumno || [])
+const listadoDeAlumnos: ComputedRef<Alumno[]> = computed(() => alumnoStore.alumno || [])
 const botonesDePaginacion: ComputedRef<any[]> = computed(() =>
-  generarBotonesPaginacion(alumnoStore.cantidadDeAlumnoes, pagina.value, limitePorPagina),
+  generarBotonesPaginacion(alumnoStore.cantidadDeAlumnos, pagina.value, limitePorPagina),
 )
 
 function onNuevoAlumno() {

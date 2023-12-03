@@ -39,7 +39,6 @@
                 <th>Acciones</th>
               </tr>
             </thead>
-  
             <tbody>
               <tr v-for="profesor in listadoDeProfesores" :key="profesor.id">
                 <td>{{ `${profesor.persona.nombre} ${profesor.persona.apellido}`}} </td>

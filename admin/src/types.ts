@@ -36,6 +36,7 @@ export type Profesor = {
 
 export type Alumno ={
     id?: number
+    persona: Persona
     
 }
 export type Afiliado = {
