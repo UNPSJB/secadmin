@@ -179,18 +179,18 @@ export const ocupacionesComercio: SelectOption[]  = [
     { text: 'Gerente de Tienda', value: TipoOcupacion.GERENTE_TIENDA },
     { text: 'Mercaderista', value: TipoOcupacion.MERCADERISTA },
     { text: 'Comprador', value: TipoOcupacion.COMPRADOR },
-    { text: 'Prevención de Pérdidas', value: TipoOcupacion.PREVENCION_PERDIDAS },
+    { text: 'Prevención de PérdidOrderDeOrdenamientoas', value: TipoOcupacion.PREVENCION_PERDIDAS },
     { text: 'Visual Merchandiser', value: TipoOcupacion.VISUAL_MERCHANDISER },
     { text: 'Demostrador de Productos', value: TipoOcupacion.DEMOSTRADOR_PRODUCTO }
 ];
 
-export enum categoriaCurso{
+export enum CategoriaCurso{
     CAPACITACION = 'Capacitacion',
     GIMNASIOSALUDABLE = 'Gimnasio Saludable',
     CULTURA = 'Cultura'
 }
 
-export enum tipoCurso{
+export enum TipoCurso{
     UNICO ='Curso unico',
     PERIODO = 'Curso por periodo', 
     NORMAL = 'Curso normal'
@@ -200,20 +200,31 @@ export type Curso = {
     id?: number;
     codigo_curso: string;
     nombre_curso: string;
-    categoria_curso: categoriaCurso;
-    tipo_curso: tipoCurso
+    categoria_curso: CategoriaCurso;
+    tipo_curso: TipoCurso
 }
 
 export const duracionCurso: SelectOption[]  = [
-    { text: 'Curso único', value: tipoCurso.UNICO },
-    { text: 'Curso por período', value: tipoCurso.PERIODO },
-    { text: 'Curso normal', value: tipoCurso.NORMAL },
+    { text: 'Curso único', value: TipoCurso.UNICO },
+    { text: 'Curso por período', value: TipoCurso.PERIODO },
+    { text: 'Curso normal', value: TipoCurso.NORMAL },
     
 ];
 
 export const areaCurso: SelectOption[]  = [
-    { text: 'Cultura', value: categoriaCurso.CULTURA },
-    { text: 'Gimnasio saludable', value: categoriaCurso.GIMNASIOSALUDABLE },
-    { text: 'Capacitación', value: categoriaCurso.CAPACITACION },
+    { text: 'Cultura', value: CategoriaCurso.CULTURA },
+    { text: 'Gimnasio saludable', value: CategoriaCurso.GIMNASIOSALUDABLE },
+    { text: 'Capacitación', value: CategoriaCurso.CAPACITACION },
     
 ];
+
+export type Dictado = {
+    id?: number;
+    curso: Curso;
+    profesor: Profesor;
+    precio: number;
+    precio_afiliado: number;
+    capacidad: number;
+    fecha_inicio: Date;
+    fecha_fin: Date;
+}

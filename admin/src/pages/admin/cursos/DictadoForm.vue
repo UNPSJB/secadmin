@@ -4,38 +4,12 @@
       <va-card-content class="overflow-auto">
         <div class="flex flex-row">
           <div class="basis-10/12">
-            <h4>{{ esEdicion ? 'Editar Curso' : 'Nuevo curso' }}</h4>
+            <h4>{{ esEdicion ? 'Editar Dictado' : 'Nuevo Dictado' }}</h4>
           </div>
         </div>
         <form>
           <div class="grid grid-cols-12 gap-6">
-            <div class="flex md:col-span-6 sm:col-span-6 col-span-12">
-              <va-input v-model="codigoCurso" label="Código curso" />
-            </div>
-            <div class="flex md:col-span-6 sm:col-span-6 col-span-12">
-              <va-input v-model="nombreCurso" label="Nombre curso"/>
-            </div>
-            <div class="flex md:col-span-6 sm:col-span-6 col-span-12">
-                <va-select
-                  v-model="categoriaCurso"
-                  :options="areaCurso"
-                  label="Área curso"
-                  text-by="text"
-                  track-by="value"
-                  value-by="value"
-                />
-              </div>
-
-              <div class="flex md:col-span-6 sm:col-span-6 col-span-12">
-                <va-select
-                  v-model="tipoCurso"
-                  :options="duracionCurso"
-                  label="Duración curso"
-                  text-by="text"
-                  track-by="value"
-                  value-by="value"
-               />
-              </div>
+            
           </div>
         </form>
         <div class="grid grid-cols-12 gap-6">

@@ -12,7 +12,6 @@ export const useAlumnosStore = defineStore('alumnos', {
   },
   actions: {
     async guardarAlumno(
-      alumnoId: string,
       nombre: string,
       apellido:string,
       dni:string,
@@ -22,7 +21,6 @@ export const useAlumnosStore = defineStore('alumnos', {
       honorarios: number
     ) {
       const response = await request(`alumnos`, 'POST', {
-        id: Number(alumnoId),
         nombre, 
         apellido, 
         dni, 
