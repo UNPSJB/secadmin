@@ -10,9 +10,7 @@ export class Persona {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column({
-        unique: true
-    })
+    @Column({})
     nroDocumento: string;
 
     @Column()

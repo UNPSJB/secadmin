@@ -66,7 +66,13 @@ export class ProfesoresService {
       }
     }
 
-    return this.repo.find(processed_filter);
+
+    const [profesores, cantidadDeProfesores] = await this.repo.findAndCount(processed_filter);  
+
+    return {
+      profesores, 
+      cantidadDeProfesores
+    }  
   }
 
   findOne(id: number) {
