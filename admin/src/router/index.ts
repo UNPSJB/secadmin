@@ -115,6 +115,24 @@ const routes: Array<RouteRecordRaw> = [
         ],
       },
       {
+        name: 'dictado-menu',
+        path: 'dictados',
+        component: RouteViewComponent,
+        children: [
+          {
+            name: 'nuevo-dictado',
+            path: 'form/:cursoId',
+            component: () => import('../pages/admin/cursos/DictadoForm.vue'),
+          },
+          {
+            name: 'editar-dictado',
+            path: 'form/:cursoId/:dictadoId',
+            component: () => import('../pages/admin/cursos/DictadoForm.vue'),
+          },
+        ],
+      },
+      
+      {
       name: 'profesores-menu',
         path: 'profesores',
         component: RouteViewComponent,

@@ -51,7 +51,7 @@
         </div>
       </va-card-content>
     </va-card>
-    <dictados />
+    <dictados v-if="esEdicion" :cursoId="route.params.id"/>
   </va-content>
 </template>
 

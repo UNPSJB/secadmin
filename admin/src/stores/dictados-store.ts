@@ -11,9 +11,8 @@ export const useDictadosStore = defineStore('dictados', {
     }
   },
   actions: {
-    async guardarDictado(dictado:Dictado) {
-      const response = await request(`dictados`, 'POST', {
-        });
+    async guardarDictado(dictado:any) {
+      const response = await request(`dictados`, 'POST', dictado);
 
       if (!response.ok) {
         const data = await response.json()

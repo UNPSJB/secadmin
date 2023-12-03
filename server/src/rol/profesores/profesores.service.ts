@@ -76,7 +76,7 @@ export class ProfesoresService {
   }
 
   findOne(id: number) {
-    return this.repo.findOne({where:{id}, relations:["localidad"]});
+    return this.repo.findOne({where:{id}, relations:["persona.localidad"]});
   }
 
   async update(id: number, updateProfesorDto: UpdateProfesorDto) {

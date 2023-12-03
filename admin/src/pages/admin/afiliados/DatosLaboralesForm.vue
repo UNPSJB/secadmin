@@ -23,8 +23,6 @@
                 />            
             </div>
             
-            
-
             <div class="flex md:col-span-6 sm:col-span-6 col-span-12">
                 <Suspense>
                     <EmpresasSelect

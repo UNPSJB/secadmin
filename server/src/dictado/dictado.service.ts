@@ -49,7 +49,8 @@ export class DictadoService {
     let processed_filter: FindManyOptions<Dictado> = {
       where: {},
       take: cantidad_por_pagina,
-      order: { id: 'ASC' as 'ASC' }
+      order: { id: 'ASC' as 'ASC' },
+      relations: ['profesor.persona']
     };
   
     if (filters.curso) {
