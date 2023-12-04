@@ -221,7 +221,7 @@ inscriptoStore.obtenerInscripto(route.params.id as string)
 
 
 function onCancelar() {
-router.push({ name: 'inscriptos' })
+  router.push({ name: 'editar-dictado', params:{ cursoId: route.params.cursoId, dictadoId: route.params.dictadoId} })
 }
 
 const sePuedeGuardar = computed(
@@ -255,6 +255,7 @@ try {
   //  )
   } else {
      await inscriptoStore.guardarInscripto({
+      dictado: route.params.dictadoId,
       datosPersonales: {
         ...datosPersonales.value,
         localidad: datosPersonales.value.localidad.value,
@@ -268,7 +269,7 @@ try {
       position: 'bottom-right',
       duration: 2500,
     })
-    router.push({ name: 'inscriptos' })
+    router.push({ name: 'editar-dictado', params:{ cursoId: route.params.cursoId, dictadoId: route.params.dictadoId} })
   }
 } catch (e: any) {
   init({

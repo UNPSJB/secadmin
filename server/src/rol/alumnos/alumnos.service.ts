@@ -1,31 +1,55 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FindManyOptions, ILike, Repository } from 'typeorm';
 import { Alumnos } from './alumnos.entity';
 import { CreateAlumnoDto } from './dto/create-alumno.dto';
 import { UpdateAlumnoDto } from './dto/update-alumno.dto';
 import { PersonaService } from 'src/persona/persona.service';
+import { DictadoService } from 'src/dictado/dictado.service';
 
 @Injectable()
 export class AlumnosService {
   constructor(
     @InjectRepository(Alumnos) private repo: Repository<Alumnos>,
-    private personaService: AlumnosService,
+    private personaService: PersonaService,
+    private dictadoService: DictadoService,
   ) {}
   
 
   async create(dto: CreateAlumnoDto) {
-    //const persona 
-    let alumno = this.repo.create({
+    const dictadoPromise = this.dictadoService.findOne(dto.dictado)
+
+    const personaPromise = this.personaService.findOnePorDocumento(dto.datosPersonales.tipoDocumento, dto.datosPersonales.nroDocumento); 
     
-      persona: dto.persona
+    const [dictado,persona] = await Promise.all([dictadoPromise, personaPromise]);
+
+    
+    if(dictado.alumnos.length >= dictado.capacidad) {
+      throw new NotFoundException("No se puede seguir agregando inscriptos a este curso. La capacidad está al máximo.")
+    }
+
+    if(persona) {
+      const inscripto = await this.repo.find({
+        where:{
+          dictado: {id : dictado.id}, 
+          persona: {id: persona.id}
+        }
+      });
+
+      if (inscripto) {
+        throw new NotFoundException("La persona ingresada ya está inscripta al dictado.")
+      }
+    }
+    
+    let alumno = this.repo.create({
+      dictado: dictado
     })
 
-    alumno = await this.repo.save(alumno)
+    alumno = await this.repo.save(alumno);
 
-   // const personaAlumno = await this.personaService.crearPersona(dto.datosPersonales, alumno)
+    const personaAlumno = await this.personaService.crearPersona(dto.datosPersonales, alumno)
 
-    //return personaAlumno
+    return personaAlumno
   }
 
   async findAll(filters) {
@@ -37,6 +61,12 @@ export class AlumnosService {
       take:cantidad_por_pagina,
       order: {id: 'ASC' as 'ASC'}
     };
+
+    if(filters.dictado_filter) {
+      processed_filter.where = {
+        dictado: { id: filters.dictado_filter}
+      }
+    }
 
 
     if(filters.like_filter) {
@@ -65,7 +95,12 @@ export class AlumnosService {
       }
     }
 
-    
+    const [alumnos, cantidadDeAlumnos] = await this.repo.findAndCount(processed_filter);  
+
+    return {
+      alumnos, 
+      cantidadDeAlumnos
+    }  
   }
 
   findOne(id: number) {

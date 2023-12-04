@@ -75,7 +75,7 @@
         </div>
       </va-card-content>
     </va-card>
-    <inscriptos v-if="esEdicion"/>
+    <inscriptos v-if="esEdicion" :curso-id="Number(route.params.cursoId)" :dictado-id="Number(route.params.dictadoId)"/>
   </va-content>
 </template>
 

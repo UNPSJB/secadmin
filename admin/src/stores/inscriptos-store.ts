@@ -12,7 +12,7 @@ export const useInscriptosStore = defineStore('inscriptos', {
   },
   actions: {
     async guardarInscripto(inscripto: any) {
-      const response = await request(`inscriptos`, 'POST', inscripto);
+      const response = await request(`alumnos`, 'POST', inscripto);
 
       if (!response.ok) {
         const data = await response.json()
@@ -21,7 +21,7 @@ export const useInscriptosStore = defineStore('inscriptos', {
     },
 
     async actualizarInscripto(inscriptoId: string, codigo_inscripto: string, capacidad: number, localidad: any, direccion: string) {
-      const response = await request(`inscriptos/${inscriptoId}`, 'PATCH', {
+      const response = await request(`alumnos/${inscriptoId}`, 'PATCH', {
         id: Number(inscriptoId),
         localidad: localidad.id,
         codigo_inscripto,
@@ -35,7 +35,7 @@ export const useInscriptosStore = defineStore('inscriptos', {
     },
 
     async borrarInscripto(inscriptoId: number) {
-      const response = await request(`inscriptos/${inscriptoId}`, 'DELETE')
+      const response = await request(`alumnos/${inscriptoId}`, 'DELETE')
 
       if (!response.ok) {
         throw new Error('Fallo el borrado')
@@ -43,11 +43,16 @@ export const useInscriptosStore = defineStore('inscriptos', {
     },
 
     async obtenerListadoDeInscriptos(
+      dictado?: number,
       like?: string,
       ordernamiento?: { atributo: string; orden: OrderDeOrdenamiento },
       pagina = 1,
     ) {
       const filters = []
+
+      if(dictado) {
+        filters.push(`dictado=${dictado}`)
+      }
 
       if (like) {
         filters.push(`like=${like}`)
@@ -62,18 +67,18 @@ export const useInscriptosStore = defineStore('inscriptos', {
         filters.push(`pagina=${pagina}`)
       }
 
-      const response = await request(`inscriptos?${filters.join('&')}`, 'GET')
+      const response = await request(`alumnos?${filters.join('&')}`, 'GET')
 
       if (!response.ok) {
         throw new Error('Error guardando los datos')
       }
       const respuesta = await response.json()
-      this.inscriptos = respuesta.inscriptos
-      this.cantidadDeInscriptos = respuesta.cantidadDeInscriptos
+      this.inscriptos = respuesta.alumnos
+      this.cantidadDeInscriptos = respuesta.cantidadDeAlumnos
     },
 
     async obtenerInscripto(id: string) {
-      const response = await request(`inscriptos/${id}`, 'GET')
+      const response = await request(`alumnos/${id}`, 'GET')
 
       if (!response.ok) {
         throw new Error('Error encontrando el inscripto')

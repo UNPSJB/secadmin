@@ -53,8 +53,8 @@ export class DictadoService {
       relations: ['profesor.persona']
     };
   
-    if (filters.curso) {
-      processed_filter.where = { curso: { id: filters.curso }}
+    if (filters.curso_filter) {
+      processed_filter.where = { curso: { id: filters.curso_filter }}
     }
 
     if (filters.like_filter) {
@@ -86,7 +86,7 @@ export class DictadoService {
   
 
   findOne(id: number) {
-    return this.repo.findOne({where:{ id }, relations: ['profesor.persona']});
+    return this.repo.findOne({where:{ id }, relations: ['profesor.persona', 'alumnos']});
   }
 
   async update(id: number, updateDictadoDto: UpdateDictadoDto) {

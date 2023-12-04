@@ -14,12 +14,14 @@ export class AlumnosController {
 
     @Get()
     findAll(
+      @Query('dictado') dictado_filter:string,
       @Query('like') like_filter:string,
       @Query('ordenPor') orden_por_filter:string,
       @Query('ordenDireccion') orden_direccion_filter:string,
       @Query('pagina') pagina_filter:string,
     ) {
       return this.AlumnosService.findAll({
+        dictado_filter,
         like_filter, 
         orden_por_filter,
         orden_direccion_filter,

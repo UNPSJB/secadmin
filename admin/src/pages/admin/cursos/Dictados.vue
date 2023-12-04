@@ -1,100 +1,96 @@
 <template>    
-      <va-card class="markup-tables mb-8">
-        <va-card-content class="overflow-auto">
-          <div class="flex flex-row">
-            <div class="basis-8/12">
-              <h4>Listado de dictados</h4>
-            </div>
-  
-            <div class="basis-2/12">
-              <va-select v-model="ordenarPor" label="Ordenar por" :options="opcionesOrdenarPor" />
-            </div>
-            <div class="basis-2/12">
-              <va-select
-                v-model="ordenDeOrdenamiento"
-                label="Dirección de ordenamiento"
-                :options="opcionesDeOrdenamientoListado"
-              />
-            </div>
-            <div class="basis-2/12">
-              <va-input v-model="filtro" placeholder="Filtrar..." @change="onCambiaFiltro">
-                <template #prependInner>
-                  <va-icon name="search" />
-                </template>
-              </va-input>
-            </div>
-            <div class="basis-2/12">
-              <va-button @click="onNuevaDictado"> Nuevo dictado </va-button>
-            </div>
+  <va-card class="markup-tables mb-8">
+      <va-card-content class="overflow-auto">
+        <div class="flex flex-row">
+          <div class="basis-8/12">
+            <h4>Listado de dictados</h4>
           </div>
-  
-          <table class="va-table w-full">
-            <thead>
-              <tr>
-                <th>Profesor a cargo</th>
-                <th>Capacidad</th>
-                <th>Fecha inicio</th>
-                <th>Fecha fin</th>
-                <th>Acciones</th>
-              </tr>
-            </thead>
-  
-            <tbody>
-              <tr v-for="dictado in listadoDeDictados" :key="dictado.id">
-                <td>{{ dictado.profesor.persona.nombre }} {{ dictado.profesor.persona.apellido }}</td>
-                <td>{{ dictado.capacidad }}</td>
-                <td>{{ transformarAFechaBostera(dictado.fecha_inicio) }}</td>
-                <td>{{ transformarAFechaBostera(dictado.fecha_fin) }}</td>
-                <td>
-                  <va-button-group class="col-span-12 xl:col-span-6" preset="plain">
-                    <va-button round icon="md_edit" @click="onEditarDictado(dictado)" />
-                    <va-button round icon="md_delete" @click="onEliminarDictado(dictado)" />
-                  </va-button-group>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-          <div class="wrapper">
-            <va-button-group class="botton-group">
-              <va-button
-                v-for="boton in botonesDePaginacion"
-                :key="boton.pagina"
-                :disabled="boton.selected"
-                @click="cambiarPagina(boton.pagina)"
-              >
-                {{ boton.pagina }}</va-button
-              >
-            </va-button-group>
-          </div>
-        </va-card-content>
-        <va-modal
-            v-model="showSmallModal"
-            size="small"
-            title="Confirmar eliminación"
-            :message="obtenerMensajeDeEliminacion()"
-            ok-text="Eliminar"
-            cancel-text="Cancelar"
-            @ok="eliminarDictado"
-        />
-      </va-card>  
-  </template>
-  
-  <script setup lang="ts">
 
-    import { computed, ComputedRef, ref,Ref, watch } from 'vue';
-    import { useRouter, useRoute } from 'vue-router';
-    import { useDictadosStore } from '../../../stores/dictados-store';
-    import { generarBotonesPaginacion } from '../../../services/paginacion/paginacion.service';
-    import { Dictado, OrderDeOrdenamiento } from '../../../types';
-    import { SelectOption } from 'vuestic-ui/web-components';
-    import {transformarAFechaBostera} from '../../../services/utils/formatos'
-    const dictadosStore = useDictadosStore();
-    const router = useRouter();
+          <div class="basis-2/12">
+            <va-select v-model="ordenarPor" label="Ordenar por" :options="opcionesOrdenarPor" />
+          </div>
+          <div class="basis-2/12">
+            <va-select
+              v-model="ordenDeOrdenamiento"
+              label="Dirección de ordenamiento"
+              :options="opcionesDeOrdenamientoListado"
+            />
+          </div>
+          <div class="basis-2/12">
+            <va-input v-model="filtro" placeholder="Filtrar..." @change="onCambiaFiltro">
+              <template #prependInner>
+                <va-icon name="search" />
+              </template>
+            </va-input>
+          </div>
+          <div class="basis-2/12">
+            <va-button @click="onNuevaDictado"> Nuevo dictado </va-button>
+          </div>
+        </div>
+
+        <table class="va-table w-full">
+          <thead>
+            <tr>
+              <th>Profesor a cargo</th>
+              <th>Capacidad</th>
+              <th>Fecha inicio</th>
+              <th>Fecha fin</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr v-for="dictado in listadoDeDictados" :key="dictado.id">
+              <td>{{ dictado.profesor.persona.nombre }} {{ dictado.profesor.persona.apellido }}</td>
+              <td>{{ dictado.capacidad }}</td>
+              <td>{{ transformarAFechaBostera(dictado.fecha_inicio) }}</td>
+              <td>{{ transformarAFechaBostera(dictado.fecha_fin) }}</td>
+              <td>
+                <va-button-group class="col-span-12 xl:col-span-6" preset="plain">
+                  <va-button round icon="md_edit" @click="onEditarDictado(dictado)" />
+                  <va-button round icon="md_delete" @click="onEliminarDictado(dictado)" />
+                </va-button-group>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="wrapper">
+          <va-button-group class="botton-group">
+            <va-button
+              v-for="boton in botonesDePaginacion"
+              :key="boton.pagina"
+              :disabled="boton.selected"
+              @click="cambiarPagina(boton.pagina)"
+            >
+              {{ boton.pagina }}</va-button
+            >
+          </va-button-group>
+        </div>
+      </va-card-content>
+      <va-modal
+          v-model="showSmallModal"
+          size="small"
+          title="Confirmar eliminación"
+          :message="obtenerMensajeDeEliminacion()"
+          ok-text="Eliminar"
+          cancel-text="Cancelar"
+          @ok="eliminarDictado"
+      />
+    </va-card>  
+</template>
+
+<script setup lang="ts">
+
+  import { computed, ComputedRef, ref,Ref, watch } from 'vue';
+  import { useRouter, useRoute } from 'vue-router';
+  import { useDictadosStore } from '../../../stores/dictados-store';
+  import { generarBotonesPaginacion } from '../../../services/paginacion/paginacion.service';
+  import { Dictado, OrderDeOrdenamiento } from '../../../types';
+  import { SelectOption } from 'vuestic-ui/web-components';
+  import {transformarAFechaBostera} from '../../../services/utils/formatos'
+  const dictadosStore = useDictadosStore();
+  const router = useRouter();
     
-    dictadosStore.obtenerListadoDeDictados();
-
-  dictadosStore.obtenerListadoDeDictados()
-
   const opcionesDeOrdenamientoListado: SelectOption[] = [
     { value: 'ASC', text: 'Ascendente' },
     { value: 'DESC', text: 'Descendente' },
@@ -123,6 +119,7 @@
   const props = defineProps<{
     cursoId: number
   }>()
+  dictadosStore.obtenerListadoDeDictados(Number(route.params.id))
 
   function onNuevaDictado() {
     router.push({ name: 'nuevo-dictado', params:{cursoId: props.cursoId} })

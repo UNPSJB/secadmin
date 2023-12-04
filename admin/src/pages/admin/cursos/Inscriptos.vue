@@ -1,97 +1,93 @@
 <template>    
-      <va-card class="markup-tables mb-8">
-        <va-card-content class="overflow-auto">
-          <div class="flex flex-row">
-            <div class="basis-8/12">
-              <h4>Listado de inscriptos</h4>
-            </div>
-  
-            <div class="basis-2/12">
-              <va-select v-model="ordenarPor" label="Ordenar por" :options="opcionesOrdenarPor" />
-            </div>
-            <div class="basis-2/12">
-              <va-select
-                v-model="ordenDeOrdenamiento"
-                label="Dirección de ordenamiento"
-                :options="opcionesDeOrdenamientoListado"
-              />
-            </div>
-            <div class="basis-2/12">
-              <va-input v-model="filtro" placeholder="Filtrar..." @change="onCambiaFiltro">
-                <template #prependInner>
-                  <va-icon name="search" />
-                </template>
-              </va-input>
-            </div>
-            <div class="basis-2/12">
-              <va-button @click="onNuevaInscripto"> Nuevo inscripto </va-button>
-            </div>
+    <va-card class="markup-tables mb-8">
+      <va-card-content class="overflow-auto">
+        <div class="flex flex-row">
+          <div class="basis-8/12">
+            <h4>Listado de inscriptos</h4>
           </div>
-  
-          <table class="va-table w-full">
-            <thead>
-              <tr>
-                <th>Nombre completo</th>
-                <th>DNI</th>
-                <th>Fecha inscripción</th>
-                <th>Acciones</th>
-              </tr>
-            </thead>
-  
-            <tbody>
-              <tr v-for="inscripto in listadoDeInscriptos" :key="inscripto.id">
-                <td>{{ inscripto.persona.nombre }} {{ inscripto.persona.apellido }}</td>
-                <td>{{ inscripto.persona.tipo_documento }} {{ inscripto.persona.nroDocumento }}</td>
-                <td>{{ transformarAFechaBostera(inscripto.fecha_creacion) }}</td>
-                <td>
-                  <va-button-group class="col-span-12 xl:col-span-6" preset="plain">
-                    <va-button round icon="md_edit" @click="onEditarInscripto(inscripto)" />
-                    <va-button round icon="md_delete" @click="onEliminarInscripto(inscripto)" />
-                  </va-button-group>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-          <div class="wrapper">
-            <va-button-group class="botton-group">
-              <va-button
-                v-for="boton in botonesDePaginacion"
-                :key="boton.pagina"
-                :disabled="boton.selected"
-                @click="cambiarPagina(boton.pagina)"
-              >
-                {{ boton.pagina }}</va-button
-              >
-            </va-button-group>
+
+          <div class="basis-2/12">
+            <va-select v-model="ordenarPor" label="Ordenar por" :options="opcionesOrdenarPor" />
           </div>
-        </va-card-content>
-        <va-modal
-            v-model="showSmallModal"
-            size="small"
-            title="Confirmar eliminación"
-            :message="obtenerMensajeDeEliminacion()"
-            ok-text="Eliminar"
-            cancel-text="Cancelar"
-            @ok="eliminarInscripto"
-        />
-      </va-card>  
-  </template>
+          <div class="basis-2/12">
+            <va-select
+              v-model="ordenDeOrdenamiento"
+              label="Dirección de ordenamiento"
+              :options="opcionesDeOrdenamientoListado"
+            />
+          </div>
+          <div class="basis-2/12">
+            <va-input v-model="filtro" placeholder="Filtrar..." @change="onCambiaFiltro">
+              <template #prependInner>
+                <va-icon name="search" />
+              </template>
+            </va-input>
+          </div>
+          <div class="basis-2/12">
+            <va-button @click="onNuevaInscripto"> Nuevo inscripto </va-button>
+          </div>
+        </div>
+
+        <table class="va-table w-full">
+          <thead>
+            <tr>
+              <th>Nombre completo</th>
+              <th>DNI</th>
+              <th>Fecha inscripción</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr v-for="inscripto in listadoDeInscriptos" :key="inscripto.id">
+              <td>{{ inscripto.persona.nombre }} {{ inscripto.persona.apellido }}</td>
+              <td>{{ inscripto.persona.tipo_documento }} {{ inscripto.persona.nroDocumento }}</td>
+              <td>{{ transformarAFechaBostera(inscripto.fecha_creacion) }}</td>
+              <td>
+                <va-button-group class="col-span-12 xl:col-span-6" preset="plain">
+                  <va-button round icon="md_edit" @click="onEditarInscripto(inscripto)" />
+                  <va-button round icon="md_delete" @click="onEliminarInscripto(inscripto)" />
+                </va-button-group>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="wrapper">
+          <va-button-group class="botton-group">
+            <va-button
+              v-for="boton in botonesDePaginacion"
+              :key="boton.pagina"
+              :disabled="boton.selected"
+              @click="cambiarPagina(boton.pagina)"
+            >
+              {{ boton.pagina }}</va-button
+            >
+          </va-button-group>
+        </div>
+      </va-card-content>
+      <va-modal
+          v-model="showSmallModal"
+          size="small"
+          title="Confirmar eliminación"
+          :message="obtenerMensajeDeEliminacion()"
+          ok-text="Eliminar"
+          cancel-text="Cancelar"
+          @ok="eliminarInscripto"
+      />
+    </va-card>  
+</template>
+
+<script setup lang="ts">
+  import { computed, ComputedRef, ref,Ref, watch } from 'vue';
+  import { useRouter, useRoute } from 'vue-router';
+  import { useInscriptosStore } from '../../../stores/inscriptos-store';
+  import { generarBotonesPaginacion } from '../../../services/paginacion/paginacion.service';
+  import { Inscripto, OrderDeOrdenamiento } from '../../../types';
+  import { SelectOption } from 'vuestic-ui/web-components';
+  import {transformarAFechaBostera} from '../../../services/utils/formatos'
   
-  <script setup lang="ts">
-
-    import { computed, ComputedRef, ref,Ref, watch } from 'vue';
-    import { useRouter, useRoute } from 'vue-router';
-    import { useInscriptosStore } from '../../../stores/inscriptos-store';
-    import { generarBotonesPaginacion } from '../../../services/paginacion/paginacion.service';
-    import { Inscripto, OrderDeOrdenamiento } from '../../../types';
-    import { SelectOption } from 'vuestic-ui/web-components';
-    import {transformarAFechaBostera} from '../../../services/utils/formatos'
-    const inscriptosStore = useInscriptosStore();
-    const router = useRouter();
-    
-    inscriptosStore.obtenerListadoDeInscriptos();
-
-  inscriptosStore.obtenerListadoDeInscriptos()
+  const inscriptosStore = useInscriptosStore();
+  const router = useRouter();
 
   const opcionesDeOrdenamientoListado: SelectOption[] = [
     { value: 'ASC', text: 'Ascendente' },
@@ -119,11 +115,14 @@
   const route = useRoute()
 
   const props = defineProps<{
-    dictadoId: number
+    dictadoId: number,
+    cursoId: number,
   }>()
 
+  inscriptosStore.obtenerListadoDeInscriptos(props.dictadoId);
+
   function onNuevaInscripto() {
-    router.push({ name: 'nuevo-inscripto', params:{dictadoId: props.dictadoId} })
+    router.push({ name: 'nuevo-inscripto', params:{dictadoId: props.dictadoId, cursoId: props.cursoId} })
   }
 
   async function onEliminarInscripto(inscripto: Inscripto) {
@@ -134,13 +133,13 @@
   async function eliminarInscripto() {
     if (inscriptoParaEliminar.value && inscriptoParaEliminar.value.id) {
       await inscriptosStore.borrarInscripto(inscriptoParaEliminar.value.id)
-      inscriptosStore.obtenerListadoDeInscriptos()
+      inscriptosStore.obtenerListadoDeInscriptos(props.dictadoId)
     }
   }
 
   function onEditarInscripto(inscripto: Inscripto) {
     if (inscripto.id) {
-      router.push({ name: 'editar-inscripto', params: { dictadoId: props.dictadoId, inscriptoId: inscripto.id } })
+      router.push({ name: 'editar-inscripto', params: { dictadoId: props.dictadoId, inscriptoId: inscripto.id, cursoId: props.cursoId } })
     }
   }
 
@@ -157,13 +156,13 @@
     pagina.value = 1
 
     inscriptosStore.obtenerListadoDeInscriptos(
-        Number(route.params.id),
-        filtro.value,
-        {
-            atributo: ordenarPor.value.value,
-            orden: ordenDeOrdenamiento.value.value as OrderDeOrdenamiento,
-        },
-        1,
+      props.dictadoId,
+      filtro.value,
+      {
+          atributo: ordenarPor.value.value,
+          orden: ordenDeOrdenamiento.value.value as OrderDeOrdenamiento,
+      },
+      1,
     )
   }
 
@@ -171,7 +170,7 @@
     () => ordenarPor.value,
     (nuevoOrden) => {
       inscriptosStore.obtenerListadoDeInscriptos(
-        Number(route.params.id),
+        props.dictadoId,
         filtro.value,
         {
           atributo: nuevoOrden.value,
@@ -186,13 +185,13 @@
     () => ordenDeOrdenamiento.value,
     (nuevoOrden) => {
       inscriptosStore.obtenerListadoDeInscriptos(
-        Number(route.params.id),
+        props.dictadoId,
         filtro.value,
         {
           atributo: ordenarPor.value.value,
           orden: nuevoOrden.value as OrderDeOrdenamiento,
         },
-        pagina.value,route.params.id
+        pagina.value,
       )
     },
   )
@@ -200,13 +199,13 @@
   function cambiarPagina(paginaSeleccionada: number) {
     pagina.value = paginaSeleccionada
     inscriptosStore.obtenerListadoDeInscriptos(
-        Number(route.params.id),
-        filtro.value,
-        {
-            atributo: ordenarPor.value.value,
-            orden: ordenDeOrdenamiento.value.value as OrderDeOrdenamiento,
-        },
-        paginaSeleccionada,
+      props.dictadoId,
+      filtro.value,
+      {
+          atributo: ordenarPor.value.value,
+          orden: ordenDeOrdenamiento.value.value as OrderDeOrdenamiento,
+      },
+      paginaSeleccionada,
     )
   }
 

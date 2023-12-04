@@ -1,7 +1,8 @@
 import { Aula } from "src/aula/entities/aula.entity";
 import { Curso } from "src/curso/entities/curso.entity";
+import { Alumnos } from "src/rol/alumnos/alumnos.entity";
 import { Profesor } from "src/rol/profesores/profesor.entity";
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn, UpdateDateColumn, DeleteDateColumn } from "typeorm"
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, OneToMany } from "typeorm"
 
 @Entity('dictados')
 export class Dictado {
@@ -28,6 +29,9 @@ export class Dictado {
     
     @Column()
     fecha_fin: Date;
+
+    @OneToMany(() => Alumnos, (alumno) => alumno.dictado)
+    alumnos: Alumnos[];
 
     @CreateDateColumn()
     fecha_creacion: Date

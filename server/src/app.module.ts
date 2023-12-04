@@ -18,6 +18,7 @@ import emailConfig from './configuracion/email';
 import {RolModule} from './rol/rol.module';
 import { ProfesorModule } from './rol/profesores/profesor.module';
 import { DictadoModule } from './dictado/dictado.module';
+import { AlumnoModule } from './rol/alumnos/alumnos.module';
 
 
 
@@ -48,7 +49,8 @@ import { DictadoModule } from './dictado/dictado.module';
     CursoModule,
     RolModule,
     ProfesorModule,
-    DictadoModule
+    DictadoModule,
+    AlumnoModule
   ],
   controllers: [AppController],
   providers: [AppService],

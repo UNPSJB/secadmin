@@ -139,12 +139,12 @@ const routes: Array<RouteRecordRaw> = [
         children: [
           {
             name: 'nuevo-inscripto',
-            path: 'form/:dictadoId',
+            path: 'form/:cursoId/:dictadoId',
             component: () => import('../pages/admin/cursos/InscriptoForm.vue'),
           },
           {
             name: 'editar-inscripto',
-            path: 'form/:cursoId/:inscriptoId',
+            path: 'form/:cursoId/:dictadoId/:inscriptoId',
             component: () => import('../pages/admin/cursos/InscriptoForm.vue'),
           },
         ],

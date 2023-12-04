@@ -14,6 +14,7 @@ export class DictadoController {
 
   @Get()
   findAll(  
+    @Query('curso') curso_filter:string,
     @Query('like') like_filter:string,
     @Query('ordenPor') orden_por_filter:string,
     @Query('ordenDireccion') orden_direccion_filter:string,
@@ -21,6 +22,7 @@ export class DictadoController {
   
   ) {
     return this.dictadoService.findAll({
+      curso_filter,
       like_filter, 
       orden_por_filter,
       orden_direccion_filter,
