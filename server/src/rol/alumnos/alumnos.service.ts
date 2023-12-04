@@ -55,7 +55,7 @@ export class AlumnosService {
     return personaAlumno
   }
 
-  async crearEnListaDeEspera(dto: CrearEnListaDeEsperaDto) {
+  async crearEnListaDeEspera(dto: any) {
     const cursoPromise = this.cursoService.findOne(dto.curso);
 
     const personaPromise = this.personaService.findOnePorDocumento(dto.datosPersonales.tipoDocumento, dto.datosPersonales.nroDocumento); 
@@ -95,6 +95,13 @@ export class AlumnosService {
       take:cantidad_por_pagina,
       order: {id: 'ASC' as 'ASC'}
     };
+
+    if(filters.curso_filter) {
+      processed_filter.where = {
+        curso: { id: filters.curso_filter}
+      }
+
+    }
 
     if(filters.dictado_filter) {
       processed_filter.where = {

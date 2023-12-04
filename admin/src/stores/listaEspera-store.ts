@@ -12,7 +12,7 @@ export const uselistaEsperaStore = defineStore('listaEspera', {
   },
   actions: {
     async guardarlistaDeEspera(curso:any) {
-      const response = await request(`cursos`, 'POST', this.listaEspera);
+      const response = await request(`alumnos/listaespera`, 'POST', curso);
 
       if (!response.ok) {
         const data = await response.json()
@@ -50,12 +50,16 @@ export const uselistaEsperaStore = defineStore('listaEspera', {
     },
 
     async obtenerListaDeEspera(
+      curso?: string,
       like?: string,
       ordernamiento?: { atributo: string; orden: OrderDeOrdenamiento },
       pagina = 1,
     ) {
       const filters = []
 
+      if (curso) {
+        filters.push(`curso=${curso}`)
+      }
       if (like) {
         filters.push(`like=${like}`)
       }
