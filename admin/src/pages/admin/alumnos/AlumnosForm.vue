@@ -171,7 +171,7 @@
         </va-modal>
             <div class="grid grid-cols-12 gap-6">
               <div class="flex md:col-span-4 sm:col-span-4 col-span-4">
-                <va-button preset="outline" border-color="primary" @click="onCancelar"> Cancelar </va-button>
+                <va-button preset="outline" border-color="primary" @click="onCancelar"> Volver </va-button>
               </div>
               <div class="flex md:col-span-4 sm:col-span-4 col-span-4">
                 <va-button preset="outline" border-color="primary" @click="onLimpiar"> Limpiar </va-button>

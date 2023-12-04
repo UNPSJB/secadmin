@@ -212,7 +212,7 @@
     function buscarDocumento() {
         const {tipoDocumento, nroDocumento } = props.formData.value;
         if(esDocumentoValido(nroDocumento)) {
-            personasStore.obtenerPersonaPorDocumento(tipoDocumento.value, nroDocumento, onPersonaEncontrada)
+            personasStore.obtenerPersonaPorDocumento(tipoDocumento, nroDocumento, onPersonaEncontrada)
         }
 
     }
@@ -231,6 +231,7 @@
     }
 
     function onCargarAutomaticamente(){
+        debugger       
         sePuedeEditar.value = true;
         const data = personaEncontrada.value;
         props.formData.value.nombre = data.nombre; 

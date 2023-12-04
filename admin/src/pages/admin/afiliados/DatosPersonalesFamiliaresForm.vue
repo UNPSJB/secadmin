@@ -138,7 +138,7 @@
             <div class="flex md:col-span-3 sm:col-span-3 col-span-3">
             </div>
             <div class="flex md:col-span-2 sm:col-span-2 col-span-2">
-                <va-button @click="onCancelar" preset="outline" border-color="primary"> Cancelar </va-button>
+                <va-button @click="onCancelar" preset="outline" border-color="primary"> Volver </va-button>
             </div>
             <div class="flex md:col-span-2 sm:col-span-2 col-span-2">
             </div>

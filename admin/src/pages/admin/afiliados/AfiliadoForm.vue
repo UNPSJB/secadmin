@@ -31,7 +31,7 @@
 
                 </va-stepper>
                     <!-- <div class="flex md:col-span-4 sm:col-span-4 col-span-4">
-                        <va-button @click="onCancelar" preset="outline" border-color="primary"> Cancelar </va-button>
+                        <va-button @click="onCancelar" preset="outline" border-color="primary"> Volver </va-button>
                     </div>
                     <div class="flex md:col-span-4 sm:col-span-4 col-span-4">
                         <va-button @click="onLimpiar" preset="outline" border-color="primary"> Limpiar </va-button>
