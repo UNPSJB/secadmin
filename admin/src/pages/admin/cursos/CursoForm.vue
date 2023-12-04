@@ -52,6 +52,7 @@
       </va-card-content>
     </va-card>
     <dictados v-if="esEdicion" :cursoId="route.params.id"/>
+    <listaEspera v-if="esEdicion" :cursoId="route.params.id" />
   </va-content>
 </template>
 
@@ -62,6 +63,7 @@ import { useCursosStore } from '../../../stores/cursos-store';
 import { useToast } from 'vuestic-ui'
 import { Curso, CategoriaCurso, TipoCurso, duracionCurso, areaCurso, SelectOption } from '../../../types';
 import Dictados from './Dictados.vue';
+import listaEspera from './listaEspera.vue';
 
 const router = useRouter()
 const route = useRoute()

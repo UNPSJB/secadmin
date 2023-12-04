@@ -75,6 +75,7 @@
           @ok="eliminarInscripto"
       />
     </va-card>  
+    <InscriptoForm v-if="showEnrollmentForm" :cursoId="cursoId" />
 </template>
 
 <script setup lang="ts">
@@ -208,6 +209,12 @@
       paginaSeleccionada,
     )
   }
+
+  let showEnrollmentForm = ref(false);
+
+function onAgregarInscripto() {
+  showEnrollmentForm.value = true;
+}
 
   </script>
   
