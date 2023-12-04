@@ -19,6 +19,7 @@ import {RolModule} from './rol/rol.module';
 import { ProfesorModule } from './rol/profesores/profesor.module';
 import { DictadoModule } from './dictado/dictado.module';
 import { AlumnoModule } from './rol/alumnos/alumnos.module';
+import { AfiliadoModule } from './rol/afiliados/afiliado.module';
 
 
 
@@ -50,7 +51,8 @@ import { AlumnoModule } from './rol/alumnos/alumnos.module';
     RolModule,
     ProfesorModule,
     DictadoModule,
-    AlumnoModule
+    AlumnoModule,
+    AfiliadoModule
   ],
   controllers: [AppController],
   providers: [AppService],

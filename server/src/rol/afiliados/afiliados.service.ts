@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FindManyOptions, ILike, Repository } from 'typeorm';
-import { Afiliado } from './afiliado.entity';
+import { Afiliado, EstadoAfiliacion } from './afiliado.entity';
 import { CreateAfiliadoDto } from './dto/create-afiliado.dto';
 import { UpdateAfiliadoDto } from './dto/update-afiliado.dto';
 import { PersonaService } from 'src/persona/persona.service';
@@ -37,6 +37,7 @@ export class AfiliadosService {
       ramaDedicacion: dto.datosLaborales.ocupacion,
       conyuge: conyuge,
       hijos: hijos,
+      estado: EstadoAfiliacion.EVALUANDO
     })
     
     afiliado = await this.repo.save(afiliado)
@@ -83,11 +84,11 @@ export class AfiliadosService {
       }
     }
 
-    const [aulas, cantidadDeAulas] = await this.repo.findAndCount(processed_filter);  
+    const [afiliados, cantidadDeAfiliados] = await this.repo.findAndCount(processed_filter);  
 
     return {
-      aulas, 
-      cantidadDeAulas
+      afiliados, 
+      cantidadDeAfiliados
     }
   }
 
