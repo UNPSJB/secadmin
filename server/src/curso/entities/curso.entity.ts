@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn, UpdateDateColumn, DeleteDateColumn } from "typeorm"
+import { Alumnos } from "src/rol/alumnos/alumnos.entity"
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, OneToMany } from "typeorm"
 
 export enum categoriaCurso{
     CAPACITACION = 'Capacitacion',
@@ -36,6 +37,9 @@ export class Curso {
         enum:categoriaCurso
     })
     categoria_curso:categoriaCurso
+
+    @OneToMany(() => Alumnos, (alumno) => alumno.curso)
+    alumnosEnListaDeEspera: Alumnos[];
 
     @CreateDateColumn()
     fecha_creacion: Date

@@ -6,6 +6,8 @@ import { CreateAlumnoDto } from './dto/create-alumno.dto';
 import { UpdateAlumnoDto } from './dto/update-alumno.dto';
 import { PersonaService } from 'src/persona/persona.service';
 import { DictadoService } from 'src/dictado/dictado.service';
+import { CursoService } from 'src/curso/curso.service';
+import { CrearEnListaDeEsperaDto } from './dto/crear-en-lista-de-espera.dto';
 
 @Injectable()
 export class AlumnosService {
@@ -13,6 +15,7 @@ export class AlumnosService {
     @InjectRepository(Alumnos) private repo: Repository<Alumnos>,
     private personaService: PersonaService,
     private dictadoService: DictadoService,
+    private cursoService: CursoService,
   ) {}
   
 
@@ -43,6 +46,37 @@ export class AlumnosService {
     
     let alumno = this.repo.create({
       dictado: dictado
+    })
+
+    alumno = await this.repo.save(alumno);
+
+    const personaAlumno = await this.personaService.crearPersona(dto.datosPersonales, alumno)
+
+    return personaAlumno
+  }
+
+  async crearEnListaDeEspera(dto: CrearEnListaDeEsperaDto) {
+    const cursoPromise = this.cursoService.findOne(dto.curso);
+
+    const personaPromise = this.personaService.findOnePorDocumento(dto.datosPersonales.tipoDocumento, dto.datosPersonales.nroDocumento); 
+    
+    const [curso,persona] = await Promise.all([cursoPromise, personaPromise]);
+
+    if(persona) {
+      const inscripto = await this.repo.find({
+        where:{
+          curso: {id : curso.id}, 
+          persona: {id: persona.id}
+        }
+      });
+
+      if (inscripto) {
+        throw new NotFoundException("La persona ingresada ya está inscripta a la lista de espera.")
+      }
+    }
+    
+    let alumno = this.repo.create({
+      curso: curso
     })
 
     alumno = await this.repo.save(alumno);
