@@ -53,6 +53,7 @@ export type Afiliado = {
 }
 
 export type Persona = {
+    tipoDocumento?: string; 
     tipo_documento: TipoDocumento; 
     nroDocumento: string;
     cuil: string;

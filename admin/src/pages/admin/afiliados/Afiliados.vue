@@ -43,8 +43,7 @@
                         <tr>
                             <th> Nombre completo </th>
                             <th> DNI </th>
-                            <th> Localidad </th>
-                            <th> Direccion </th>
+                            <th> Estado </th>
                             <th> Acciones </th>
                         </tr>
                     </thead>
@@ -52,9 +51,8 @@
                     <tbody>
                         <tr v-for="afiliado in listadoDeAFiliados" :key="afiliado.id">
                             <td>{{ `${afiliado.persona.nombre} ${afiliado.persona.apellido}`}} </td>
-                            <td>{{ afiliado.persona.nroDocumento }}</td>
-                            <td>{{ afiliado.persona.localidad.nombre }}</td>
-                            <td>{{ afiliado.persona.direccion }}</td>
+                            <td> {{ afiliado.persona.tipoDocumento }} {{ afiliado.persona.nroDocumento }}</td>
+                            <td>{{ afiliado.estado }}</td>
                             <td> 
                                 <va-button-group class="col-span-12 xl:col-span-6" preset="plain">
                                     <va-button 

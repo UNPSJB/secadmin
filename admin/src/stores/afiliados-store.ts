@@ -63,6 +63,7 @@ export const useAfiliadosStore = defineStore('afiliados', {
         throw new Error('Error obteniendo los datos');
       }
       const respuesta = await response.json();
+      debugger
       this.afiliados = respuesta.afiliados;
       this.cantidadDeAfiliados = respuesta.cantidadDeAfiliados;
     },
