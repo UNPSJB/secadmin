@@ -189,7 +189,7 @@ import { Inscripto, DatosPersonalesFormType,TipoDocumento, Localidad, SelectOpti
 import { esEmail, esDocumentoValido, esNumeroDeTelefonoCompleto, esMayorDeCiertaEdad, esCUILValido } from '../../../services/utils/validaciones'
 import { usePersonasStore } from '../../../stores/personas-store';
 import { DatePickerView } from 'vuestic-ui/dist/types/components/va-date-picker/types';
-
+import { uselistaEsperaStore } from "../../../stores/listaEspera-store";
 
 const personasStore = usePersonasStore()
 const router = useRouter()
@@ -214,14 +214,19 @@ const esEdicion = route.name === 'editar-inscripto'
 const personaEncontrada = ref<any>(null)
 const mostrarModalDePersonaEncontrada = ref(false);
 
-
+const listaDeEsperaStore = uselistaEsperaStore()
 if (esEdicion) {
 inscriptoStore.obtenerInscripto(route.params.id as string)
 }
 
 
 function onCancelar() {
-  router.push({ name: 'editar-dictado', params:{ cursoId: route.params.cursoId, dictadoId: route.params.dictadoId} })
+  debugger
+  if (route.name === "nuevo-inscripto-curso" || route.name === "editar-inscripto-curso") { 
+    router.push({ name: 'editar-curso', params:{ id: route.params.cursoId} })
+  } else {
+    router.push({ name: 'editar-dictado', params:{ cursoId: route.params.cursoId, dictadoId: route.params.dictadoId} })
+  }
 }
 
 const sePuedeGuardar = computed(
@@ -254,22 +259,35 @@ try {
   //    honorarios.value,
   //  )
   } else {
-     await inscriptoStore.guardarInscripto({
-      dictado: route.params.dictadoId,
-      datosPersonales: {
-        ...datosPersonales.value,
-        localidad: datosPersonales.value.localidad.value,
-        nacionalidad: datosPersonales.value.nacionalidad.id,
-      }
-
-      
-    })
+    if (route.name === "nuevo-inscripto-curso" || route.name === "editar-inscripto-curso") {
+      await listaDeEsperaStore.guardarlistaDeEspera({
+        curso: route.params.cursoId,
+        datosPersonales: {
+          ...datosPersonales.value,
+          localidad: datosPersonales.value.localidad.value,
+          nacionalidad: datosPersonales.value.nacionalidad.id,
+        }
+      })
+    } else {
+      await inscriptoStore.guardarInscripto({
+        dictado: route.params.dictadoId,
+        datosPersonales: {
+          ...datosPersonales.value,
+          localidad: datosPersonales.value.localidad.value,
+          nacionalidad: datosPersonales.value.nacionalidad.id,
+        }
+      })
+    }
     init({
       message: 'Inscripto guardado correctamente',
       position: 'bottom-right',
       duration: 2500,
     })
-    router.push({ name: 'editar-dictado', params:{ cursoId: route.params.cursoId, dictadoId: route.params.dictadoId} })
+    if (route.name === "nuevo-inscripto-curso" || route.name === "editar-inscripto-curso") {
+      router.push({ name: 'editar-curso', params:{ id: route.params.cursoId } })
+    } else { 
+      router.push({ name: 'editar-dictado', params:{ cursoId: route.params.cursoId, dictadoId: route.params.dictadoId} })
+    }
   }
 } catch (e: any) {
   init({

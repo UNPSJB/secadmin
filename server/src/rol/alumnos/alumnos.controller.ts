@@ -12,8 +12,14 @@ export class AlumnosController {
       return this.AlumnosService.create(createAlumnosDto);
     }
 
+    @Post("listaespera")
+    createListaEspera(@Body() createAlumnosDto: CreateAlumnoDto) {
+      return this.AlumnosService.crearEnListaDeEspera(createAlumnosDto);
+    }
+
     @Get()
     findAll(
+      @Query('curso') curso_filter:string,
       @Query('dictado') dictado_filter:string,
       @Query('like') like_filter:string,
       @Query('ordenPor') orden_por_filter:string,
@@ -21,6 +27,7 @@ export class AlumnosController {
       @Query('pagina') pagina_filter:string,
     ) {
       return this.AlumnosService.findAll({
+        curso_filter,
         dictado_filter,
         like_filter, 
         orden_por_filter,

@@ -88,6 +88,7 @@
   import { generarBotonesPaginacion } from '../../../services/paginacion/paginacion.service';
   import { Curso, OrderDeOrdenamiento } from '../../../types';
   import { SelectOption } from 'vuestic-ui/web-components';
+  import listaEspera from './listaEspera.vue';
   
   const cursosStore = useCursosStore();
   const router = useRouter();

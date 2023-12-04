@@ -236,3 +236,9 @@ export type Inscripto = {
     persona:Persona;
     fecha_creacion: Date | string;
 }
+
+export type listaEspera = {
+    id?: number;
+    inscripto: Inscripto;
+    fecha_creacion: Date;
+}
